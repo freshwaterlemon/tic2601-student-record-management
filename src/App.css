@@ -1,20 +1,61 @@
+:root {
+	--input-button-hover-colour: rgb(167, 167, 167);
+	--button-bg-colour: #eae9e9;
+	--input-bg-colour: #eae9e9;
+	--bg-colour: white;
+
+	
+	background-color: var(--bg-colour);
+
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+
 button{
-    border-radius: 15px;
+    border-radius: 10px;
 	border: 3px solid transparent;
 	padding: 0.6em 1.2em;
 	font-size: 1em;
 	font-weight: 500;
 	font-family: inherit;
     cursor: pointer;
+	background-color: var(--button-bg-colour);
 }
 
 input{
-    border-radius: 15px;
+    border-radius: 10px;
 	border: 3px solid transparent;
 	padding: 0.6em 1.2em;
 	font-size: 1em;
 	font-weight: 500;
 	font-family: inherit;
     cursor: pointer;
+	background-color: var(--input-bg-colour);
 }
 
+input:hover {
+	border-color: var(--input-button-hover-colour);
+}
+
+button:hover {
+	border-color: var(--input-button-hover-colour);
+}
+
+input:focus {
+	outline: none;
+}
+input:focus-visible {
+	outline: none;
+}
+
+button:focus,
+button:focus-visible {
+	outline: none;
+}
