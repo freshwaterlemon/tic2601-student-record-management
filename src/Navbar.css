@@ -1,0 +1,40 @@
+.navbar {
+	background-color: #f4a261;
+	color: white;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: larger;
+	padding: 0.5rem 3rem;
+}
+
+.navbar a {
+	color: white;
+	text-decoration: none;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	padding: 0.25rem;
+}
+
+.navbar ul {
+	list-style: none;
+	display: flex;
+}
+
+.navbar li {
+	padding: 0 1rem;
+}
+
+.navbar li:active {
+	background-color: #f4a261;
+}
+
+.navbar li:hover {
+	text-decoration: underline;
+	height: 100%;
+}
+
+.site-title {
+	font-size: 2rem;
+}
