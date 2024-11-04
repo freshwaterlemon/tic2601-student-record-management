@@ -1,11 +1,11 @@
-import './Academic.css'
+import './Academic.css';
 
 const Academic = () => {
-    return (
-        <>
-            <div>Academic</div>
-        </>
-    )
-}
+	return (
+		<>
+			<div>Academic</div>
+		</>
+	);
+};
 
-export default Academic
+export default Academic;
