@@ -363,8 +363,13 @@ Course.hasMany(Module);
 Module.belongsTo(Course);
 
 Student.belongsToMany(Module, { through: 'StudentModule' });
+Module.belongsToMany(Student, { through: 'StudentModule' });
+
 AdminStaff.belongsToMany(Course, { through: 'AdminStaffCourse' });
+Course.belongsToMany(AdminStaff, { through: 'AdminStaffCourse' });
+
 Instructor.belongsToMany(Module, { through: 'InstructorModule' });
+Module.belongsToMany(Instructor, { through: 'InstructorModule' });
 
 sequelize.sync();
 
