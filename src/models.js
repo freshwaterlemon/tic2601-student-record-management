@@ -329,16 +329,38 @@ const AdminStaff = sequelize.define(
 
 // association
 Student.hasMany(NextOfKin);
+NextOfKin.belongsTo(Student);
+
 School.hasMany(Student);
+Student.belongsTo(School);
+
 School.hasMany(Employee);
+Employee.belongsTo(School);
+
 School.hasMany(Course);
+Course.belongsTo(School);
+
 UserAccount.hasMany(Student);
+Student.belongsTo(UserAccount);
+
 UserAccount.hasMany(Employee);
+Employee.belongsTo(UserAccount);
+
 Employee.hasMany(Instructor);
+Instructor.belongsTo(Employee);
+
 Employee.hasMany(AdminStaff);
-CourseRecord.hasMany(Student);
+AdminStaff.belongsTo(Employee);
+
+// CourseRecord.hasMany(Student);
+CourseRecord.belongsTo(Student);
+Student.hasMany(CourseRecord);
+
 Course.hasMany(CourseRecord);
+CourseRecord.belongsTo(Course);
+
 Course.hasMany(Module);
+Module.belongsTo(Course);
 
 Student.belongsToMany(Module, { through: 'StudentModule' });
 AdminStaff.belongsToMany(Course, { through: 'AdminStaffCourse' });
