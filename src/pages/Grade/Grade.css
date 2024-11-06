@@ -1,0 +1,73 @@
+.updategradeform {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 4rem;
+}
+
+.gradeform {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	background-color: white;
+	padding: 3em;
+	width: 70%;
+	border-radius: 25px;
+	transition: 0.4s ease-in-out;
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+		0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.heading {
+	color: black;
+	text-align: center;
+	font-weight: bold;
+	font-size: 2em;
+	margin: 0;
+}
+
+.input {
+	outline: none;
+	transition: 0.4s ease-in-out;
+}
+
+.input:hover {
+	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
+}
+
+.btn .input:focus {
+	background: #ffffff;
+	box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.form .btn {
+	margin-top: 2em;
+	align-self: center;
+	padding: 0.7em;
+	padding-left: 1em;
+	padding-right: 1em;
+	border-radius: 10px;
+	border: none;
+	color: whitesmoke;
+	outline: none;
+	transition: 0.4s ease-in-out;
+}
+
+.btn {
+	margin-top: 1rem;
+}
+
+.form .btn:hover {
+	box-shadow: 6px 6px 0px #969696, -3px -3px 10px #ffffff;
+}
+
+.form .btn:active {
+	box-shadow: 6px 6px 0px #969696, -3px -3px 10px #ffffff;
+}
+
+.label {
+	color: #565b66;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	padding: 0 0.5rem;
+}
