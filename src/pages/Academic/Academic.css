@@ -1,0 +1,18 @@
+.transcriptTable{
+    margin: 2rem;
+    font-size: 0.8rem;
+
+}
+table{
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    text-align: center;
+    border-spacing: 30px;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 1rem;
+  }
