@@ -101,14 +101,17 @@ const Student = sequelize.define(
 const NextOfKin = sequelize.define(
 	'NextOfKin',
 	{
-		NOKName: {
+		NOKID: {
 			type: DataTypes.STRING,
 			primaryKey: true,
 			allowNull: false,
 		},
+		NOKName: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
 		NOKPhoneNum: {
 			type: DataTypes.INTEGER,
-			primaryKey: true,
 			allowNull: false,
 		},
 	},
@@ -158,7 +161,6 @@ const Course = sequelize.define(
 		},
 		courseName: {
 			type: DataTypes.STRING,
-			primaryKey: true,
 			allowNull: false,
 		},
 		description: {
@@ -328,8 +330,8 @@ const AdminStaff = sequelize.define(
 );
 
 // association
-Student.hasMany(NextOfKin);
-NextOfKin.belongsTo(Student);
+// Student.hasMany(NextOfKin);
+// NextOfKin.belongsTo(Student);
 
 School.hasMany(Student);
 Student.belongsTo(School);
@@ -361,6 +363,9 @@ CourseRecord.belongsTo(Course);
 
 Course.hasMany(Module);
 Module.belongsTo(Course);
+
+Student.belongsToMany(NextOfKin, { through: 'StudentNextOfKin' });
+NextOfKin.belongsToMany(Student, { through: 'StudentNextOfKin' });
 
 Student.belongsToMany(Module, { through: 'StudentModule' });
 Module.belongsToMany(Student, { through: 'StudentModule' });
