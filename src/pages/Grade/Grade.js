@@ -3,6 +3,7 @@ import './Grade.css'
 const Grade = () => {
     return (
         <>
+        <div className='gradecontainer'>
             <div className='updategradeform'>
                 <form className="gradeform">
                     <p className="heading">Update Grade</p>
@@ -20,6 +21,27 @@ const Grade = () => {
 
                     <button className="btn">Submit</button>
                 </form>
+            </div>
+
+            <div className='viewcourse'>   
+                <table>   
+					<tr>
+						<th colspan='4'><h2>Course: </h2></th>
+					</tr>
+					<tr>
+						<th>STUDENT NO</th>
+						<th>STUDENT NAME</th>
+                        <th>GRADE</th>
+                        <th>PASS/FAIL</th>
+					</tr>
+					<tr>
+						<td>"sn placeholder"</td>
+						<td>"name placeholder"</td>
+						<td>"grade placeholder"</td>
+                        <td>"Pass/Fail placeholder"</td>
+					</tr>
+				</table>
+            </div>
             </div>
         </>
     )

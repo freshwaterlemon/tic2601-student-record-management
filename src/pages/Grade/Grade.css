@@ -1,7 +1,14 @@
-.updategradeform {
+.gradecontainer{
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
-	justify-content: center;
+	align-content: center;
+	flex-wrap: wrap;
+	margin: 0 2rem;
+	gap: 5rem;
+}
+
+.updategradeform {
 	margin: 4rem;
 }
 
@@ -11,11 +18,9 @@
 	gap: 15px;
 	background-color: white;
 	padding: 3em;
-	width: 70%;
-	border-radius: 25px;
+	width: 80%;
+	border-radius: 10px;
 	transition: 0.4s ease-in-out;
-	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-		0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .heading {
@@ -40,8 +45,7 @@
 	box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
-.form .btn {
-	margin-top: 2em;
+.form, .btn {
 	align-self: center;
 	padding: 0.7em;
 	padding-left: 1em;
@@ -55,14 +59,15 @@
 
 .btn {
 	margin-top: 1rem;
+	width: 100%;
 }
 
-.form .btn:hover {
-	box-shadow: 6px 6px 0px #969696, -3px -3px 10px #ffffff;
+.btn:hover {
+	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
 }
 
-.form .btn:active {
-	box-shadow: 6px 6px 0px #969696, -3px -3px 10px #ffffff;
+.btn:active {
+	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
 }
 
 .label {
@@ -71,3 +76,26 @@
 	line-height: 1.25rem;
 	padding: 0 0.5rem;
 }
+
+
+.viewcourse{
+    margin: 2rem;
+    font-size: 0.8rem;
+	margin-right: auto;
+	overflow-y:auto;
+	background-color: white;
+	/* border-radius: 10px; */
+}
+table{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    text-align: center;
+    border-spacing: 30px;
+}
+
+table, th, td {
+    border: 1px dashed grey;
+    border-collapse: collapse;
+    padding: 1rem;
+  }
