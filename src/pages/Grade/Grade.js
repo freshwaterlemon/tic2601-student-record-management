@@ -24,7 +24,7 @@ const Grade = () => {
             </div>
 
             <div className='viewcourse'>   
-                <table>   
+                <table className='viewcoursetable'>   
 					<tr>
 						<th colspan='4'><h2>Course: </h2></th>
 					</tr>
