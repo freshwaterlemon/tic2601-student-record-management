@@ -1,0 +1,141 @@
+.courseContainer {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	align-content: center;
+	flex-wrap: wrap;
+	margin: 0 1rem;
+}
+
+.updateCourseForm {
+	margin: 3rem;
+}
+
+.courseForm {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	background-color: white;
+	padding: 3em;
+	width: 80%;
+	border-radius: 10px;
+	transition: 0.4s ease-in-out;
+	height: 60vh;
+}
+
+.updateCourseheading {
+	color: black;
+	text-align: center;
+	font-weight: bold;
+	font-size: 2em;
+	margin: 0;
+}
+
+.updateCourseInput {
+	outline: none;
+	transition: 0.4s ease-in-out;
+}
+
+.updateCourseInput:hover {
+	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
+}
+
+.updateCourseBtn .updateCourseInput:focus {
+	background: #ffffff;
+	box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.viewCourseBtn,
+.updateCourseBtn {
+	align-self: center;
+	padding: 0.7em;
+	padding-left: 1em;
+	padding-right: 1em;
+	border-radius: 10px;
+	border: none;
+	color: whitesmoke;
+	outline: none;
+	transition: 0.4s ease-in-out;
+}
+
+.updateCourseBtn {
+	margin-top: 1rem;
+	width: 100%;
+}
+
+.updateCourseBtn:hover {
+	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
+}
+
+.updateCourseBtn:active {
+	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
+}
+
+.updateCourseLabel {
+	color: #565b66;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	padding: 0 0.5rem;
+}
+
+.viewCourse {
+	margin: 1rem;
+	font-size: 0.8rem;
+	margin-right: auto;
+	overflow-y: auto;
+	background-color: white;
+	/* border-radius: 10px; */
+	height: 70vh;
+	width: 65vw;
+	padding: 0.5em;
+}
+
+.viewCourseTable {
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+	text-align: center;
+	border-spacing: 30px;
+}
+
+table,
+th,
+td {
+	border: 1px dashed grey;
+	border-collapse: collapse;
+	padding: 1rem;
+}
+
+.viewCourseHeading {
+	color: black;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.5em;
+	margin: 1rem;
+}
+
+.viewCourseInput {
+	outline: none;
+	transition: 0.4s ease-in-out;
+}
+
+.viewCourseInput:hover {
+	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
+}
+
+.viewCourseBtn .viewCourseInput:focus {
+	background: #ffffff;
+	box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.searchbarcontainer {
+	margin: 2rem 0rem;
+	max-width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+textarea{
+	
+	transition: 0.4s ease-in-out;
+}
