@@ -4,6 +4,7 @@ import Academic from './pages/Academic/Academic';
 import Course from './pages/Course/Course';
 import Grade from './pages/Grade/Grade';
 import Student from './pages/Student/Student';
+import Enrollment from './pages/Enrollment/Enrollment';
 import Error from './pages/Error';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -15,6 +16,7 @@ function App() {
 					<Route path="/" element={<Layout />}>
 						<Route path="/Academic" element={<Academic />} />
 						<Route path="/Course" element={<Course />} />
+						<Route path="/Enrollment" element={<Enrollment />} />
 						<Route path="/Grade" element={<Grade />} />
 						<Route path="/Student" element={<Student />} />
 						<Route path="*" element={<Error />} />

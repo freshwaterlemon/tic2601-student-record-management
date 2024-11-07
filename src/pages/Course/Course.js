@@ -3,7 +3,10 @@ import './Course.css';
 const Course = () => {
 	return (
 		<>
-			<div>Course</div>
+			<div>
+				<p>Add New Course</p>
+				<p>View Course Details</p>
+			</div>
 		</>
 	);
 };

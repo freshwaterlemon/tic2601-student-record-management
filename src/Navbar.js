@@ -8,16 +8,19 @@ const Navbar = () => {
 				<h1>Student Record Management</h1>
 				<ul>
 					<li>
-						<Link to="/Student">Student</Link>
+						<Link to="/Student">Student Management</Link>
 					</li>
 					<li>
-						<Link to="/Course">Course</Link>
+						<Link to="/Enrollment">Student Enrollment</Link>
+					</li>
+					<li>
+						<Link to="/Course">Course Management</Link>
 					</li>
 					<li>
 						<Link to="/Academic">Academic</Link>
 					</li>
 					<li>
-						<Link to="/Grade">Grade</Link>
+						<Link to="/Grade">Grade Management</Link>
 					</li>
 				</ul>
 			</nav>
