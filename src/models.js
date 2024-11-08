@@ -3,7 +3,8 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize('', '', '', {
 	dialect: 'sqlite',
 	storage: './db/studentrecordmanagement.db',
-	logging: console.log, // Enable logging for debugging
+	logging: false
+	// logging: console.log, // Enable logging for debugging
 });
 
 // Define tables
