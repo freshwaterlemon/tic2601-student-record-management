@@ -103,7 +103,7 @@ const Grade = () => {
                                 students.map((student, index) => (
                                     <tr key={index}>
                                         <td>{student.studentNo}</td>
-                                        <td>{student.name}</td>
+                                        <td>{student.studentName}</td>
                                         <td>{student.grade}</td>
                                         <td>{student.passFail}</td>
                                     </tr>

@@ -4,7 +4,7 @@ const cors = require('cors'); // Import cors
 const app = express();
 const port = 3000;
 const courseRecords = require('./routes/courseRecords');
-const addCourse = require('./routes/addCourse');
+// const addCourse = require('./routes/addCourse');
 
 // Use CORS middleware
 app.use(cors());
@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Mount the courseRecords router at /grade
 app.use('/grade', courseRecords);
-app.use('/course', addCourse);
+// app.use('/course', addCourse);
 
 // Home route
 app.get('/', (req, res) => {
