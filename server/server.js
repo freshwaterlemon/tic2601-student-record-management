@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors'); // Import cors
 const app = express();
 const port = 3000;
-const courseRecords = require('./routes/courseRecords');
+const courseRecords = require('./routes/grades');
 const courses = require('./routes/courses');
 
 // Use CORS middleware
