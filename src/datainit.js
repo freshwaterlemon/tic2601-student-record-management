@@ -10,7 +10,7 @@ const {
 	AdminStaff,
 	Module,
 	CourseRecord,
-} = require('./routes/models');
+} = require('./models');
 
 async function seedData() {
 	try {
