@@ -200,42 +200,6 @@ const CourseRecord = sequelize.define(
 	}
 );
 
-const Module = sequelize.define(
-	'Module',
-	{
-		studentID: {
-			type: DataTypes.STRING,
-			primaryKey: true,
-			allowNull: false,
-		},
-		courseCode: {
-			type: DataTypes.STRING,
-			primaryKey: true,
-			allowNull: false,
-		},
-		moduleNum: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-		},
-		year: {
-			type: DataTypes.DATE,
-			primaryKey: true,
-			allowNull: false,
-		},
-		semester: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
-		instructor: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
-	},
-	{
-		freezeTableName: true,
-	}
-);
-
 const Employee = sequelize.define(
 	'Employee',
 	{
@@ -322,6 +286,43 @@ const AdminStaff = sequelize.define(
 			type: DataTypes.STRING,
 			allowNull: false,
 			unique: true,
+		},
+	},
+	{
+		freezeTableName: true,
+	}
+);
+
+const Module = sequelize.define(
+	'Module',
+	{
+		studentID: {
+			type: DataTypes.STRING,
+			primaryKey: true,
+			allowNull: false,
+		},
+		courseCode: {
+			type: DataTypes.STRING,
+			primaryKey: true,
+			allowNull: false,
+		},
+		moduleNum: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+		},
+		year: {
+			type: DataTypes.DATE,
+			primaryKey: true,
+			allowNull: false,
+		},
+		semester: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		instructorID: {
+			type: DataTypes.STRING,
+			primaryKey: true,
+			allowNull: false,
 		},
 	},
 	{
