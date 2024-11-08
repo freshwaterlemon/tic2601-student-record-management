@@ -3,8 +3,9 @@ const express = require('express');
 const cors = require('cors'); // Import cors
 const app = express();
 const port = 3000;
-const courseRecords = require('./routes/grades');
-const courses = require('./routes/courses');
+const grades = require('./routes/gradesRoute');
+const courses = require('./routes/coursesRoute');
+const academic = require('./routes/academicRoute');
 
 // Use CORS middleware
 app.use(cors());
@@ -13,14 +14,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Mount the courseRecords router at /grade
-app.use('/grade', courseRecords);
+// Mount router
+app.use('/grade', grades);
 app.use('/courses', courses);
-
+app.use('/academic', academic);
 
 // Home route
 app.get('/', (req, res) => {
-  res.send("Hello world");
+  res.send("Home");
 });
 
 // Start the server
