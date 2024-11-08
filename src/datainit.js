@@ -10,7 +10,7 @@ const {
 	AdminStaff,
 	Module,
 	CourseRecord,
-} = require('./models');
+} = require('./routes/models');
 
 async function seedData() {
 	try {
@@ -26,9 +26,9 @@ async function seedData() {
 
 		// Students
 		const students = await Student.bulkCreate([
-			{ studentNum: 'ST001', studentName: 'Alice', studentDOB: new Date('2000-01-01'), personalPhoneNum: '987654321', housePhoneNum: '123456789', sex: 'F', currentAddress: '123 Maple St', nationality: 'Singaporean', emergencyContact: 'Jane Doe', degree: 'Bachelor of Science', gpa: 3.8, status: 'Active', studentEmail: 'alice@student.edu', SchoolSchoolCode: schools[0].schoolCode },
-			{ studentNum: 'ST002', studentName: 'Bob', studentDOB: new Date('2001-02-02'), personalPhoneNum: '876543210', housePhoneNum: '234567890', sex: 'M', currentAddress: '456 Oak St', nationality: 'Singaporean', emergencyContact: 'John Doe', degree: 'Bachelor of Engineering', gpa: 3.5, status: 'Active', studentEmail: 'bob@student.edu', SchoolSchoolCode: schools[1].schoolCode },
-			{ studentNum: 'ST003', studentName: 'Charlie', studentDOB: new Date('1999-03-03'), personalPhoneNum: '765432109', housePhoneNum: '345678901', sex: 'M', currentAddress: '789 Pine St', nationality: 'Malaysian', emergencyContact: 'Emily Doe', degree: 'Bachelor of Arts', gpa: 3.2, status: 'Inactive', studentEmail: 'charlie@student.edu', SchoolSchoolCode: schools[2].schoolCode },
+			{ studentNum: 'ST001', studentName: 'Alice', studentDOB: new Date('2000-01-01'), personalPhoneNum: '987654321', housePhoneNum: '123456789', sex: 'F', currentAddress: '123 Maple St', nationality: 'Singaporean', degree: 'Bachelor of Science', gpa: 3.8, status: 'Active', studentEmail: 'alice@student.edu', schoolCode: schools[0].schoolCode },
+			{ studentNum: 'ST002', studentName: 'Bob', studentDOB: new Date('2001-02-02'), personalPhoneNum: '876543210', housePhoneNum: '234567890', sex: 'M', currentAddress: '456 Oak St', nationality: 'Singaporean', degree: 'Bachelor of Engineering', gpa: 3.5, status: 'Active', studentEmail: 'bob@student.edu', schoolCode: schools[1].schoolCode },
+			{ studentNum: 'ST003', studentName: 'Charlie', studentDOB: new Date('1999-03-03'), personalPhoneNum: '765432109', housePhoneNum: '345678901', sex: 'M', currentAddress: '789 Pine St', nationality: 'Malaysian', degree: 'Bachelor of Arts', gpa: 3.2, status: 'Inactive', studentEmail: 'charlie@student.edu', schoolCode: schools[2].schoolCode },
 		]);
 
 		// NextOfKin
@@ -57,44 +57,44 @@ async function seedData() {
 			{ employeeID: 'E003', employeeSchoolCode: schools[2].schoolCode, employeeName: 'Ms. Tan', employeeEmail: 'tan@school.com', employeePhoneNum: '789789789', employeeAddress: '3 Arts Lane', employeeType: 'Instructor', UserAccountUserID: userAccounts[2].userID },
 		]);
 
-		// Courses
-		const courses = await Course.bulkCreate([
-			{ courseCode: 'C001', courseName: 'Physics 101', description: 'Introduction to Physics', SchoolSchoolCode: schools[0].schoolCode },
-			{ courseCode: 'C002', courseName: 'Mechanics', description: 'Mechanical Engineering Basics', SchoolSchoolCode: schools[1].schoolCode },
-			{ courseCode: 'C003', courseName: 'Painting 101', description: 'Introduction to Painting', SchoolSchoolCode: schools[2].schoolCode },
-		]);
-
-		// CourseRecords
-		await CourseRecord.bulkCreate([
-			{ studentID: students[0].studentNum, courseCode: courses[0].courseCode, grade: 85.0, passfail: 'Pass' },
-			{ studentID: students[1].studentNum, courseCode: courses[1].courseCode, grade: 75.0, passfail: 'Pass' },
-			{ studentID: students[2].studentNum, courseCode: courses[2].courseCode, grade: 65.0, passfail: 'Fail' },
-		]);
-
-		// Modules
-		await Module.bulkCreate([
-			{ studentID: students[0].studentNum, courseCode: courses[0].courseCode, moduleNum: 1, year: new Date('2023-01-01'), semester: 'Spring', instructor: 'Dr. Smith' },
-			{ studentID: students[1].studentNum, courseCode: courses[1].courseCode, moduleNum: 2, year: new Date('2023-01-01'), semester: 'Fall', instructor: 'Dr. Lee' },
-			{ studentID: students[2].studentNum, courseCode: courses[2].courseCode, moduleNum: 3, year: new Date('2023-01-01'), semester: 'Summer', instructor: 'Ms. Tan' },
-		]);
-
 		// Instructors
-		await Instructor.bulkCreate([
-			{ instructorID: 'I001', instructorName: 'Dr. Smith', instructorPhoneNum: '111222333', instructorEmail: 'smith@school.com' },
-			{ instructorID: 'I002', instructorName: 'Dr. Lee', instructorPhoneNum: '444555666', instructorEmail: 'lee@school.com' },
-			{ instructorID: 'I003', instructorName: 'Ms. Tan', instructorPhoneNum: '777888999', instructorEmail: 'tan@school.com' },
+		const instructors = await Instructor.bulkCreate([
+			{ instructorID: 'I001', instructorName: 'Dr. Smith', instructorPhoneNum: '111222333', instructorEmail: 'smith@school.com', employeeID: employees[0].employeeID },
+			{ instructorID: 'I002', instructorName: 'Dr. Lee', instructorPhoneNum: '444555666', instructorEmail: 'lee@school.com', employeeID: employees[1].employeeID },
+			{ instructorID: 'I003', instructorName: 'Ms. Tan', instructorPhoneNum: '777888999', instructorEmail: 'tan@school.com', employeeID: employees[2].employeeID },
 		]);
 
 		// AdminStaff
-		await AdminStaff.bulkCreate([
-			{ adminStaffID: 'A001', adminStaffName: 'Alice Admin', adminStaffPhoneNum: '333444555', adminStaffEmail: 'alice@school.com' },
+		const adminStaff = await AdminStaff.bulkCreate([
+			{ adminStaffID: 'A001', adminStaffName: 'Alice Admin', adminStaffPhoneNum: '333444555', adminStaffEmail: 'alice@school.com', employeeID: employees[1].employeeID },
 			{ adminStaffID: 'A002', adminStaffName: 'Bob Admin', adminStaffPhoneNum: '666777888', adminStaffEmail: 'bob@school.com' },
 			{ adminStaffID: 'A003', adminStaffName: 'Charlie Admin', adminStaffPhoneNum: '999000111', adminStaffEmail: 'charlie@school.com' },
 		]);
 
-		console.log('Database populated with sample data!');
-	} catch (err) {
-		console.error('Error seeding data:', err);
+		// Courses
+		const courses = await Course.bulkCreate([
+			{ courseCode: 'C001', courseName: 'Physics 101', description: 'Introduction to Physics', schoolCode: schools[0].schoolCode },
+			{ courseCode: 'C002', courseName: 'Mechanics', description: 'Mechanical Engineering Basics', schoolCode: schools[1].schoolCode },
+			{ courseCode: 'C003', courseName: 'Painting 101', description: 'Introduction to Painting', schoolCode: schools[2].schoolCode },
+		]);
+
+		// CourseRecords
+		await CourseRecord.bulkCreate([
+			{ studentID: students[0].studentNum, courseCode: courses[0].courseCode, grade: 85.0, passFail: 'Pass' },
+			{ studentID: students[1].studentNum, courseCode: courses[1].courseCode, grade: 75.0, passFail: 'Pass' },
+			{ studentID: students[2].studentNum, courseCode: courses[2].courseCode, grade: 65.0, passFail: 'Fail' },
+		]);
+
+		// Modules
+		await Module.bulkCreate([
+			{ studentID: students[0].studentNum, courseCode: courses[0].courseCode, moduleNum: 1, year: new Date('2023-01-01'), semester: 'Sem 1', instructorID: instructors[0].instructorID },
+			{ studentID: students[1].studentNum, courseCode: courses[1].courseCode, moduleNum: 2, year: new Date('2023-01-01'), semester: 'Sem 1', instructorID: instructors[1].instructorID },
+			{ studentID: students[2].studentNum, courseCode: courses[2].courseCode, moduleNum: 3, year: new Date('2023-01-01'), semester: 'Sem 2', instructorID: instructors[2].instructorID },
+		]);
+
+		console.log('Database seeded successfully!');
+	} catch (error) {
+		console.error('Error seeding data:', error);
 	}
 }
 
