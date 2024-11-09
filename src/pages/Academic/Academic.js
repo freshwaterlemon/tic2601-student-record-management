@@ -67,9 +67,9 @@ const Academic = () => {
                             <td>{transcriptData.gpa}</td>
                         </tr>
                         <tr>
-                            <td colSpan="4">COURSE</td>
-                            <td colSpan="2">GRADE</td>
-                            <td colSpan="2">PASS/FAIL</td>
+                            <td colSpan="6">COURSE</td>
+                            <td colSpan="1">GRADE</td>
+                            <td colSpan="1">PASS/FAIL</td>
                         </tr>
                         {transcriptData.courses.map((course, index) => (
                             <React.Fragment key={index}>
@@ -77,13 +77,13 @@ const Academic = () => {
                                     <td colSpan="1">ACADEMIC YEAR</td>
                                     <td colSpan="2">{course.year}</td>
                                     <td colSpan="1">SEMESTER</td>
-                                    <td colSpan="2">{course.semester}</td>
+                                    <td colSpan="1">{course.semester}</td>
                                 </tr>
                                 <tr>
                                     <td>{course.courseCode}</td>
-                                    <td colSpan="3">{course.moduleName}</td>
-                                    <td colSpan="2">{course.grade}</td>
-                                    <td colSpan="2">{course.passFail}</td>
+                                    <td colSpan="5">{course.moduleName}</td>
+                                    <td colSpan="1">{course.grade}</td>
+                                    <td colSpan="1">{course.passFail}</td>
                                 </tr>
                             </React.Fragment>
                         ))}
