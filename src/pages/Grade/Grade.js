@@ -30,7 +30,7 @@ const Grade = () => {
             const response = await fetch('http://localhost:3000/grade/update', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ studentNo, courseCode, grade, passFail })
+                body: JSON.stringify({ studentNo, courseCode, grade, passFail, year, semester })
             });
             if (!response.ok) throw new Error('Failed to submit grade');
 
@@ -43,6 +43,8 @@ const Grade = () => {
             setCourseCode('');
             setGrade('');
             setPassFail('');
+            setYear('');
+            setSemester('');
 
             // Refresh student data after successful update
             handleFilter();
@@ -71,6 +73,22 @@ const Grade = () => {
                         type="text"
                         value={courseCode}
                         onChange={(e) => setCourseCode(e.target.value)}
+                    />
+                    <label className="updateGradeLabel">Enter Year: </label>
+                    <input
+                        className="updateGradeInput"
+                        placeholder="Year"
+                        type="text"
+                        value={year}
+                        onChange={(e) => setYear(e.target.value)}
+                    />
+                    <label className="updateGradeLabel">Enter Semester: </label>
+                    <input
+                        className="updateGradeInput"
+                        placeholder="Semester"
+                        type="text"
+                        value={semester}
+                        onChange={(e) => setSemester(e.target.value)}
                     />
                     <label className="updateGradeLabel">Enter Grade: </label>
                     <input
@@ -130,13 +148,15 @@ const Grade = () => {
                 <table className='viewCourseTable'>
                     <thead>
                         <tr>
-                            <th colSpan='4'><h2>Course: {courseCode || "courseplaceholder"}</h2></th>
+                            <th colSpan='6'><h2>Course: {courseCode || "courseplaceholder"}</h2></th>
                         </tr>
                         <tr>
                             <th>STUDENT NO</th>
                             <th>STUDENT NAME</th>
                             <th>GRADE</th>
                             <th>PASS/FAIL</th>
+                            <th>YEAR</th>
+                            <th>SEMESTER</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -147,11 +167,13 @@ const Grade = () => {
                                     <td>{student.studentName}</td>
                                     <td>{student.grade}</td>
                                     <td>{student.passFail}</td>
+                                    <td>{student.year}</td>
+                                    <td>{student.semester}</td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="4">No students found</td>
+                                <td colSpan="6">No students found</td>
                             </tr>
                         )}
                     </tbody>

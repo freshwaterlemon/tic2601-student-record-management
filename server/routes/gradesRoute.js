@@ -1,16 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { CourseRecord, Student, Course } = require('../../src/models'); // Import models
+const { CourseRecord, Student, Course } = require('../../src/models');
 
-// Route to fetch course records with filtering
+// Route to fetch course records with filtering by courseCode, year, and semester
 router.get('/', async (req, res) => {
     const { courseCode, year, semester } = req.query;
 
     console.log("Received query parameters:", { courseCode, year, semester });
 
     try {
+        // Fetch records based on courseCode, year, and semester
         const records = await CourseRecord.findAll({
-            where: { courseCode },
+            where: { courseCode, year, semester },
             include: [
                 {
                     model: Student,
@@ -28,7 +29,9 @@ router.get('/', async (req, res) => {
             studentNo: record.Student.studentID,
             studentName: record.Student.studentName,
             grade: record.grade,
-            passFail: record.passfail
+            passFail: record.passfail,
+            year: record.year,
+            semester: record.semester
         }));
 
         console.log("Fetched records:", formattedRecords); // Log fetched records for verification
@@ -39,16 +42,18 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Route to update a student's grade and pass/fail status
+// Route to update a student's grade and pass/fail status for a specific course record identified by courseCode, year, and semester
 router.post('/update', async (req, res) => {
-    const { studentNo, courseCode, grade, passFail } = req.body;
+    const { studentNo, courseCode, year, semester, grade, passFail } = req.body;
 
     try {
-        // Find the course record for the specified student and course
+        // Find the specific course record by studentID, courseCode, year, and semester
         const record = await CourseRecord.findOne({
             where: {
                 studentID: studentNo,
-                courseCode: courseCode
+                courseCode: courseCode,
+                year: year,
+                semester: semester
             }
         });
 
@@ -66,6 +71,8 @@ router.post('/update', async (req, res) => {
         console.log("Updated record:", {
             studentNo,
             courseCode,
+            year,
+            semester,
             grade,
             passFail
         });
