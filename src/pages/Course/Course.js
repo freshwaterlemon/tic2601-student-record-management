@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import './Course.css';
 
 const Course = () => {
-    const [courses, setCourses] = useState([]); // Store all courses
-    const [filteredCourses, setFilteredCourses] = useState([]); // Store filtered courses
-    const [searchQuery, setSearchQuery] = useState(''); // Store the search input value
+    const [courses, setCourses] = useState([]);
+    const [filteredCourses, setFilteredCourses] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const [newCourse, setNewCourse] = useState({
         courseCode: '',
         courseName: '',
         description: ''
     });
 
-    // Fetch all courses on component mount
+    // fetch all courses on component mount
     useEffect(() => {
         const fetchCourses = async () => {
             try {
@@ -26,7 +26,7 @@ const Course = () => {
         fetchCourses();
     }, []);
 
-    // Update filtered courses based on search query (by courseCode)
+    // update filtered courses based on search query (by courseCode)
     useEffect(() => {
         const results = courses.filter(course =>
             course.courseCode.toLowerCase().includes(searchQuery.toLowerCase())
@@ -34,34 +34,33 @@ const Course = () => {
         setFilteredCourses(results);
     }, [searchQuery, courses]);
 
-    // Handle input changes for the new course form
+    // handle input changes for the new course form
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setNewCourse(prev => ({ ...prev, [name]: value }));
+        setNewCourse(prev => ({ ...prev, [name]: value })); // spread the data
     };
 
-    // Submit new course to the server
+    // submit new course to the server
     const handleAddCourse = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3000/courses/add', {
+            await fetch('http://localhost:3000/courses/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newCourse)
             });
-            const addedCourse = await response.json();
-
+    
             // Refetch courses after adding a new course
             const updatedCoursesResponse = await fetch('http://localhost:3000/courses');
             const updatedCoursesData = await updatedCoursesResponse.json();
-
+    
             // Update state with refetched courses
             setCourses(updatedCoursesData);
-            setFilteredCourses(updatedCoursesData); // Update filtered list as well
-
-            setNewCourse({ courseCode: '', courseName: '', description: '' }); // Reset form
+            setFilteredCourses(updatedCoursesData); // update filtered list as well
+    
+            setNewCourse({ courseCode: '', courseName: '', description: '' }); // reset form
         } catch (error) {
             console.error('Error adding course:', error);
         }
@@ -73,7 +72,7 @@ const Course = () => {
                 <div className='updateCourseForm'>
                     <form className="courseForm" onSubmit={handleAddCourse}>
                         <p className="updateCourseheading">Add Course</p>
-                        <label className="updateCourseLabel">Course Code </label>
+                        <label className="updateCourseLabel">Course Code:</label>
                         <input
                             className="updateCourseInput"
                             placeholder="Course Code"

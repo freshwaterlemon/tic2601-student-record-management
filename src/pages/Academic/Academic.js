@@ -3,13 +3,13 @@ import './Academic.css';
 
 const Academic = () => {
     const [studentNo, setStudentNo] = useState('');
-    const [transcriptData, setTranscriptData] = useState(null); // Store the fetched transcript data
-    const [error, setError] = useState(null); // State for error handling
+    const [transcriptData, setTranscriptData] = useState(null);
+    const [error, setError] = useState(null);
 
     const handleFilter = async (e) => {
         e.preventDefault();
-        setError(null); // Reset any previous error
-        setTranscriptData(null); // Reset data when a new search is initiated
+        setError(null);
+        setTranscriptData(null);
 
         try {
             const response = await fetch(`http://localhost:3000/academic?studentNo=${studentNo}`);
@@ -17,11 +17,13 @@ const Academic = () => {
                 throw new Error("Failed to fetch data. Please ensure the student number is correct.");
             }
             const data = await response.json();	
-            setTranscriptData(data); // Update state with fetched transcript data
+            setTranscriptData(data); // update transcriptData state with fetched transcript data
         } catch (error) {
             console.error("Failed to fetch transcript data:", error);
-            setError(error.message); // Display error message to the user
+            setError(error.message);
         }
+
+        setTimeout(() => setError(''), 3000); // clear after 3 sec
     };
 
     return (
@@ -40,7 +42,8 @@ const Academic = () => {
                 </form>
             </div>
 
-            {error && <p className="error">{error}</p>}
+            {/* display only if error is true */}
+            {error && <p className="error">{error}</p>} 
 
             {transcriptData && (
                 <table className="transcriptTable">

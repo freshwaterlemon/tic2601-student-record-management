@@ -49,6 +49,9 @@ textarea {
 	background-color: var(--input-bg-colour);
 	overflow-y: auto;
 	transition: 0.4s ease-in-out;
+	width: 95%;
+    max-width: 100%;
+    resize: vertical;
 }
 
 input:hover {

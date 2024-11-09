@@ -9,7 +9,7 @@ const Grade = () => {
     const [year, setYear] = useState('');
     const [semester, setSemester] = useState('');
     const [students, setStudents] = useState([]);
-    const [message, setMessage] = useState(''); // For displaying success message
+    const [message, setMessage] = useState('');
 
     const handleFilter = async (e) => {
         if (e) e.preventDefault();
@@ -34,11 +34,11 @@ const Grade = () => {
             });
             if (!response.ok) throw new Error('Failed to submit grade');
 
-            // Set and clear the success message with a timeout
+            // set and clear the success message using timeout
             setMessage("Grade updated successfully!");
-            setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
+            setTimeout(() => setMessage(''), 3000); // clear after 3 sec
 
-            // Reset form fields
+            // reset form fields
             setStudentNo('');
             setCourseCode('');
             setGrade('');
@@ -46,7 +46,7 @@ const Grade = () => {
             setYear('');
             setSemester('');
 
-            // Refresh student data after successful update
+            // refresh student data after successful update
             handleFilter();
         } catch (error) {
             console.error('Error submitting grade:', error);
@@ -58,7 +58,7 @@ const Grade = () => {
             <div className='updateGradeForm'>
                 <form className="gradeForm" onSubmit={handleSubmitGrade}>
                     <p className="updateGradeHeading">Update Grade</p>
-                    <label className="updateGradeLabel">Enter Student No: </label>
+                    {/* <label className="updateGradeLabel">Enter Student No: </label> */}
                     <input
                         className="updateGradeInput"
                         placeholder="Student No"
@@ -66,7 +66,7 @@ const Grade = () => {
                         value={studentNo}
                         onChange={(e) => setStudentNo(e.target.value)}
                     />
-                    <label className="updateGradeLabel">Enter Course Code: </label>
+                    {/* <label className="updateGradeLabel">Enter Course Code: </label> */}
                     <input
                         className="updateGradeInput"
                         placeholder="Course Code"
@@ -74,7 +74,7 @@ const Grade = () => {
                         value={courseCode}
                         onChange={(e) => setCourseCode(e.target.value)}
                     />
-                    <label className="updateGradeLabel">Enter Year: </label>
+                    {/* <label className="updateGradeLabel">Enter Year: </label> */}
                     <input
                         className="updateGradeInput"
                         placeholder="Year"
@@ -82,7 +82,7 @@ const Grade = () => {
                         value={year}
                         onChange={(e) => setYear(e.target.value)}
                     />
-                    <label className="updateGradeLabel">Enter Semester: </label>
+                    {/* <label className="updateGradeLabel">Enter Semester: </label> */}
                     <input
                         className="updateGradeInput"
                         placeholder="Semester"
@@ -90,7 +90,7 @@ const Grade = () => {
                         value={semester}
                         onChange={(e) => setSemester(e.target.value)}
                     />
-                    <label className="updateGradeLabel">Enter Grade: </label>
+                    {/* <label className="updateGradeLabel">Enter Grade: </label> */}
                     <input
                         className="updateGradeInput"
                         placeholder="Grade"
@@ -101,7 +101,7 @@ const Grade = () => {
                         value={grade}
                         onChange={(e) => setGrade(e.target.value)}
                     />
-                    <label className="updateGradeLabel">Enter Pass/Fail: </label>
+                    {/* <label className="updateGradeLabel">Enter Pass/Fail: </label> */}
                     <input
                         className="updateGradeInput"
                         placeholder="Pass/Fail"

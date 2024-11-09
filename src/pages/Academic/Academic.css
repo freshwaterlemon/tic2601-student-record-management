@@ -4,12 +4,12 @@
 	background-color: white;
 }
 
-.filterStudentForm{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    padding: 0.5rem;
+.filterStudentForm {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	padding: 0.5rem;
 }
 
 .transcriptTable {
@@ -39,7 +39,7 @@ td {
 	outline: none;
 	transition: 0.4s ease-in-out;
 	max-width: fit-content;
-    margin: 1rem;
+	margin: 1rem;
 }
 
 .filterStudentBtn {
@@ -53,4 +53,14 @@ td {
 
 .filterStudentBtn:active {
 	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
+}
+
+.error {
+	color: red;
+	font-weight: bold;
+	font-size: 1rem;
+	padding: 5em;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }

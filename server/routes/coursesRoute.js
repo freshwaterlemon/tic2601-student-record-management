@@ -1,9 +1,9 @@
 // server/routes/courses.js
 const express = require('express');
 const router = express.Router();
-const { Course } = require('../../src/models'); // Import the Course model
+const { Course } = require('../../src/models');
 
-// Route to fetch all courses
+// route to fetch all courses
 router.get('/', async (req, res) => {
     try {
         const courses = await Course.findAll();
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Route to add a new course
+// route to post a new course
 router.post('/add', async (req, res) => {
     const { courseCode, courseName, description } = req.body;
 

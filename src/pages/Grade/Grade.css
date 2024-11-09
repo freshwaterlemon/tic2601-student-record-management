@@ -14,7 +14,7 @@
 .gradeForm {
 	display: flex;
 	flex-direction: column;
-	gap: 5px;
+	gap: 25px;
 	padding: 1em 3em;
 	width: 80%;
 	transition: 0.4s ease-in-out;
