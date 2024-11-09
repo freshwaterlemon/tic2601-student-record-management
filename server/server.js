@@ -6,6 +6,8 @@ const port = 3000;
 const grades = require('./routes/gradesRoute');
 const courses = require('./routes/coursesRoute');
 const academic = require('./routes/academicRoute');
+const enrollment = require('./routes/enrollmentRoute');
+const student = require('./routes/studentRoute');
 
 // Use CORS middleware
 app.use(cors());
@@ -18,6 +20,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/grade', grades);
 app.use('/courses', courses);
 app.use('/academic', academic);
+app.use('/enrollment', enrollment); // for amos backend
+app.use('/student', student); // for aaron backend
 
 // Home route
 app.get('/', (req, res) => {
