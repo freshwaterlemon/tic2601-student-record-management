@@ -15,12 +15,10 @@
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
-	background-color: white;
-	padding: 3em;
+	padding: 1em 3em;
 	width: 80%;
-	border-radius: 10px;
 	transition: 0.4s ease-in-out;
-	height: 60vh;
+	height: 70vh;
 }
 
 .updateCourseheading {
@@ -29,20 +27,6 @@
 	font-weight: bold;
 	font-size: 2em;
 	margin: 0;
-}
-
-.updateCourseInput {
-	outline: none;
-	transition: 0.4s ease-in-out;
-}
-
-.updateCourseInput:hover {
-	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
-}
-
-.updateCourseBtn .updateCourseInput:focus {
-	background: #ffffff;
-	box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
 .viewCourseBtn,
@@ -63,28 +47,12 @@
 	width: 100%;
 }
 
-.updateCourseBtn:hover {
-	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
-}
-
-.updateCourseBtn:active {
-	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
-}
-
-.updateCourseLabel {
-	color: #565b66;
-	font-size: 0.875rem;
-	line-height: 1.25rem;
-	padding: 0 0.5rem;
-}
-
 .viewCourse {
 	margin: 1rem;
 	font-size: 0.8rem;
 	margin-right: auto;
 	overflow-y: auto;
 	background-color: white;
-	/* border-radius: 10px; */
 	height: 70vh;
 	width: 65vw;
 	padding: 0.5em;
@@ -114,20 +82,6 @@ td {
 	margin: 1rem;
 }
 
-.viewCourseInput {
-	outline: none;
-	transition: 0.4s ease-in-out;
-}
-
-.viewCourseInput:hover {
-	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
-}
-
-.viewCourseBtn .viewCourseInput:focus {
-	background: #ffffff;
-	box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.3);
-}
-
 .searchbarcontainer {
 	margin: 2rem 0rem;
 	max-width: fit-content;
@@ -135,7 +89,26 @@ td {
 	margin-right: auto;
 }
 
-textarea{
-	
-	transition: 0.4s ease-in-out;
+@media only screen and (max-width: 1500px) {
+	.gradeForm {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		padding: 1em 3em;
+		width: 60%;
+		transition: 0.4s ease-in-out;
+		height: 70vh;
+	}
+
+	.viewCourse {
+		margin: 0em;
+		font-size: 0.8rem;
+		margin-right: auto;
+		overflow-y: auto;
+		background-color: white;
+		height: 70vh;
+		width: 50vw;
+		padding: 1.5em;
+	}
+
 }
