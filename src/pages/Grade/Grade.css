@@ -137,6 +137,12 @@
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
+.viewCourseStudentTable thead h3{
+	text-align: center;
+	padding: 0.5em;
+	margin: 0;
+}
+
 .viewCourseStudentTable thead tr {
     background-color: #ffab67; 
     color: #ffffff; 
@@ -146,6 +152,11 @@
     padding: 12px 15px;
     /* border: 1px solid #dddddd; */
 	text-align: left;
+}
+
+.viewCourseStudentTable tbody tr td[colspan="6"] {
+    text-align: center;
+	padding: 6em;
 }
 
 .viewCourseStudentTable tbody tr {
@@ -158,5 +169,5 @@
 }
 
 .viewCourseStudentTable tbody tr:hover {
-    background-color: #b0c4de99;
+    background-color: rgba(255, 235, 205, 0.357);
 }

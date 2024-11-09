@@ -14,7 +14,7 @@
 .courseForm {
 	display: flex;
 	flex-direction: column;
-	gap: 15px;
+	gap: 35px;
 	padding: 1em 3em;
 	width: 80%;
 	transition: 0.4s ease-in-out;
@@ -110,8 +110,8 @@
     width: 100%;
     border-collapse: collapse;
     font-family: Arial, sans-serif;
-    font-size: 16px;
-    margin: 20px 0;
+    font-size: 1em;
+    margin: 1em 0;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -121,7 +121,7 @@
 }
 
 .viewCourseTable th, .viewCourseTable td {
-    padding: 12px 15px;
+    padding: 1.2em 1em;
 	text-align: left;
 }
 
@@ -135,5 +135,5 @@
 }
 
 .viewCourseTable tbody tr:hover {
-    background-color: #b0c4de99;
+    background-color: rgba(255, 235, 205, 0.357);
 }

@@ -72,7 +72,7 @@ const Course = () => {
                 <div className='updateCourseForm'>
                     <form className="courseForm" onSubmit={handleAddCourse}>
                         <p className="updateCourseheading">Add Course</p>
-                        <label className="updateCourseLabel">Course Code:</label>
+                        {/* <label className="updateCourseLabel">Course Code:</label> */}
                         <input
                             className="updateCourseInput"
                             placeholder="Course Code"
@@ -82,7 +82,7 @@ const Course = () => {
                             onChange={handleInputChange}
                         />
 
-                        <label className="updateCourseLabel">Course Name:</label>
+                        {/* <label className="updateCourseLabel">Course Name:</label> */}
                         <input
                             className="updateCourseInput"
                             placeholder="Course Name"
@@ -92,7 +92,7 @@ const Course = () => {
                             onChange={handleInputChange}
                         />
 
-                        <label className="updateCourseLabel">Description: </label>
+                        {/* <label className="updateCourseLabel">Description: </label> */}
                         <textarea
                             rows="3"
                             className="updateCourseInput"
