@@ -38,7 +38,7 @@
 	box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
-.viewcoursebtn,
+.viewCourseStudentBtn,
 .updateGradeBtn {
 	align-self: center;
 	padding: 0.7em;
@@ -56,7 +56,7 @@
 	width: 100%;
 }
 
-.viewCourse {
+.viewCourseStudent {
 	margin: 1rem;
 	font-size: 0.8rem;
 	margin-right: auto;
@@ -67,20 +67,12 @@
 	padding: 1.5em;
 }
 
-.viewCourseTable {
+.viewCourseStudentTable {
 	margin-left: auto;
 	margin-right: auto;
 	width: 100%;
 	text-align: center;
 	border-spacing: 30px;
-}
-
-table,
-th,
-td {
-	border: 1px dashed grey;
-	border-collapse: collapse;
-	padding: 1rem;
 }
 
 .viewCourseHeading {
@@ -91,17 +83,17 @@ td {
 	margin: 1rem;
 }
 
-.chooseCourse {
+.chooseCourseStudent {
 	margin: 2rem 0rem;
 }
 
-.viewCourseBtn {
+.viewCourseStudentBtn {
 	margin-top: 1rem;
 	margin-left: 1.5rem;
 	width: 10%;
 }
 
-.viewCourseLabel {
+.viewCourseStudentLabel {
 	margin-left: 1rem;
 }
 
@@ -123,7 +115,7 @@ td {
 		height: 70vh;
 	}
 
-	.viewCourse {
+	.viewCourseStudent {
 		margin: 0em;
 		font-size: 0.8rem;
 		margin-right: auto;
@@ -134,4 +126,37 @@ td {
 		padding: 1.5em;
 	}
 
+}
+
+.viewCourseStudentTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 1.2em;
+    margin: 1em 0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.viewCourseStudentTable thead tr {
+    background-color: #ffab67; 
+    color: #ffffff; 
+}
+
+.viewCourseStudentTable th, .viewCourseStudentTable td {
+    padding: 12px 15px;
+    /* border: 1px solid #dddddd; */
+	text-align: left;
+}
+
+.viewCourseStudentTable tbody tr {
+    background-color: #f3f3f3;
+    transition: background-color 0.2s ease;
+}
+
+.viewCourseStudentTable tbody tr:nth-child(even) {
+    background-color: #e6e6e6;
+}
+
+.viewCourseStudentTable tbody tr:hover {
+    background-color: #b0c4de99;
 }

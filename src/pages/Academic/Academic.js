@@ -80,13 +80,13 @@ const Academic = () => {
                                     <td colSpan="1">ACADEMIC YEAR</td>
                                     <td colSpan="2">{course.year}</td>
                                     <td colSpan="1">SEMESTER</td>
-                                    <td colSpan="1">{course.semester}</td>
+                                    <td colSpan="4">{course.semester}</td>
                                 </tr>
                                 <tr>
                                     <td>{course.courseCode}</td>
                                     <td colSpan="5">{course.moduleName}</td>
                                     <td colSpan="1">{course.grade}</td>
-                                    <td colSpan="1">{course.passFail}</td>
+                                    <td colSpan="4">{course.passFail}</td>
                                 </tr>
                             </React.Fragment>
                         ))}

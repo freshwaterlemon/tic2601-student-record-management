@@ -114,12 +114,12 @@ const Grade = () => {
                 </form>
             </div>
 
-            <div className='viewCourse'>
-                <form className="chooseCourse" onSubmit={handleFilter}>
-                    <p className="viewCourseHeading">View Course</p>
-                    <label className="viewCourseLabel">Course Code: </label>
+            <div className='viewCourseStudent'>
+                <form className="chooseCourseStudent" onSubmit={handleFilter}>
+                    <p className="viewviewCourseStudentHeading">View Course</p>
+                    <label className="viewCourseStudentLabel">Course Code: </label>
                     <input
-                        className="viewCourseInput"
+                        className="viewCourseStudentInput"
                         placeholder="Course Code"
                         type="text"
                         value={courseCode}
@@ -127,28 +127,28 @@ const Grade = () => {
                     />
                     <label className="viewCourseLabel">Year: </label>
                     <input
-                        className="viewCourseInput"
+                        className="viewCourseStudentInput"
                         placeholder="Year"
                         type="text"
                         value={year}
                         onChange={(e) => setYear(e.target.value)}
                     />
-                    <label className="viewCourseLabel">Semester: </label>
+                    <label className="viewCourseStudentLabel">Semester: </label>
                     <input
-                        className="viewCourseInput"
+                        className="viewCourseStudentInput"
                         placeholder="Semester"
                         type="text"
                         maxLength="8"
                         value={semester}
                         onChange={(e) => setSemester(e.target.value)}
                     />
-                    <button className="viewCourseBtn" type="submit">Filter</button>
+                    <button className="viewCourseStudentBtn" type="submit">Filter</button>
                 </form>
 
-                <table className='viewCourseTable'>
+                <table className='viewCourseStudentTable'>
                     <thead>
                         <tr>
-                            <th colSpan='6'><h2>Course: {courseCode || "courseplaceholder"}</h2></th>
+                            <th colSpan='6'><h3>{courseCode || "No Course Selected"}</h3></th>
                         </tr>
                         <tr>
                             <th>STUDENT NO</th>

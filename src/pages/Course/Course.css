@@ -25,7 +25,7 @@
 	color: black;
 	text-align: center;
 	font-weight: bold;
-	font-size: 2em;
+	font-size: 1.5em;
 	margin: 0;
 }
 
@@ -66,14 +66,6 @@
 	border-spacing: 30px;
 }
 
-table,
-th,
-td {
-	border: 1px dashed grey;
-	border-collapse: collapse;
-	padding: 1rem;
-}
-
 .viewCourseHeading {
 	color: black;
 	text-align: center;
@@ -111,4 +103,37 @@ td {
 		padding: 1.5em;
 	}
 
+}
+
+
+.viewCourseTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    margin: 20px 0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.viewCourseTable thead tr {
+    background-color: #ffab67; 
+    color: #ffffff;
+}
+
+.viewCourseTable th, .viewCourseTable td {
+    padding: 12px 15px;
+	text-align: left;
+}
+
+.viewCourseTable tbody tr {
+    background-color: #f3f3f3;
+    transition: background-color 0.2s ease;
+}
+
+.viewCourseTable tbody tr:nth-child(even) {
+    background-color: #e6e6e6;
+}
+
+.viewCourseTable tbody tr:hover {
+    background-color: #b0c4de99;
 }
