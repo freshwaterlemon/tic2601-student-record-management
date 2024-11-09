@@ -62,18 +62,21 @@ const Course = sequelize.define(
 );
 
 const CourseRecord = sequelize.define(
-	'CourseRecord',
-	{
-		studentID: { type: DataTypes.STRING, allowNull: false },
-		courseCode: { type: DataTypes.STRING, allowNull: false },
-		grade: { type: DataTypes.FLOAT, allowNull: true },
-		passfail: { type: DataTypes.STRING, allowNull: false },
-	},
-	{
-		indexes: [{ unique: true, fields: ['studentID', 'courseCode'] }],
-		freezeTableName: true,
-	}
+    'CourseRecord',
+    {
+        studentID: { type: DataTypes.STRING, allowNull: false },
+        courseCode: { type: DataTypes.STRING, allowNull: false },
+        grade: { type: DataTypes.FLOAT, allowNull: true },
+        passfail: { type: DataTypes.STRING, allowNull: false },
+        year: { type: DataTypes.INTEGER, allowNull: false },      // New field
+        semester: { type: DataTypes.STRING, allowNull: false },    // New field
+    },
+    {
+        indexes: [{ unique: true, fields: ['studentID', 'courseCode', 'year', 'semester'] }],
+        freezeTableName: true,
+    }
 );
+
 
 const NextOfKin = sequelize.define(
 	'NextOfKin',
@@ -285,22 +288,52 @@ CourseRecord.belongsTo(Module, {
     ]);
 
     // Add Course Records
-    await CourseRecord.bulkCreate([
-        { studentID: 'S001', courseCode: 'C001', grade: 4.0, passfail: 'Pass' },
-        { studentID: 'S001', courseCode: 'C002', grade: 3.8, passfail: 'Pass' },
-        { studentID: 'S001', courseCode: 'C003', grade: 3.8, passfail: 'Pass' },
-        { studentID: 'S001', courseCode: 'C004', grade: 3.8, passfail: 'Pass' },
-        { studentID: 'S001', courseCode: 'C005', grade: 3.8, passfail: 'Pass' },
-        { studentID: 'S001', courseCode: 'C006', grade: 3.8, passfail: 'Pass' },
+	// Add Course Records
+await CourseRecord.bulkCreate([
+    // Records for student S001
+    { studentID: 'S001', courseCode: 'C001', grade: 4.0, passfail: 'Pass', year: 2022, semester: '1' },
+    { studentID: 'S001', courseCode: 'C002', grade: 3.8, passfail: 'Pass', year: 2022, semester: '2' },
+    { studentID: 'S001', courseCode: 'C003', grade: 3.7, passfail: 'Pass', year: 2023, semester: '1' },
+    { studentID: 'S001', courseCode: 'C004', grade: 3.9, passfail: 'Pass', year: 2023, semester: '2' },
+    { studentID: 'S001', courseCode: 'C005', grade: 4.0, passfail: 'Pass', year: 2024, semester: '1' },
+    { studentID: 'S001', courseCode: 'C006', grade: 3.6, passfail: 'Pass', year: 2024, semester: '2' },
 
-        { studentID: 'S002', courseCode: 'C003', grade: 3.2, passfail: 'Pass' },
-        { studentID: 'S002', courseCode: 'C004', grade: 3.6, passfail: 'Pass' },
-        { studentID: 'S003', courseCode: 'C005', grade: 3.9, passfail: 'Pass' },
-        { studentID: 'S004', courseCode: 'C006', grade: 3.7, passfail: 'Pass' },
-        { studentID: 'S005', courseCode: 'C001', grade: 3.5, passfail: 'Pass' },
-        { studentID: 'S006', courseCode: 'C002', grade: 3.4, passfail: 'Pass' },
-        { studentID: 'S006', courseCode: 'C003', grade: 3.9, passfail: 'Pass' },
-    ]);
+    // Records for student S002
+    { studentID: 'S002', courseCode: 'C001', grade: 3.5, passfail: 'Pass', year: 2022, semester: '1' },
+    { studentID: 'S002', courseCode: 'C002', grade: 3.2, passfail: 'Pass', year: 2022, semester: '2' },
+    { studentID: 'S002', courseCode: 'C003', grade: 3.4, passfail: 'Pass', year: 2023, semester: '1' },
+    { studentID: 'S002', courseCode: 'C004', grade: 3.7, passfail: 'Pass', year: 2023, semester: '2' },
+    { studentID: 'S002', courseCode: 'C005', grade: 3.9, passfail: 'Pass', year: 2024, semester: '1' },
+    { studentID: 'S002', courseCode: 'C006', grade: 3.6, passfail: 'Pass', year: 2024, semester: '2' },
+
+    // Records for student S003
+    { studentID: 'S003', courseCode: 'C001', grade: 4.0, passfail: 'Pass', year: 2023, semester: '1' },
+    { studentID: 'S003', courseCode: 'C002', grade: 3.8, passfail: 'Pass', year: 2023, semester: '2' },
+    { studentID: 'S003', courseCode: 'C003', grade: 3.5, passfail: 'Pass', year: 2024, semester: '1' },
+    { studentID: 'S003', courseCode: 'C004', grade: 3.7, passfail: 'Pass', year: 2024, semester: '2' },
+
+    // Records for student S004
+    { studentID: 'S004', courseCode: 'C005', grade: 3.8, passfail: 'Pass', year: 2023, semester: '1' },
+    { studentID: 'S004', courseCode: 'C006', grade: 3.9, passfail: 'Pass', year: 2023, semester: '2' },
+    { studentID: 'S004', courseCode: 'C001', grade: 3.7, passfail: 'Pass', year: 2024, semester: '1' },
+    { studentID: 'S004', courseCode: 'C002', grade: 3.5, passfail: 'Pass', year: 2024, semester: '2' },
+
+    // Records for student S005
+    { studentID: 'S005', courseCode: 'C003', grade: 3.9, passfail: 'Pass', year: 2022, semester: '1' },
+    { studentID: 'S005', courseCode: 'C004', grade: 3.8, passfail: 'Pass', year: 2023, semester: '2' },
+    { studentID: 'S005', courseCode: 'C005', grade: 4.0, passfail: 'Pass', year: 2024, semester: '1' },
+    { studentID: 'S005', courseCode: 'C006', grade: 3.6, passfail: 'Pass', year: 2024, semester: '2' },
+
+    // Records for student S006
+    { studentID: 'S006', courseCode: 'C001', grade: 3.9, passfail: 'Pass', year: 2022, semester: '1' },
+    { studentID: 'S006', courseCode: 'C002', grade: 3.5, passfail: 'Pass', year: 2022, semester: '2' },
+    { studentID: 'S006', courseCode: 'C003', grade: 3.6, passfail: 'Pass', year: 2023, semester: '1' },
+    { studentID: 'S006', courseCode: 'C004', grade: 3.7, passfail: 'Pass', year: 2023, semester: '2' },
+    { studentID: 'S006', courseCode: 'C005', grade: 3.8, passfail: 'Pass', year: 2024, semester: '1' },
+    { studentID: 'S006', courseCode: 'C006', grade: 4.0, passfail: 'Pass', year: 2024, semester: '2' },
+]);
+
+	
 
     console.log('Database fully seeded with sample data!');
 })();
@@ -319,17 +352,3 @@ module.exports = {
     AdminStaff,
 };
 
-
-module.exports = {
-    sequelize,
-    UserAccount,
-    Student,
-    NextOfKin,
-    School,
-    Course,
-    CourseRecord,
-    Module,
-    Employee,
-    Instructor,
-    AdminStaff,
-};

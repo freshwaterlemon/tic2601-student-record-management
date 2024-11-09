@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Student, CourseRecord, Course, Module } = require('../../src/models'); // Adjust path if necessary
+const { Student, CourseRecord, Course } = require('../../src/models'); // Adjust path if necessary
 
 // Route to fetch transcript data by student number
 router.get('/', async (req, res) => {
@@ -11,14 +11,14 @@ router.get('/', async (req, res) => {
     }
 
     try {
-        // Fetch the student and basic course records without Module
+        // Fetch the student and related course records, now with year and semester in CourseRecord
         const student = await Student.findOne({
             where: { studentID: studentNo },
             attributes: ['studentName', 'studentID', 'studentDOB', 'degree', 'status'],
             include: [
                 {
                     model: CourseRecord,
-                    attributes: ['courseCode', 'grade', 'passfail'],
+                    attributes: ['courseCode', 'grade', 'passfail', 'year', 'semester'],
                     include: [
                         {
                             model: Course,
@@ -39,28 +39,15 @@ router.get('/', async (req, res) => {
         const averageGPA = grades.length ? (totalGrade / grades.length) : 0;
         const gpa = Math.min(averageGPA, 5).toFixed(2); // Cap the GPA at 5
 
-        // Fetch related Modules separately and match by courseCode
-        const courseCodes = student.CourseRecords.map(record => record.courseCode);
-        const modules = await Module.findAll({
-            where: { courseCode: courseCodes },
-            attributes: ['courseCode', 'year', 'semester']
-        });
-
-        // Map each CourseRecord to its corresponding Module data, and sort by year and semester
-        const courses = student.CourseRecords.map(record => {
-            const module = modules.find(m => m.courseCode === record.courseCode);
-            return {
-                courseCode: record.courseCode,
-                moduleName: record.Course.courseName,
-                year: module ? module.year : 'N/A',
-                semester: module ? module.semester : 'N/A',
-                grade: record.grade,
-                passFail: record.passfail,
-            };
-        });
-
         // Sort the courses by year and semester
-        courses.sort((a, b) => {
+        const courses = student.CourseRecords.map(record => ({
+            courseCode: record.courseCode,
+            moduleName: record.Course.courseName,
+            year: record.year,
+            semester: record.semester,
+            grade: record.grade,
+            passFail: record.passfail,
+        })).sort((a, b) => {
             if (a.year === b.year) {
                 return a.semester.localeCompare(b.semester); // Sort by semester if the year is the same
             }
