@@ -30,7 +30,7 @@ const Academic = () => {
         <div className="academicContainer">
             <div className="filterStudentForm">
                 <form onSubmit={handleFilter}>
-                    <label className="filterStudentLabel">Student No: </label>
+                    {/* <label className="filterStudentLabel">Student No: </label> */}
                     <input
                         className="filterStudentInput"
                         placeholder="Student No"
