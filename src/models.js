@@ -32,12 +32,15 @@ const Student = sequelize.define(
 		studentDOB: { type: DataTypes.DATE, allowNull: false },
 		personalPhoneNum: { type: DataTypes.STRING, allowNull: false },
 		housePhoneNum: { type: DataTypes.STRING, allowNull: true },
-		sex: { type: DataTypes.STRING, allowNull: false },
+		sex: { type: DataTypes.ENUM('Female', 'Male'), allowNull: false },
 		currentAddress: { type: DataTypes.STRING, allowNull: false },
 		nationality: { type: DataTypes.STRING, allowNull: false },
 		degree: { type: DataTypes.STRING, allowNull: false },
-		gpa: { type: DataTypes.FLOAT, allowNull: false },
-		status: { type: DataTypes.STRING, allowNull: false },
+		gpa: { type: DataTypes.FLOAT, allowNull: false, validate: {
+			min: 0.0,
+			max: 5.0,
+		} },
+		status: { type: DataTypes.ENUM('Postgraduate', 'Undergraduate'), allowNull: false },
 		studentEmail: {
 			type: DataTypes.STRING,
 			allowNull: false,

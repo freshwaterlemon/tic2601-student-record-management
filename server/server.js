@@ -21,7 +21,7 @@ app.use('/grade', grades);
 app.use('/courses', courses);
 app.use('/academic', academic);
 // app.use('/enrollment', enrollment); // for amos backend
-// app.use('/student', student); // for aaron backend
+app.use('/student', student);
 
 // Home route
 app.get('/', (req, res) => {
