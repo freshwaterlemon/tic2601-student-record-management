@@ -40,7 +40,7 @@ const Student = sequelize.define(
 			min: 0.0,
 			max: 5.0,
 		} },
-		status: { type: DataTypes.ENUM('Postgraduate', 'Undergraduate'), allowNull: false },
+		studentstudentStatus: { type: DataTypes.ENUM('Active', 'Graduated'), allowNull: false },
 		studentEmail: {
 			type: DataTypes.STRING,
 			allowNull: false,
@@ -259,12 +259,12 @@ CourseRecord.belongsTo(Module, {
 
     // Add Students
     await Student.bulkCreate([
-        { studentID: 'S001', studentName: 'Alice', studentDOB: '2000-01-01', personalPhoneNum: '9876543210', sex: 'F', currentAddress: '123 Main St', nationality: 'Singaporean', degree: 'BSc', gpa: 3.8, status: 'Active', studentEmail: 'alice@student.com' },
-        { studentID: 'S002', studentName: 'Bob', studentDOB: '1999-03-15', personalPhoneNum: '9123456789', sex: 'M', currentAddress: '456 Elm St', nationality: 'Singaporean', degree: 'BSc', gpa: 3.5, status: 'Active', studentEmail: 'bob@student.com' },
-        { studentID: 'S003', studentName: 'Charlie', studentDOB: '2001-06-21', personalPhoneNum: '9988776655', sex: 'M', currentAddress: '789 Maple Ave', nationality: 'Malaysian', degree: 'BA', gpa: 3.6, status: 'Active', studentEmail: 'charlie@student.com' },
-        { studentID: 'S004', studentName: 'David', studentDOB: '2002-02-20', personalPhoneNum: '8765432109', sex: 'M', currentAddress: '101 Oak St', nationality: 'Indonesian', degree: 'BSc', gpa: 3.2, status: 'Active', studentEmail: 'david@student.com' },
-        { studentID: 'S005', studentName: 'Eve', studentDOB: '2000-05-18', personalPhoneNum: '9123067890', sex: 'F', currentAddress: '202 Pine St', nationality: 'Indian', degree: 'BA', gpa: 3.4, status: 'Active', studentEmail: 'eve@student.com' },
-        { studentID: 'S006', studentName: 'Frank', studentDOB: '2001-12-12', personalPhoneNum: '8112233445', sex: 'M', currentAddress: '303 Cedar Ave', nationality: 'Filipino', degree: 'BEng', gpa: 3.9, status: 'Active', studentEmail: 'frank@student.com' },
+        { studentID: 'S001', studentName: 'Alice', studentDOB: '2000-01-01', personalPhoneNum: '9876543210', sex: 'F', currentAddress: '123 Main St', nationality: 'Singaporean', degree: 'BSc', gpa: 3.8, studentstudentStatus: 'Active', studentEmail: 'alice@student.com' },
+        { studentID: 'S002', studentName: 'Bob', studentDOB: '1999-03-15', personalPhoneNum: '9123456789', sex: 'M', currentAddress: '456 Elm St', nationality: 'Singaporean', degree: 'BSc', gpa: 3.5, studentStatus: 'Active', studentEmail: 'bob@student.com' },
+        { studentID: 'S003', studentName: 'Charlie', studentDOB: '2001-06-21', personalPhoneNum: '9988776655', sex: 'M', currentAddress: '789 Maple Ave', nationality: 'Malaysian', degree: 'BA', gpa: 3.6, studentStatus: 'Active', studentEmail: 'charlie@student.com' },
+        { studentID: 'S004', studentName: 'David', studentDOB: '2002-02-20', personalPhoneNum: '8765432109', sex: 'M', currentAddress: '101 Oak St', nationality: 'Indonesian', degree: 'BSc', gpa: 3.2, studentStatus: 'Active', studentEmail: 'david@student.com' },
+        { studentID: 'S005', studentName: 'Eve', studentDOB: '2000-05-18', personalPhoneNum: '9123067890', sex: 'F', currentAddress: '202 Pine St', nationality: 'Indian', degree: 'BA', gpa: 3.4, studentStatus: 'Active', studentEmail: 'eve@student.com' },
+        { studentID: 'S006', studentName: 'Frank', studentDOB: '2001-12-12', personalPhoneNum: '8112233445', sex: 'M', currentAddress: '303 Cedar Ave', nationality: 'Filipino', degree: 'BEng', gpa: 3.9, studentStatus: 'Active', studentEmail: 'frank@student.com' },
     ]);
 
     // Add Courses
