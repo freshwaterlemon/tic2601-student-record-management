@@ -4,6 +4,7 @@ import './Grade.css';
 const Grade = () => {
     const [studentNo, setStudentNo] = useState('');
     const [courseCode, setCourseCode] = useState('');
+    const [courseName, setCourseName] = useState('');
     const [grade, setGrade] = useState('');
     const [passFail, setPassFail] = useState('');
     const [year, setYear] = useState('');
@@ -17,10 +18,16 @@ const Grade = () => {
             const response = await fetch(`http://localhost:3000/grade?courseCode=${courseCode}&year=${year}&semester=${semester}`);
             if (!response.ok) throw new Error('Failed to fetch data');
             const data = await response.json();
+
+            if (data.length > 0) {
+                setCourseName(data[0].courseName);
+            }
+
             setStudents(data);
         } catch (error) {
             console.error('Error fetching data:', error);
             setStudents([]);
+            setCourseName('');
         }
     };
 
@@ -30,7 +37,7 @@ const Grade = () => {
             const response = await fetch('http://localhost:3000/grade/update', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ studentNo, courseCode, grade, passFail, year, semester })
+                body: JSON.stringify({ studentNo, courseCode, courseName, grade, passFail, year, semester })
             });
             if (!response.ok) throw new Error('Failed to submit grade');
 
@@ -41,6 +48,7 @@ const Grade = () => {
             // reset form fields
             setStudentNo('');
             setCourseCode('');
+            setCourseName('');
             setGrade('');
             setPassFail('');
             setYear('');
@@ -149,7 +157,7 @@ const Grade = () => {
                 <table className='viewCourseStudentTable'>
                     <thead>
                         <tr>
-                            <th colSpan='6'><h3>{courseCode || "No Course Selected"}</h3></th>
+                            <th colSpan='6'><h3>{courseCode + ' ' + courseName || "No Course Selected"}</h3></th>
                         </tr>
                         <tr>
                             <th>STUDENT NO</th>

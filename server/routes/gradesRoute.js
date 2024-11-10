@@ -7,11 +7,16 @@ router.get('/', async (req, res) => {
     const { courseCode, year, semester } = req.query;
 
     console.log("Received query parameters:", { courseCode, year, semester });
+    
+    const filters = {};
+        if (courseCode) filters.courseCode = courseCode;
+        if (year) filters.year = year;
+        if (semester) filters.semester = semester;
 
     try {
         // fetch records based on courseCode, year, and semester
         const records = await CourseRecord.findAll({
-            where: { courseCode, year, semester },
+            where: filters,
             include: [
                 {
                     model: Student,
@@ -28,6 +33,7 @@ router.get('/', async (req, res) => {
         const formattedRecords = records.map(record => ({
             studentNo: record.Student.studentID,
             studentName: record.Student.studentName,
+            courseName: record.Course.courseName,
             grade: record.grade,
             passFail: record.passfail,
             year: record.year,
