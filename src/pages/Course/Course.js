@@ -51,15 +51,15 @@ const Course = () => {
                 },
                 body: JSON.stringify(newCourse)
             });
-    
+
             // Refetch courses after adding a new course
             const updatedCoursesResponse = await fetch('http://localhost:3000/courses');
             const updatedCoursesData = await updatedCoursesResponse.json();
-    
+
             // Update state with refetched courses
             setCourses(updatedCoursesData);
             setFilteredCourses(updatedCoursesData); // update filtered list as well
-    
+
             setNewCourse({ courseCode: '', courseName: '', description: '' }); // reset form
         } catch (error) {
             console.error('Error adding course:', error);
@@ -70,8 +70,8 @@ const Course = () => {
         <>
             <div className='courseContainer'>
                 <div className='updateCourseForm'>
+                    <p className="updateCourseheading">Add Course</p>
                     <form className="courseForm" onSubmit={handleAddCourse}>
-                        <p className="updateCourseheading">Add Course</p>
                         {/* <label className="updateCourseLabel">Course Code:</label> */}
                         <input
                             className="updateCourseInput"

@@ -5,7 +5,7 @@ const Navbar = () => {
 	return (
 		<header className="header">
 			<nav className="navbar">
-				<h1>Student Record Management</h1>
+				<h1 className='site-title '>Student Record Management</h1>
 				<ul>
 					<li>
 						<Link to="/Student">Student Management</Link>

@@ -56,8 +56,8 @@ const Grade = () => {
     return (
         <div className='gradeContainer'>
             <div className='updateGradeForm'>
+                <p className="updateGradeHeading">Update Grade</p>
                 <form className="gradeForm" onSubmit={handleSubmitGrade}>
-                    <p className="updateGradeHeading">Update Grade</p>
                     {/* <label className="updateGradeLabel">Enter Student No: </label> */}
                     <input
                         className="updateGradeInput"
@@ -95,9 +95,9 @@ const Grade = () => {
                         className="updateGradeInput"
                         placeholder="Grade"
                         type="number"
-                        min="1"
-                        max="5"
-                        step="0.1"
+                        // min="1"
+                        // max="5"
+                        // step="0.1"
                         value={grade}
                         onChange={(e) => setGrade(e.target.value)}
                     />
@@ -115,9 +115,10 @@ const Grade = () => {
             </div>
 
             <div className='viewCourseStudent'>
+            <p className="viewCourseStudentHeading">View Course</p>
                 <form className="chooseCourseStudent" onSubmit={handleFilter}>
-                    <p className="viewviewCourseStudentHeading">View Course</p>
-                    <label className="viewCourseStudentLabel">Course Code: </label>
+                    
+                    {/* <label className="viewCourseStudentLabel">Course Code: </label> */}
                     <input
                         className="viewCourseStudentInput"
                         placeholder="Course Code"
@@ -125,7 +126,7 @@ const Grade = () => {
                         value={courseCode}
                         onChange={(e) => setCourseCode(e.target.value)}
                     />
-                    <label className="viewCourseLabel">Year: </label>
+                    {/* <label className="viewCourseLabel">Year: </label> */}
                     <input
                         className="viewCourseStudentInput"
                         placeholder="Year"
@@ -133,7 +134,7 @@ const Grade = () => {
                         value={year}
                         onChange={(e) => setYear(e.target.value)}
                     />
-                    <label className="viewCourseStudentLabel">Semester: </label>
+                    {/* <label className="viewCourseStudentLabel">Semester: </label> */}
                     <input
                         className="viewCourseStudentInput"
                         placeholder="Semester"
