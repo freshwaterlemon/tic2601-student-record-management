@@ -160,7 +160,6 @@
 	background-color: rgba(255, 235, 205, 0.357);
 }
 
-
 @media only screen and (max-width: 992px) {
 	.updateGradeHeading {
 		background-color: white;
@@ -199,7 +198,6 @@
 		padding: 1.5em;
 	}
 }
-
 
 @media only screen and (max-width: 1200px) {
 	.updateGradeHeading {
