@@ -79,7 +79,7 @@
 .transcriptTable th, .transcriptTable td {
     padding: 1.5em 1em;
     /* border: 1px solid #cccccc; */
-    font-size: 1.1em;
+    font-size: 1em;
     text-align: left;
 }
 
@@ -114,7 +114,7 @@
 }
 
 .transcriptTable tbody tr td[colspan="1"] {
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 .transcriptTable tbody tr:hover {

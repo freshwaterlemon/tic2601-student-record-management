@@ -16,7 +16,7 @@ const Academic = () => {
             if (!response.ok) {
                 throw new Error("Failed to fetch data. Please ensure the student number is correct.");
             }
-            const data = await response.json();	
+            const data = await response.json();
             setTranscriptData(data); // update transcriptData state with fetched transcript data
         } catch (error) {
             console.error("Failed to fetch transcript data:", error);
@@ -30,7 +30,6 @@ const Academic = () => {
         <div className="academicContainer">
             <div className="filterStudentForm">
                 <form onSubmit={handleFilter}>
-                    {/* <label className="filterStudentLabel">Student No: </label> */}
                     <input
                         className="filterStudentInput"
                         placeholder="Student No"
@@ -42,8 +41,7 @@ const Academic = () => {
                 </form>
             </div>
 
-            {/* display only if error is true */}
-            {error && <p className="error">{error}</p>} 
+            {error && <p className="error">{error}</p>}
 
             {transcriptData && (
                 <table className="transcriptTable">
@@ -74,22 +72,31 @@ const Academic = () => {
                             <td colSpan="1">GRADE</td>
                             <td colSpan="1">PASS/FAIL</td>
                         </tr>
-                        {transcriptData.courses.map((course, index) => (
-                            <React.Fragment key={index}>
-                                <tr>
-                                    <td colSpan="1">ACADEMIC YEAR </td>
-                                    <td colSpan="1">{course.year}</td>
-                                    <td colSpan="1">SEMESTER</td>
-                                    <td colSpan="5">{course.semester}</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="1">{course.courseCode}</td>
-                                    <td colSpan="5">{course.moduleName}</td>
-                                    <td colSpan="1">{course.grade}</td>
-                                    <td colSpan="4">{course.passFail}</td>
-                                </tr>
-                            </React.Fragment>
-                        ))}
+                        {transcriptData.courses.map((course, index) => {
+                            const isSameGroup =
+                                index > 0 &&
+                                course.year === transcriptData.courses[index - 1].year &&
+                                course.semester === transcriptData.courses[index - 1].semester;
+
+                            return (
+                                <React.Fragment key={index}>
+                                    {!isSameGroup && (
+                                        <tr>
+                                            <td colSpan="1">ACADEMIC YEAR </td>
+                                            <td colSpan="1">{course.year}</td>
+                                            <td colSpan="1">SEMESTER</td>
+                                            <td colSpan="5">{course.semester}</td>
+                                        </tr>
+                                    )}
+                                    <tr>
+                                        <td colSpan="1">{course.courseCode}</td>
+                                        <td colSpan="5">{course.moduleName}</td>
+                                        <td colSpan="1">{course.grade}</td>
+                                        <td colSpan="1">{course.passFail}</td>
+                                    </tr>
+                                </React.Fragment>
+                            );
+                        })}
                     </tbody>
                 </table>
             )}
