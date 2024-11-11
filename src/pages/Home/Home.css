@@ -1,11 +1,11 @@
-.homeContainer{
-    text-align: center;
-    padding: 2em;
-    width: fit-content;
-    margin: auto auto;
+.homeContainer {
+	text-align: center;
+	padding: 2em;
+	width: fit-content;
+	margin: auto auto;
 }
 
-.homeContainer li{
-    list-style: none;
-    text-align: left;
+.homeContainer li {
+	list-style: none;
+	text-align: left;
 }

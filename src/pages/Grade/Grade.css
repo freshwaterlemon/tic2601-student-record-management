@@ -119,7 +119,7 @@
 	width: 100%;
 	border-collapse: collapse;
 	font-family: Arial, sans-serif;
-	font-size: 1.2em;
+	font-size: 1em;
 	margin: 1em 0;
 	box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
@@ -142,7 +142,7 @@
 	text-align: left;
 }
 
-.viewCourseStudentTable tbody tr td[colspan='6'] {
+.viewCourseStudentTable tbody tr td[colspan='7'] {
 	text-align: center;
 	padding: 6em;
 }
