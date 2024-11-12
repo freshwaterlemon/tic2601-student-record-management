@@ -32,7 +32,7 @@ const Student = sequelize.define(
 		studentDOB: { type: DataTypes.DATE, allowNull: false },
 		personalPhoneNum: { type: DataTypes.STRING, allowNull: false },
 		housePhoneNum: { type: DataTypes.STRING, allowNull: true },
-		sex: { type: DataTypes.ENUM('Female', 'Male'), allowNull: false },
+		sex: { type: DataTypes.ENUM('F', 'M'), allowNull: false },
 		currentAddress: { type: DataTypes.STRING, allowNull: false },
 		nationality: { type: DataTypes.STRING, allowNull: false },
 		degree: { type: DataTypes.STRING, allowNull: false },

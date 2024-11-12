@@ -4,6 +4,7 @@ import './Student.css'
 
 const Student = () => {
 
+    // const [isUpdated, setIsUpdated] = useState([]);
     const [students, setStudents] = useState([]);
     const [newStudent, setNewStudent] = useState({
         studentID: "",
@@ -16,12 +17,13 @@ const Student = () => {
         nationality: "", 
         degree: "", 
         gpa: "", 
-        studentstatus: "", 
+        studentStatus: "", 
         studentEmail: "",
     });
 
     useEffect(() => {
         // Fetch all students
+        
         axios.get('http://localhost:3000/student')
           .then(response => setStudents(response.data))
           .catch(error => console.error("Error fetching students:", error));
@@ -38,14 +40,21 @@ const Student = () => {
         }));
     };
 
+    // check if student ID exists
+    function studentIdExists(studentID, students) {
+        return students.some(student => student.studentID === studentID);
+      }
+      
+
     // reference: https://axios-http.com/docs/api_intro
     // Add or Update student
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log({newStudent});
 
-        const url = newStudent.studentID ? `/student/${newStudent.studentID}` : '/student'; // Update if ID exists, else add new
-        const method = newStudent.studentID ? 'put' : 'post';
+        const url = studentIdExists(newStudent.studentID, students) ? `http://localhost:3000/student/add/${newStudent.studentID}` : 'http://localhost:3000/student/add'; // Update if ID exists, else add new
+        const method = studentIdExists(newStudent.studentID, students) ? 'put' : 'post';
+        console.log(studentIdExists(newStudent.studentID, students));
         console.log({method},{url});
         try {
         await axios({
@@ -53,7 +62,7 @@ const Student = () => {
             url,
             data: newStudent,
         });
-        
+        console.log("added");
         if (!newStudent.studentID) setNewStudent({ 
             studentID: "",
             studentName: "",
@@ -65,11 +74,20 @@ const Student = () => {
             nationality: "", 
             degree: "", 
             gpa: "", 
-            studentstatus: "", 
+            studentStatus: "", 
             studentEmail: "",}); // Reset form after adding
         } catch (error) {
         console.log('Error: ' + error.message);
         }
+        if (method === 'post') {
+            // If a new student was added, append it to the students array
+            setStudents([...students, newStudent]);
+          } else {
+            // If a student was updated, map over the students array to replace the old data
+            setStudents(students.map(student =>
+              student.studentID === newStudent.studentID ? newStudent : student
+            ));
+          }
     };
         
     return (
@@ -119,7 +137,7 @@ const Student = () => {
                 </div>
                 <div className="form-group">
                 <label>Student Status:</label>
-                <input type="text" name="studentstatus" value={newStudent.studentstatus} onChange={handleChange} />
+                <input type="text" name="studentStatus" value={newStudent.studentStatus} onChange={handleChange} />
                 </div>
                 <div className="form-group">
                 <label>Student Email:</label>
@@ -128,7 +146,7 @@ const Student = () => {
 
                  {/* This part is wrong, need to troubleshoot
                 need a function to query the database to check if studentID exists */}
-                <button type="submit" onSubmit={handleSubmit}>{students.studentID ? 'Update' : 'Add'}</button>
+                <button type="submit" onSubmit={handleSubmit}>{studentIdExists(newStudent.studentID, students) ? 'Update' : 'Add'}</button>
             </form>
 
             {/* Displays student information 
@@ -167,7 +185,7 @@ const Student = () => {
                             <td>{student.nationality}</td>
                             <td>{student.degree}</td>
                             <td>{student.gpa}</td>
-                            <td>{student.studentstatus}</td>
+                            <td>{student.studentStatus}</td>
                             <td>{student.studentEmail}</td>
                         </tr>
                       ))
