@@ -32,12 +32,22 @@ const Student = sequelize.define(
 		studentDOB: { type: DataTypes.DATE, allowNull: false },
 		personalPhoneNum: { type: DataTypes.STRING, allowNull: false },
 		housePhoneNum: { type: DataTypes.STRING, allowNull: true },
-		sex: { type: DataTypes.STRING, allowNull: false },
+		sex: { type: DataTypes.ENUM('F', 'M'), allowNull: false },
 		currentAddress: { type: DataTypes.STRING, allowNull: false },
 		nationality: { type: DataTypes.STRING, allowNull: false },
 		degree: { type: DataTypes.STRING, allowNull: false },
-		gpa: { type: DataTypes.FLOAT, allowNull: false },
-		status: { type: DataTypes.STRING, allowNull: false },
+		gpa: {
+			type: DataTypes.FLOAT,
+			allowNull: false,
+			validate: {
+				min: 0.0,
+				max: 5.0,
+			},
+		},
+		studentStatus: {
+			type: DataTypes.ENUM('Active', 'Graduated'),
+			allowNull: false,
+		},
 		studentEmail: {
 			type: DataTypes.STRING,
 			allowNull: false,
@@ -67,7 +77,7 @@ const CourseRecord = sequelize.define(
 		studentID: { type: DataTypes.STRING, allowNull: false },
 		courseCode: { type: DataTypes.STRING, allowNull: false },
 		grade: { type: DataTypes.FLOAT, allowNull: true },
-		passfail: { type: DataTypes.STRING, allowNull: true },
+		passfail: { type: DataTypes.STRING, allowNull: false },
 		year: { type: DataTypes.INTEGER, allowNull: false },
 		semester: { type: DataTypes.STRING, allowNull: false },
 		enrollmentStatus: { type: DataTypes.STRING, allowNull: false },
@@ -156,7 +166,7 @@ const Module = sequelize.define(
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
-		},
+		}, // Surrogate primary key
 		courseCode: { type: DataTypes.STRING, allowNull: false },
 		year: { type: DataTypes.INTEGER, allowNull: false },
 		semester: { type: DataTypes.STRING, allowNull: false },
@@ -168,13 +178,13 @@ const Module = sequelize.define(
 		indexes: [
 			{
 				unique: true,
-				fields: ['courseCode', 'year', 'semester'], // unique constraint as super key
+				fields: ['courseCode', 'year', 'semester'], // Unique constraint as super key
 			},
 		],
 	}
 );
 
-// associations
+// Define Associations
 
 School.hasMany(Student, { foreignKey: 'SchoolSchoolCode' });
 Student.belongsTo(School, { foreignKey: 'SchoolSchoolCode' });
@@ -206,8 +216,14 @@ CourseRecord.belongsTo(Course, { foreignKey: 'courseCode' });
 Course.hasMany(Module, { foreignKey: 'courseCode' });
 Module.belongsTo(Course, { foreignKey: 'courseCode' });
 
-Student.belongsToMany(NextOfKin, { through: 'StudentNextOfKin' });
-NextOfKin.belongsToMany(Student, { through: 'StudentNextOfKin' });
+Student.belongsToMany(NextOfKin, {
+	through: 'StudentNextOfKin',
+	onDelete: 'CASCADE',
+});
+NextOfKin.belongsToMany(Student, {
+	through: 'StudentNextOfKin',
+	onDelete: 'CASCADE',
+});
 
 Student.belongsToMany(Module, { through: 'StudentModule' });
 Module.belongsToMany(Student, { through: 'StudentModule' });
@@ -218,7 +234,7 @@ Course.belongsToMany(AdminStaff, { through: 'AdminStaffCourse' });
 Instructor.belongsToMany(Module, { through: 'InstructorModule' });
 Module.belongsToMany(Instructor, { through: 'InstructorModule' });
 
-// association for academic
+// Association for academic
 CourseRecord.belongsTo(Course, { foreignKey: 'courseCode' });
 CourseRecord.belongsTo(Module, {
 	foreignKey: 'courseCode',
@@ -236,7 +252,8 @@ CourseRecord.belongsTo(Module, {
 	constraints: false,
 });
 
-// sync and Populate Database
+// Sync and Populate Database
+// Sync and Populate Database
 (async () => {
 	await sequelize.sync({ force: true });
 	console.log('Database synced!');
@@ -356,7 +373,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Singaporean',
 			degree: 'BSc',
 			gpa: 3.8,
-			status: 'undergraduate',
+			studentStatus: 'undergraduate',
 			studentEmail: 'alice@student.com',
 		},
 		{
@@ -369,7 +386,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Singaporean',
 			degree: 'BSc',
 			gpa: 3.5,
-			status: 'undergraduate',
+			studentStatus: 'undergraduate',
 			studentEmail: 'bob@student.com',
 		},
 		{
@@ -382,7 +399,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Malaysian',
 			degree: 'BA',
 			gpa: 3.6,
-			status: 'undergraduate',
+			studentStatus: 'undergraduate',
 			studentEmail: 'charlie@student.com',
 		},
 		{
@@ -395,7 +412,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Indonesian',
 			degree: 'BSc',
 			gpa: 3.2,
-			status: 'undergraduate',
+			studentStatus: 'undergraduate',
 			studentEmail: 'david@student.com',
 		},
 		{
@@ -408,7 +425,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Indian',
 			degree: 'BA',
 			gpa: 3.4,
-			status: 'undergraduate',
+			studentStatus: 'undergraduate',
 			studentEmail: 'eve@student.com',
 		},
 		{
@@ -421,7 +438,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Filipino',
 			degree: 'BEng',
 			gpa: 3.9,
-			status: 'undergraduate',
+			studentStatus: 'undergraduate',
 			studentEmail: 'frank@student.com',
 		},
 		{

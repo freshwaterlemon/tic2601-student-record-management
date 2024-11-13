@@ -1,369 +1,228 @@
-import './Student.css';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './Student.css'
 
 const Student = () => {
-	const [studentNo, setStudentNo] = useState('');
-	const [name, setName] = useState('');
-	const [studentEmail, setStudentEmail] = useState('');
-	const [dob, setDob] = useState('');
-	const [personalPhoneNum, setPersonalPhoneNum] = useState('');
-	const [housePhoneNum, setHousePhoneNum] = useState('');
-	const [sex, setSex] = useState('');
-	const [currentAddress, setCurrentAddress] = useState('');
-	const [nationality, setNationality] = useState('');
-	const [degree, setDegree] = useState('');
-	const [gpa, setGpa] = useState('');
-	const [status, setStatus] = useState('');
 
-	const [message, setMessage] = useState('');
-	const [studentsData, setStudentsData] = useState([]);
-	const [error, setError] = useState(null);
+    // const [isUpdated, setIsUpdated] = useState([]);
+    const [students, setStudents] = useState([]);
+    const [newStudent, setNewStudent] = useState({
+        studentID: "",
+        studentName: "",
+        studentDOB: "",
+        personalPhoneNum: "",
+        housePhoneNum: "", 
+        sex: "", 
+        currentAddress: "", 
+        nationality: "", 
+        degree: "", 
+        gpa: "", 
+        studentStatus: "", 
+        studentEmail: "",
+    });
 
-	const resetForm = () => {
-		setStudentNo('');
-		setName('');
-		setStudentEmail('');
-		setDob('');
-		setPersonalPhoneNum('');
-		setHousePhoneNum('');
-		setSex('');
-		setCurrentAddress('');
-		setNationality('');
-		setDegree('');
-		setGpa('');
-		setStatus('');
-	};
+    useEffect(() => {
+        // Fetch all students
+        
+        axios.get('http://localhost:3000/student')
+          .then(response => setStudents(response.data))
+          .catch(error => console.error("Error fetching students:", error));
+      }, []);
 
-	const handleAddStudent = async (e) => {
-		e.preventDefault();
-		setError(null);
-
-		const studentInfo = {
-			studentNo,
-			name,
-			studentEmail,
-			dob,
-			personalPhoneNum,
-			housePhoneNum,
-			sex,
-			currentAddress,
-			nationality,
-			degree,
-			gpa,
-			status,
-		};
-
-		try {
-			const response = await fetch(`http://localhost:3000/student/add`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(studentInfo),
-			});
-			if (!response.ok) throw new Error('Failed to add student.');
-
-			const result = await response.json();
-			setMessage('Student added successfully!');
-			setStudentsData([...studentsData, result]);
-
-			// reset form
-			resetForm();
-		} catch (error) {
-			console.error('Failed to add student:', error);
-			setError(error.message);
-		}
-
-		setTimeout(() => setMessage(''), 3000);
-	};
-
-	const handleUpdateStudent = async () => {
-		setError(null);
-
-		const studentInfo = {
-			studentNo,
-			name,
-			studentEmail,
-			dob,
-			personalPhoneNum,
-			housePhoneNum,
-			sex,
-			currentAddress,
-			nationality,
-			degree,
-			gpa,
-			status,
-		};
-
-		try {
-			const response = await fetch(
-				`http://localhost:3000/student/update`,
-				{
-					method: 'PUT',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(studentInfo),
-				}
-			);
-			if (!response.ok)
-				throw new Error(
-					'Failed to update student. Make sure the student number is correct.'
-				);
-
-			const result = await response.json();
-			setMessage('Student updated successfully!');
-
-			// update studentsData with updated student info
-			setStudentsData(
-				studentsData.map((student) =>
-					student.studentNo === studentNo ? result : student
-				)
-			);
-
-			// reset form
-			resetForm();
-		} catch (error) {
-			console.error('Failed to update student:', error);
-			setError(error.message);
-		}
-
-		setTimeout(() => setMessage(''), 3000);
-	};
-
-	const handleViewAllStudents = async () => {
-		setError(null);
-
-		try {
-			const response = await fetch(`http://localhost:3000/student/all`);
-			if (!response.ok) throw new Error('Failed to fetch students.');
-
-			const data = await response.json();
-			setStudentsData(data);
-		} catch (error) {
-			console.error('Failed to fetch students:', error);
-			setError(error.message);
-		}
-	};
-
-	const handleFilter = async (e) => {
-		e.preventDefault();
-		setError(null);
-		setStudentsData([]);
-
-		try {
-			const response = await fetch(
-				`http://localhost:3000/student/search?studentNo=${studentNo}`
-			);
-			if (!response.ok)
-				throw new Error(
-					'Failed to fetch data. Please ensure the student number is correct.'
-				);
-
-			const data = await response.json();
-			setStudentsData([data]);
-		} catch (error) {
-			console.error('Failed to fetch data:', error);
-			setError(error.message);
-		}
-	};
-
-    const handleFindNOK = async (e) => {
-        e.preventDefault();
-        setError(null);
-		setStudentsData([]);
-
-        try {
-			const response = await fetch(
-				`http://localhost:3000/student/find?studentNo=${studentNo}`
-			);
-			if (!response.ok)
-				throw new Error(
-					'Failed to fetch data. Please ensure the student number is correct.'
-				);
-
-			const data = await response.json();
-			setStudentsData([data]);
-		} catch (error) {
-			console.error('Failed to fetch data:', error);
-			setError(error.message);
-		}
+    // Handle form input changes
+    // takes data from input fields and put them into student as an object
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        // to check what is prev state
+        setNewStudent((prevState) => ({
+        ...prevState,
+        [name]: value,
+        }));
     };
 
-	return (
-		<div className="studentContainer">
-			<div className="updateStudentForm">
-				<p className="updateStudentHeading">Add or Update Student</p>
-				<form className="studentForm" onSubmit={handleAddStudent}>
-					<input
-						className="updateStudentInput"
-						placeholder="Student Number"
-						type="text"
-						value={studentNo}
-						onChange={(e) => setStudentNo(e.target.value)}
-					/>
-					<input
-						className="updateStudentInput"
-						placeholder="Name"
-						type="text"
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-					/>
-					<input
-						className="updateStudentInput"
-						placeholder="Email"
-						type="text"
-						value={studentEmail}
-						onChange={(e) => setStudentEmail(e.target.value)}
-					/>
-					<input
-						className="updateStudentInput"
-						placeholder="DOB"
-						type="text"
-						value={dob}
-						onChange={(e) => setDob(e.target.value)}
-					/>
-					<input
-						className="updateStudentInput"
-						placeholder="Personal Phone Number"
-						type="text"
-						value={personalPhoneNum}
-						onChange={(e) => setPersonalPhoneNum(e.target.value)}
-					/>
-					<input
-						className="updateStudentInput"
-						placeholder="Home Phone Number"
-						type="text"
-						value={housePhoneNum}
-						onChange={(e) => setHousePhoneNum(e.target.value)}
-					/>
-					<input
-						className="updateStudentInput"
-						placeholder="Sex"
-						type="text"
-						value={sex}
-						onChange={(e) => setSex(e.target.value)}
-					/>
-					<input
-						className="updateStudentInput"
-						placeholder="Current Address"
-						type="text"
-						value={currentAddress}
-						onChange={(e) => setCurrentAddress(e.target.value)}
-					/>
-					<input
-						className="updateStudentInput"
-						placeholder="Nationality"
-						type="text"
-						value={nationality}
-						onChange={(e) => setNationality(e.target.value)}
-					/>
-					<input
-						className="updateStudentInput"
-						placeholder="Degree"
-						type="text"
-						value={degree}
-						onChange={(e) => setDegree(e.target.value)}
-					/>
-					<input
-						className="updateStudentInput"
-						placeholder="GPA"
-						type="text"
-						value={gpa}
-						onChange={(e) => setGpa(e.target.value)}
-					/>
-					<input
-						className="updateStudentInput"
-						placeholder="Status"
-						type="text"
-						value={status}
-						onChange={(e) => setStatus(e.target.value)}
-					/>
-					<div className="studentBtnContainer">
-						<button className="updateStudentBtn" type="submit">
-							Add Student
-						</button>
-						<button
-							className="updateStudentBtn"
-							type="button"
-							onClick={handleUpdateStudent}
-						>
-							Update Student
-						</button>
-						<button
-							className="updateStudentBtn"
-							type="button"
-							onClick={handleViewAllStudents}
-						>
-							View All Students
-						</button>
-					</div>
-				</form>
-			</div>
+    // check if student ID exists
+    function studentIdExists(studentID, students) {
+        return students.some(student => student.studentID === studentID);
+      }
+      
 
-			<div className="viewStudentInfo">
-				<p className="viewStudentInfoHeading">View Student</p>
-				<form className="chooseStudentInfo" onSubmit={handleFilter}>
-					<input
-						className="viewStudentInfoInput"
-						placeholder="Student Number"
-						type="text"
-						value={studentNo}
-						onChange={(e) => setStudentNo(e.target.value)}
-					/>
-					<button className="viewStudentInfoBtn" type="submit">
-						Search
-					</button>
-					<button className="viewStudentInfoBtn" type="button" onClick={handleFindNOK}>
-						Emergency Contact Info
-					</button>
-				</form>
+    // reference: https://axios-http.com/docs/api_intro
+    // Add or Update student
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log({newStudent});
 
-				<table className="viewStudentInfoTable">
-					<thead>
-						<tr>
-							<th>STUDENT NO</th>
-							<th>NAME</th>
-							<th>EMAIL</th>
-							<th>DOB</th>
-							<th>PERSONAL PHONE NO</th>
-							<th>HOME PHONE NO</th>
-							<th>SEX</th>
-							<th>CURRENT ADDRESS</th>
-							<th>NATIONALITY</th>
-							<th>DEGREE</th>
-							<th>GPA</th>
-							<th>STATUS</th>
-						</tr>
-					</thead>
-					<tbody>
-						{studentsData.length > 0 ? (
-							studentsData.map((student, index) => (
-								<tr key={index}>
-									<td>{student.studentID}</td>
-									<td>{student.studentName}</td>
-									<td>{student.studentEmail}</td>
-									<td>{student.dob}</td>
-									<td>{student.personalPhoneNum}</td>
-									<td>{student.housePhoneNum || '-'}</td>
-									<td>{student.sex}</td>
-									<td>{student.currentAddress}</td>
-									<td>{student.nationality}</td>
-									<td>{student.degree}</td>
-									<td>{student.gpa}</td>
-									<td>{student.status}</td>
-								</tr>
-							))
-						) : (
-							<tr>
-								<td colSpan={12}>No student selected</td>
-							</tr>
-						)}
-					</tbody>
-				</table>
-				<div>
-					{message && <p className="updatedMessage">{message}</p>}
-					{error && <p className="updatedError">{error}</p>}
-				</div>
-			</div>
-		</div>
-	);
-};
+        const url = studentIdExists(newStudent.studentID, students) ? `http://localhost:3000/student/update/${newStudent.studentID}` : 'http://localhost:3000/student/add'; // Update if ID exists, else add new
+        const method = studentIdExists(newStudent.studentID, students) ? 'put' : 'post';
+        console.log(studentIdExists(newStudent.studentID, students));
+        console.log({method},{url});
+        try {
+        await axios({
+            method,
+            url,
+            data: newStudent,
+        });
+        console.log("added");
+        if (!newStudent.studentID) setNewStudent({ 
+            studentID: "",
+            studentName: "",
+            studentDOB: "",
+            personalPhoneNum: "",
+            housePhoneNum: "", 
+            sex: "", 
+            currentAddress: "", 
+            nationality: "", 
+            degree: "", 
+            gpa: "", 
+            studentStatus: "", 
+            studentEmail: "",}); // Reset form after adding
+        } catch (error) {
+        console.log('Error: ' + error.message);
+        }
+        if (method === 'post') {
+            // If a new student was added, append it to the students array
+            setStudents([...students, newStudent]);
+          } else {
+            // If a student was updated, map over the students array to replace the old data
+            setStudents(students.map(student =>
+              student.studentID === newStudent.studentID ? newStudent : student
+            ));
+          }
+    };
 
-export default Student;
+    //Delete student
+    const handleDelete = async (e) => {
+        if (studentIdExists(newStudent.studentID, students)){
+            try{
+                await axios.delete(`http://localhost:3000/student/delete/${newStudent.studentID}`);
+                alert(`Student with ID ${newStudent.studentID} deleted successfully`);
+                setNewStudent({ 
+                    studentID: "",
+                    studentName: "",
+                    studentDOB: "",
+                    personalPhoneNum: "",
+                    housePhoneNum: "", 
+                    sex: "", 
+                    currentAddress: "", 
+                    nationality: "", 
+                    degree: "", 
+                    gpa: "", 
+                    studentStatus: "", 
+                    studentEmail: "",});
+                } catch (error) {
+                console.error("Failed to delete student:", error);
+                alert("Error: Unable to delete student.");
+            }
+        }
+    }
+        
+    return (
+        <>
+            {/* Form to add/update and remove students */}
+            <div>Add/Update/Delete student record</div>
+            <form onSubmit={handleSubmit} className="student-form">
+                <div className="form-group">
+                <label>Student ID:</label>
+                <input type="text" name="studentID" value={newStudent.studentID} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                <label>Student Name:</label>
+                <input type="text" name="studentName" value={newStudent.studentName} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                <label>Date of Birth:</label>
+                <input type="date" name="studentDOB" value={newStudent.studentDOB} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                <label>Personal Phone Number:</label>
+                <input type="text" name="personalPhoneNum" value={newStudent.personalPhoneNum} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                <label>House Phone Number:</label>
+                <input type="text" name="housePhoneNum" value={newStudent.housePhoneNum} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                <label>Sex:</label>
+                <input type="text" name="sex" value={newStudent.sex} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                <label>Current Address:</label>
+                <input type="text" name="currentAddress" value={newStudent.currentAddress} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                <label>Nationality:</label>
+                <input type="text" name="nationality" value={newStudent.nationality} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                <label>Degree:</label>
+                <input type="text" name="degree" value={newStudent.degree} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                <label>GPA:</label>
+                <input type="number" step="0.01" name="gpa" value={newStudent.gpa} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                <label>Student Status:</label>
+                <input type="text" name="studentStatus" value={newStudent.studentStatus} onChange={handleChange} />
+                </div>
+                <div className="form-group">
+                <label>Student Email:</label>
+                <input type="email" name="studentEmail" value={newStudent.studentEmail} onChange={handleChange} />
+                </div>
+
+                <button type="submit" onSubmit={handleSubmit} disabled={studentIdExists(newStudent.studentID, students)}>Add</button>
+                <button type="submit" onSubmit={handleSubmit} disabled={!studentIdExists(newStudent.studentID, students)}>Update</button>
+                <button type="submit" onClick={handleDelete} disabled={!studentIdExists(newStudent.studentID, students)}>Delete</button>
+            </form>
+
+            {/* Displays student information 
+            Emergency contact not added yet*/}
+            <h1>Student information</h1>
+            {students.length > 0 && (
+                <thead>
+                    <tr>
+                    <td>Student ID</td>
+                    <td>Name</td>
+                    <td>Date of Birth</td>
+                    <td>Personal Phone Number</td>
+                    <td>House Phone Number</td>
+                    <td>Sex</td>
+                    <td>Address</td>
+                    <td>Nationality</td>
+                    <td>Degree</td>
+                    <td>GPA</td>
+                    <td>Degree Level</td>
+                    <td>Email</td>
+                    </tr>
+                </thead>
+            )}
+
+            <tbody>
+                {students.length > 0 ?(
+                    students.map((student, index) => (
+                        <tr key={index}>
+                            <td>{student.studentID}</td>
+                            <td>{student.studentName}</td>
+                            <td>{student.studentDOB}</td>
+                            <td>{student.personalPhoneNum}</td>
+                            <td>{student.housePhoneNum}</td>
+                            <td>{student.sex}</td>
+                            <td>{student.currentAddress}</td>
+                            <td>{student.nationality}</td>
+                            <td>{student.degree}</td>
+                            <td>{student.gpa}</td>
+                            <td>{student.studentStatus}</td>
+                            <td>{student.studentEmail}</td>
+                        </tr>
+                      ))
+                    ) : (
+                        <tr>
+                            <td>There are no students</td>
+                        </tr>
+                    )}
+            </tbody>
+        </>
+    )
+}
+
+export default Student
