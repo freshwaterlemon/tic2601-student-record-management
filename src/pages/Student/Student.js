@@ -170,7 +170,8 @@ const Student = () => {
                 <input type="email" name="studentEmail" value={newStudent.studentEmail} onChange={handleChange} />
                 </div>
 
-                <button type="submit" onSubmit={handleSubmit}>{studentIdExists(newStudent.studentID, students) ? 'Update' : 'Add'}</button>
+                <button type="submit" onSubmit={handleSubmit} disabled={studentIdExists(newStudent.studentID, students)}>Add</button>
+                <button type="submit" onSubmit={handleSubmit} disabled={!studentIdExists(newStudent.studentID, students)}>Update</button>
                 <button type="submit" onClick={handleDelete} disabled={!studentIdExists(newStudent.studentID, students)}>Delete</button>
             </form>
 

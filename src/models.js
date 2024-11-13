@@ -204,8 +204,8 @@ CourseRecord.belongsTo(Course, { foreignKey: 'courseCode' });
 Course.hasMany(Module, { foreignKey: 'courseCode' });
 Module.belongsTo(Course, { foreignKey: 'courseCode' });
 
-Student.belongsToMany(NextOfKin, { through: 'StudentNextOfKin' });
-NextOfKin.belongsToMany(Student, { through: 'StudentNextOfKin' });
+Student.belongsToMany(NextOfKin, { through: 'StudentNextOfKin', onDelete: "CASCADE" });
+NextOfKin.belongsToMany(Student, { through: 'StudentNextOfKin', onDelete: "CASCADE" });
 
 Student.belongsToMany(Module, { through: 'StudentModule' });
 Module.belongsToMany(Student, { through: 'StudentModule' });
