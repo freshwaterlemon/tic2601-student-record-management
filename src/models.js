@@ -36,11 +36,18 @@ const Student = sequelize.define(
 		currentAddress: { type: DataTypes.STRING, allowNull: false },
 		nationality: { type: DataTypes.STRING, allowNull: false },
 		degree: { type: DataTypes.STRING, allowNull: false },
-		gpa: { type: DataTypes.FLOAT, allowNull: false, validate: {
-			min: 0.0,
-			max: 5.0,
-		} },
-		studentStatus: { type: DataTypes.ENUM('Active', 'Graduated'), allowNull: false },
+		gpa: {
+			type: DataTypes.FLOAT,
+			allowNull: false,
+			validate: {
+				min: 0.0,
+				max: 5.0,
+			},
+		},
+		studentStatus: {
+			type: DataTypes.ENUM('Active', 'Graduated'),
+			allowNull: false,
+		},
 		studentEmail: {
 			type: DataTypes.STRING,
 			allowNull: false,
@@ -65,21 +72,26 @@ const Course = sequelize.define(
 );
 
 const CourseRecord = sequelize.define(
-    'CourseRecord',
-    {
-        studentID: { type: DataTypes.STRING, allowNull: false },
-        courseCode: { type: DataTypes.STRING, allowNull: false },
-        grade: { type: DataTypes.FLOAT, allowNull: true },
-        passfail: { type: DataTypes.STRING, allowNull: false },
-        year: { type: DataTypes.INTEGER, allowNull: false },      // New field
-        semester: { type: DataTypes.STRING, allowNull: false },    // New field
-    },
-    {
-        indexes: [{ unique: true, fields: ['studentID', 'courseCode', 'year', 'semester'] }],
-        freezeTableName: true,
-    }
+	'CourseRecord',
+	{
+		studentID: { type: DataTypes.STRING, allowNull: false },
+		courseCode: { type: DataTypes.STRING, allowNull: false },
+		grade: { type: DataTypes.FLOAT, allowNull: true },
+		passfail: { type: DataTypes.STRING, allowNull: false },
+		year: { type: DataTypes.INTEGER, allowNull: false },
+		semester: { type: DataTypes.STRING, allowNull: false },
+		enrollmentStatus: { type: DataTypes.STRING, allowNull: false },
+	},
+	{
+		indexes: [
+			{
+				unique: true,
+				fields: ['studentID', 'courseCode', 'year', 'semester'],
+			},
+		],
+		freezeTableName: true,
+	}
 );
-
 
 const NextOfKin = sequelize.define(
 	'NextOfKin',
@@ -204,8 +216,14 @@ CourseRecord.belongsTo(Course, { foreignKey: 'courseCode' });
 Course.hasMany(Module, { foreignKey: 'courseCode' });
 Module.belongsTo(Course, { foreignKey: 'courseCode' });
 
-Student.belongsToMany(NextOfKin, { through: 'StudentNextOfKin', onDelete: "CASCADE" });
-NextOfKin.belongsToMany(Student, { through: 'StudentNextOfKin', onDelete: "CASCADE" });
+Student.belongsToMany(NextOfKin, {
+	through: 'StudentNextOfKin',
+	onDelete: 'CASCADE',
+});
+NextOfKin.belongsToMany(Student, {
+	through: 'StudentNextOfKin',
+	onDelete: 'CASCADE',
+});
 
 Student.belongsToMany(Module, { through: 'StudentModule' });
 Module.belongsToMany(Student, { through: 'StudentModule' });
@@ -237,121 +255,715 @@ CourseRecord.belongsTo(Module, {
 // Sync and Populate Database
 // Sync and Populate Database
 (async () => {
-    await sequelize.sync({ force: true });
-    console.log('Database synced!');
+	await sequelize.sync({ force: true });
+	console.log('Database synced!');
 
-    // Add Schools
-    await School.bulkCreate([
-        { schoolCode: 'SCI01', schoolName: 'Science School', schoolPhoneNum: '1234567890', schoolDegree: 'BSc', schoolCourses: 'Physics, Chemistry, Biology' },
-        { schoolCode: 'ART01', schoolName: 'Arts School', schoolPhoneNum: '0987654321', schoolDegree: 'BA', schoolCourses: 'History, Sociology, Psychology' },
-        { schoolCode: 'ENG01', schoolName: 'Engineering School', schoolPhoneNum: '1122334455', schoolDegree: 'BEng', schoolCourses: 'Mechanical, Electrical, Civil' },
-    ]);
+	// Add Schools
+	await School.bulkCreate([
+		{
+			schoolCode: 'SCI01',
+			schoolName: 'Science School',
+			schoolPhoneNum: '1234567890',
+			schoolDegree: 'BSc',
+			schoolCourses: 'Physics, Chemistry, Biology',
+		},
+		{
+			schoolCode: 'ART01',
+			schoolName: 'Arts School',
+			schoolPhoneNum: '0987654321',
+			schoolDegree: 'BA',
+			schoolCourses: 'History, Sociology, Psychology',
+		},
+		{
+			schoolCode: 'ENG01',
+			schoolName: 'Engineering School',
+			schoolPhoneNum: '1122334455',
+			schoolDegree: 'BEng',
+			schoolCourses: 'Mechanical, Electrical, Civil',
+		},
+		{
+			schoolCode: 'BUS01',
+			schoolName: 'Business School',
+			schoolPhoneNum: '5566778899',
+			schoolDegree: 'BBA',
+			schoolCourses: 'Economics, Statistics, Management',
+		},
+		{
+			schoolCode: 'LAW01',
+			schoolName: 'Law School',
+			schoolPhoneNum: '6677889900',
+			schoolDegree: 'LLB',
+			schoolCourses: 'Criminal Law, Constitutional Law, Contract Law',
+		},
+	]);
 
-    // Add User Accounts
-    await UserAccount.bulkCreate([
-        { userID: 'U001', userEMail: 'admin@school.com', userRole: 'Admin', userPassword: 'password123' },
-        { userID: 'U002', userEMail: 'alice@student.com', userRole: 'Student', userPassword: 'securepass' },
-        { userID: 'U003', userEMail: 'bob@student.com', userRole: 'Student', userPassword: 'securepass2' },
-        { userID: 'U004', userEMail: 'charlie@student.com', userRole: 'Student', userPassword: 'securepass3' },
-        { userID: 'U005', userEMail: 'david@student.com', userRole: 'Student', userPassword: 'securepass4' },
-        { userID: 'U006', userEMail: 'eve@student.com', userRole: 'Student', userPassword: 'securepass5' },
-    ]);
+	// Add User Accounts
+	await UserAccount.bulkCreate([
+		{
+			userID: 'U001',
+			userEMail: 'admin@school.com',
+			userRole: 'Admin',
+			userPassword: 'password123',
+		},
+		{
+			userID: 'U002',
+			userEMail: 'alice@student.com',
+			userRole: 'Student',
+			userPassword: 'securepass',
+		},
+		{
+			userID: 'U003',
+			userEMail: 'bob@student.com',
+			userRole: 'Student',
+			userPassword: 'securepass2',
+		},
+		{
+			userID: 'U004',
+			userEMail: 'charlie@student.com',
+			userRole: 'Student',
+			userPassword: 'securepass3',
+		},
+		{
+			userID: 'U005',
+			userEMail: 'david@student.com',
+			userRole: 'Student',
+			userPassword: 'securepass4',
+		},
+		{
+			userID: 'U006',
+			userEMail: 'eve@student.com',
+			userRole: 'Student',
+			userPassword: 'securepass5',
+		},
+		{
+			userID: 'U007',
+			userEMail: 'frank@student.com',
+			userRole: 'Student',
+			userPassword: 'securepass6',
+		},
+		{
+			userID: 'U008',
+			userEMail: 'grace@student.com',
+			userRole: 'Student',
+			userPassword: 'securepass7',
+		},
+		{
+			userID: 'U009',
+			userEMail: 'henry@faculty.com',
+			userRole: 'Faculty',
+			userPassword: 'facultypass1',
+		},
+		{
+			userID: 'U010',
+			userEMail: 'irene@faculty.com',
+			userRole: 'Faculty',
+			userPassword: 'facultypass2',
+		},
+	]);
 
-    // Add Students
-    await Student.bulkCreate([
-        { studentID: 'S001', studentName: 'Alice', studentDOB: '2000-01-01', personalPhoneNum: '9876543210', sex: 'F', currentAddress: '123 Main St', nationality: 'Singaporean', degree: 'BSc', gpa: 3.8, studentStatus: 'Active', studentEmail: 'alice@student.com' },
-        { studentID: 'S002', studentName: 'Bob', studentDOB: '1999-03-15', personalPhoneNum: '9123456789', sex: 'M', currentAddress: '456 Elm St', nationality: 'Singaporean', degree: 'BSc', gpa: 3.5, studentStatus: 'Active', studentEmail: 'bob@student.com' },
-        { studentID: 'S003', studentName: 'Charlie', studentDOB: '2001-06-21', personalPhoneNum: '9988776655', sex: 'M', currentAddress: '789 Maple Ave', nationality: 'Malaysian', degree: 'BA', gpa: 3.6, studentStatus: 'Active', studentEmail: 'charlie@student.com' },
-        { studentID: 'S004', studentName: 'David', studentDOB: '2002-02-20', personalPhoneNum: '8765432109', sex: 'M', currentAddress: '101 Oak St', nationality: 'Indonesian', degree: 'BSc', gpa: 3.2, studentStatus: 'Active', studentEmail: 'david@student.com' },
-        { studentID: 'S005', studentName: 'Eve', studentDOB: '2000-05-18', personalPhoneNum: '9123067890', sex: 'F', currentAddress: '202 Pine St', nationality: 'Indian', degree: 'BA', gpa: 3.4, studentStatus: 'Active', studentEmail: 'eve@student.com' },
-        { studentID: 'S006', studentName: 'Frank', studentDOB: '2001-12-12', personalPhoneNum: '8112233445', sex: 'M', currentAddress: '303 Cedar Ave', nationality: 'Filipino', degree: 'BEng', gpa: 3.9, studentStatus: 'Active', studentEmail: 'frank@student.com' },
-    ]);
+	// Add Students
+	await Student.bulkCreate([
+		{
+			studentID: 'S001',
+			studentName: 'Alice',
+			studentDOB: '2000-01-01',
+			personalPhoneNum: '9876543210',
+			sex: 'F',
+			currentAddress: '123 Main St',
+			nationality: 'Singaporean',
+			degree: 'BSc',
+			gpa: 3.8,
+			studentStatus: 'undergraduate',
+			studentEmail: 'alice@student.com',
+		},
+		{
+			studentID: 'S002',
+			studentName: 'Bob',
+			studentDOB: '1999-03-15',
+			personalPhoneNum: '9123456789',
+			sex: 'M',
+			currentAddress: '456 Elm St',
+			nationality: 'Singaporean',
+			degree: 'BSc',
+			gpa: 3.5,
+			studentStatus: 'undergraduate',
+			studentEmail: 'bob@student.com',
+		},
+		{
+			studentID: 'S003',
+			studentName: 'Charlie',
+			studentDOB: '2001-06-21',
+			personalPhoneNum: '9988776655',
+			sex: 'M',
+			currentAddress: '789 Maple Ave',
+			nationality: 'Malaysian',
+			degree: 'BA',
+			gpa: 3.6,
+			studentStatus: 'undergraduate',
+			studentEmail: 'charlie@student.com',
+		},
+		{
+			studentID: 'S004',
+			studentName: 'David',
+			studentDOB: '2002-02-20',
+			personalPhoneNum: '8765432109',
+			sex: 'M',
+			currentAddress: '101 Oak St',
+			nationality: 'Indonesian',
+			degree: 'BSc',
+			gpa: 3.2,
+			studentStatus: 'undergraduate',
+			studentEmail: 'david@student.com',
+		},
+		{
+			studentID: 'S005',
+			studentName: 'Eve',
+			studentDOB: '2000-05-18',
+			personalPhoneNum: '9123067890',
+			sex: 'F',
+			currentAddress: '202 Pine St',
+			nationality: 'Indian',
+			degree: 'BA',
+			gpa: 3.4,
+			studentStatus: 'undergraduate',
+			studentEmail: 'eve@student.com',
+		},
+		{
+			studentID: 'S006',
+			studentName: 'Frank',
+			studentDOB: '2001-12-12',
+			personalPhoneNum: '8112233445',
+			sex: 'M',
+			currentAddress: '303 Cedar Ave',
+			nationality: 'Filipino',
+			degree: 'BEng',
+			gpa: 3.9,
+			studentStatus: 'undergraduate',
+			studentEmail: 'frank@student.com',
+		},
+		{
+			studentID: 'S007',
+			studentName: 'Grace',
+			studentDOB: '2000-08-08',
+			personalPhoneNum: '9234567890',
+			sex: 'F',
+			currentAddress: '404 Maple Ave',
+			nationality: 'Thai',
+			degree: 'BA',
+			gpa: 3.9,
+			status: 'undergraduate',
+			studentEmail: 'grace@student.com',
+		},
+		{
+			studentID: 'S008',
+			studentName: 'Hank',
+			studentDOB: '1999-11-30',
+			personalPhoneNum: '9345678901',
+			sex: 'M',
+			currentAddress: '505 Walnut St',
+			nationality: 'Vietnamese',
+			degree: 'BBA',
+			gpa: 3.7,
+			status: 'undergraduate',
+			studentEmail: 'hank@student.com',
+		},
+	]);
 
-    // Add Courses
-    await Course.bulkCreate([
-        { courseCode: 'C001', courseName: 'Physics', description: 'Introduction to Mechanics and Thermodynamics' },
-        { courseCode: 'C002', courseName: 'Chemistry', description: 'Basics of Organic and Inorganic Chemistry' },
-        { courseCode: 'C003', courseName: 'History', description: 'World History Overview' },
-        { courseCode: 'C004', courseName: 'Mathematics', description: 'Calculus and Linear Algebra' },
-        { courseCode: 'C005', courseName: 'Computer Science', description: 'Introduction to Programming' },
-        { courseCode: 'C006', courseName: 'Engineering Fundamentals', description: 'Basics of Engineering Concepts' },
-    ]);
+	// Add Courses
+	await Course.bulkCreate([
+		{
+			courseCode: 'C001',
+			courseName: 'Physics',
+			description: 'Introduction to Mechanics and Thermodynamics',
+		},
+		{
+			courseCode: 'C002',
+			courseName: 'Chemistry',
+			description: 'Basics of Organic and Inorganic Chemistry',
+		},
+		{
+			courseCode: 'C003',
+			courseName: 'History',
+			description: 'World History Overview',
+		},
+		{
+			courseCode: 'C004',
+			courseName: 'Mathematics',
+			description: 'Calculus and Linear Algebra',
+		},
+		{
+			courseCode: 'C005',
+			courseName: 'Computer Science',
+			description: 'Introduction to Programming',
+		},
+		{
+			courseCode: 'C006',
+			courseName: 'Engineering Fundamentals',
+			description: 'Basics of Engineering Concepts',
+		},
+		{
+			courseCode: 'C007',
+			courseName: 'Biology',
+			description: 'Fundamentals of Cellular Biology',
+		},
+		{
+			courseCode: 'C008',
+			courseName: 'Economics',
+			description: 'Principles of Microeconomics and Macroeconomics',
+		},
+		{
+			courseCode: 'C009',
+			courseName: 'Psychology',
+			description: 'Introduction to Human Psychology',
+		},
+		{
+			courseCode: 'C010',
+			courseName: 'Philosophy',
+			description: 'History of Western Philosophy',
+		},
+		{
+			courseCode: 'C011',
+			courseName: 'Sociology',
+			description: 'Foundations of Social Behavior',
+		},
+		{
+			courseCode: 'C012',
+			courseName: 'Art History',
+			description: 'Art Movements and Their Impact',
+		},
+		{
+			courseCode: 'C013',
+			courseName: 'Environmental Science',
+			description: 'Study of Ecosystems and Human Impact',
+		},
+		{
+			courseCode: 'C014',
+			courseName: 'Political Science',
+			description: 'Introduction to Political Systems',
+		},
+		{
+			courseCode: 'C015',
+			courseName: 'Statistics',
+			description: 'Probability and Data Analysis',
+		},
+		{
+			courseCode: 'C016',
+			courseName: 'Literature',
+			description: 'Survey of Classic and Modern Literature',
+		},
+		{
+			courseCode: 'C017',
+			courseName: 'Anthropology',
+			description: 'Study of Human Cultures',
+		},
+		{
+			courseCode: 'C018',
+			courseName: 'Geography',
+			description: 'Physical and Human Geography',
+		},
+		{
+			courseCode: 'C019',
+			courseName: 'Astronomy',
+			description: 'Introduction to the Universe',
+		},
+		{
+			courseCode: 'C020',
+			courseName: 'Music Theory',
+			description: 'Understanding Music Composition and Harmony',
+		},
+	]);
 
-    // Add Modules
-    await Module.bulkCreate([
-        { courseCode: 'C001', year: 2022, semester: '1', instructorID: 'E001' },
-        { courseCode: 'C001', year: 2023, semester: '1', instructorID: 'E001' },
-        { courseCode: 'C001', year: 2024, semester: '1', instructorID: 'E001' },
-        { courseCode: 'C002', year: 2023, semester: '2', instructorID: 'E002' },
-        { courseCode: 'C002', year: 2024, semester: '2', instructorID: 'E002' },
-        { courseCode: 'C003', year: 2024, semester: '1', instructorID: 'E003' },
-        { courseCode: 'C004', year: 2024, semester: '2', instructorID: 'E004' },
-        { courseCode: 'C005', year: 2023, semester: '1', instructorID: 'E005' },
-        { courseCode: 'C006', year: 2023, semester: '2', instructorID: 'E006' },
-    ]);
+	// Add Modules
+	await Module.bulkCreate([
+		{ courseCode: 'C001', year: 2022, semester: '1', instructorID: 'E001' },
+		{ courseCode: 'C001', year: 2023, semester: '1', instructorID: 'E001' },
+		{ courseCode: 'C001', year: 2024, semester: '1', instructorID: 'E001' },
+		{ courseCode: 'C002', year: 2023, semester: '2', instructorID: 'E002' },
+		{ courseCode: 'C002', year: 2024, semester: '2', instructorID: 'E002' },
+		{ courseCode: 'C003', year: 2024, semester: '1', instructorID: 'E003' },
+		{ courseCode: 'C004', year: 2024, semester: '2', instructorID: 'E004' },
+		{ courseCode: 'C005', year: 2023, semester: '1', instructorID: 'E005' },
+		{ courseCode: 'C006', year: 2023, semester: '2', instructorID: 'E006' },
+		{ courseCode: 'C007', year: 2023, semester: '2', instructorID: 'E007' },
+		{ courseCode: 'C008', year: 2023, semester: '2', instructorID: 'E008' },
+		{ courseCode: 'C009', year: 2023, semester: '1', instructorID: 'E009' },
+		{ courseCode: 'C010', year: 2023, semester: '2', instructorID: 'E010' },
+		{ courseCode: 'C011', year: 2024, semester: '1', instructorID: 'E011' },
+	]);
 
-    // Add Course Records
 	// Add Course Records
-await CourseRecord.bulkCreate([
-    // Records for student S001
-    { studentID: 'S001', courseCode: 'C001', grade: 4.0, passfail: 'Pass', year: 2022, semester: '1' },
-    { studentID: 'S001', courseCode: 'C002', grade: 3.8, passfail: 'Pass', year: 2022, semester: '2' },
-    { studentID: 'S001', courseCode: 'C003', grade: 3.7, passfail: 'Pass', year: 2023, semester: '1' },
-    { studentID: 'S001', courseCode: 'C004', grade: 3.9, passfail: 'Pass', year: 2023, semester: '2' },
-    { studentID: 'S001', courseCode: 'C005', grade: 4.0, passfail: 'Pass', year: 2024, semester: '1' },
-    { studentID: 'S001', courseCode: 'C006', grade: 3.6, passfail: 'Pass', year: 2024, semester: '2' },
+	await CourseRecord.bulkCreate([
+		// Records for student S001
+		{
+			studentID: 'S001',
+			courseCode: 'C002',
+			grade: 3.8,
+			passfail: 'Pass',
+			year: 2022,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S001',
+			courseCode: 'C003',
+			grade: 3.7,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S001',
+			courseCode: 'C004',
+			grade: 3.9,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S001',
+			courseCode: 'C005',
+			grade: 4.0,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S001',
+			courseCode: 'C001',
+			grade: 4.0,
+			passfail: 'Pass',
+			year: 2022,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S001',
+			courseCode: 'C006',
+			grade: 3.6,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S001',
+			courseCode: 'C007',
+			grade: 4.0,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S001',
+			courseCode: 'C008',
+			grade: 3.6,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
 
-    // Records for student S002
-    { studentID: 'S002', courseCode: 'C001', grade: 3.5, passfail: 'Pass', year: 2022, semester: '1' },
-    { studentID: 'S002', courseCode: 'C002', grade: 3.2, passfail: 'Pass', year: 2022, semester: '2' },
-    { studentID: 'S002', courseCode: 'C003', grade: 3.4, passfail: 'Pass', year: 2023, semester: '1' },
-    { studentID: 'S002', courseCode: 'C004', grade: 3.7, passfail: 'Pass', year: 2023, semester: '2' },
-    { studentID: 'S002', courseCode: 'C005', grade: 3.9, passfail: 'Pass', year: 2024, semester: '1' },
-    { studentID: 'S002', courseCode: 'C006', grade: 3.6, passfail: 'Pass', year: 2024, semester: '2' },
+		// Records for student S002
+		{
+			studentID: 'S002',
+			courseCode: 'C001',
+			grade: 3.5,
+			passfail: 'Pass',
+			year: 2022,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S002',
+			courseCode: 'C002',
+			grade: 3.2,
+			passfail: 'Pass',
+			year: 2022,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S002',
+			courseCode: 'C003',
+			grade: 3.4,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S002',
+			courseCode: 'C004',
+			grade: 3.7,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S002',
+			courseCode: 'C005',
+			grade: 3.9,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S002',
+			courseCode: 'C006',
+			grade: 3.6,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
 
-    // Records for student S003
-    { studentID: 'S003', courseCode: 'C001', grade: 4.0, passfail: 'Pass', year: 2023, semester: '1' },
-    { studentID: 'S003', courseCode: 'C002', grade: 3.8, passfail: 'Pass', year: 2023, semester: '2' },
-    { studentID: 'S003', courseCode: 'C003', grade: 3.5, passfail: 'Pass', year: 2024, semester: '1' },
-    { studentID: 'S003', courseCode: 'C004', grade: 3.7, passfail: 'Pass', year: 2024, semester: '2' },
+		// Records for student S003
+		{
+			studentID: 'S003',
+			courseCode: 'C001',
+			grade: 4.0,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S003',
+			courseCode: 'C002',
+			grade: 3.8,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S003',
+			courseCode: 'C003',
+			grade: 3.5,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S003',
+			courseCode: 'C004',
+			grade: 3.7,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
 
-    // Records for student S004
-    { studentID: 'S004', courseCode: 'C005', grade: 3.8, passfail: 'Pass', year: 2023, semester: '1' },
-    { studentID: 'S004', courseCode: 'C006', grade: 3.9, passfail: 'Pass', year: 2023, semester: '2' },
-    { studentID: 'S004', courseCode: 'C001', grade: 3.7, passfail: 'Pass', year: 2024, semester: '1' },
-    { studentID: 'S004', courseCode: 'C002', grade: 3.5, passfail: 'Pass', year: 2024, semester: '2' },
+		// Records for student S004
+		{
+			studentID: 'S004',
+			courseCode: 'C005',
+			grade: 3.8,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S004',
+			courseCode: 'C006',
+			grade: 3.9,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S004',
+			courseCode: 'C001',
+			grade: 3.7,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S004',
+			courseCode: 'C002',
+			grade: 3.5,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
 
-    // Records for student S005
-    { studentID: 'S005', courseCode: 'C003', grade: 3.9, passfail: 'Pass', year: 2022, semester: '1' },
-    { studentID: 'S005', courseCode: 'C004', grade: 3.8, passfail: 'Pass', year: 2023, semester: '2' },
-    { studentID: 'S005', courseCode: 'C005', grade: 4.0, passfail: 'Pass', year: 2024, semester: '1' },
-    { studentID: 'S005', courseCode: 'C006', grade: 3.6, passfail: 'Pass', year: 2024, semester: '2' },
+		// Records for student S005
+		{
+			studentID: 'S005',
+			courseCode: 'C003',
+			grade: 3.9,
+			passfail: 'Pass',
+			year: 2022,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S005',
+			courseCode: 'C004',
+			grade: 3.8,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S005',
+			courseCode: 'C005',
+			grade: 4.0,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S005',
+			courseCode: 'C006',
+			grade: 3.6,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
 
-    // Records for student S006
-    { studentID: 'S006', courseCode: 'C001', grade: 3.9, passfail: 'Pass', year: 2022, semester: '1' },
-    { studentID: 'S006', courseCode: 'C002', grade: 3.5, passfail: 'Pass', year: 2022, semester: '2' },
-    { studentID: 'S006', courseCode: 'C003', grade: 3.6, passfail: 'Pass', year: 2023, semester: '1' },
-    { studentID: 'S006', courseCode: 'C004', grade: 3.7, passfail: 'Pass', year: 2023, semester: '2' },
-    { studentID: 'S006', courseCode: 'C005', grade: 3.8, passfail: 'Pass', year: 2024, semester: '1' },
-    { studentID: 'S006', courseCode: 'C006', grade: 4.0, passfail: 'Pass', year: 2024, semester: '2' },
-]);
+		// Records for student S006
+		{
+			studentID: 'S006',
+			courseCode: 'C001',
+			grade: 3.9,
+			passfail: 'Pass',
+			year: 2022,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S006',
+			courseCode: 'C002',
+			grade: 3.5,
+			passfail: 'Pass',
+			year: 2022,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S006',
+			courseCode: 'C003',
+			grade: 3.6,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S006',
+			courseCode: 'C004',
+			grade: 3.7,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S006',
+			courseCode: 'C005',
+			grade: 3.8,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S006',
+			courseCode: 'C006',
+			grade: 4.0,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		// Records for student S007
+		{
+			studentID: 'S007',
+			courseCode: 'C005',
+			grade: 3.9,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S007',
+			courseCode: 'C006',
+			grade: 4.0,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S007',
+			courseCode: 'C016',
+			grade: 3.8,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
 
-	
+		// Records for student S008
+		{
+			studentID: 'S008',
+			courseCode: 'C001',
+			grade: 3.6,
+			passfail: 'Pass',
+			year: 2023,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S008',
+			courseCode: 'C002',
+			grade: 3.7,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '1',
+			enrollmentStatus: 'enrolled',
+		},
+		{
+			studentID: 'S008',
+			courseCode: 'C003',
+			grade: 3.5,
+			passfail: 'Pass',
+			year: 2024,
+			semester: '2',
+			enrollmentStatus: 'enrolled',
+		},
+	]);
 
-    console.log('Database fully seeded with sample data!');
+	console.log('Database fully seeded with sample data!');
 })();
 
 module.exports = {
-    sequelize,
-    UserAccount,
-    Student,
-    NextOfKin,
-    School,
-    Course,
-    CourseRecord,
-    Module,
-    Employee,
-    Instructor,
-    AdminStaff,
+	sequelize,
+	UserAccount,
+	Student,
+	NextOfKin,
+	School,
+	Course,
+	CourseRecord,
+	Module,
+	Employee,
+	Instructor,
+	AdminStaff,
 };
-
