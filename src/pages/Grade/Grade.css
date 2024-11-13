@@ -82,8 +82,7 @@
 	border-spacing: 30px;
 }
 
-.viewCourseStudentHeading,
-.viewCourseHeading {
+.viewCourseStudentHeading {
 	color: black;
 	text-align: center;
 	font-weight: bold;

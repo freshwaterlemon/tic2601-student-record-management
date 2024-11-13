@@ -356,7 +356,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Singaporean',
 			degree: 'BSc',
 			gpa: 3.8,
-			status: 'Active',
+			status: 'undergraduate',
 			studentEmail: 'alice@student.com',
 		},
 		{
@@ -369,7 +369,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Singaporean',
 			degree: 'BSc',
 			gpa: 3.5,
-			status: 'Active',
+			status: 'undergraduate',
 			studentEmail: 'bob@student.com',
 		},
 		{
@@ -382,7 +382,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Malaysian',
 			degree: 'BA',
 			gpa: 3.6,
-			status: 'Active',
+			status: 'undergraduate',
 			studentEmail: 'charlie@student.com',
 		},
 		{
@@ -395,7 +395,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Indonesian',
 			degree: 'BSc',
 			gpa: 3.2,
-			status: 'Active',
+			status: 'undergraduate',
 			studentEmail: 'david@student.com',
 		},
 		{
@@ -408,7 +408,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Indian',
 			degree: 'BA',
 			gpa: 3.4,
-			status: 'Active',
+			status: 'undergraduate',
 			studentEmail: 'eve@student.com',
 		},
 		{
@@ -421,7 +421,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Filipino',
 			degree: 'BEng',
 			gpa: 3.9,
-			status: 'Active',
+			status: 'undergraduate',
 			studentEmail: 'frank@student.com',
 		},
 		{
@@ -434,7 +434,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Thai',
 			degree: 'BA',
 			gpa: 3.9,
-			status: 'Active',
+			status: 'undergraduate',
 			studentEmail: 'grace@student.com',
 		},
 		{
@@ -447,7 +447,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Vietnamese',
 			degree: 'BBA',
 			gpa: 3.7,
-			status: 'Active',
+			status: 'undergraduate',
 			studentEmail: 'hank@student.com',
 		},
 	]);

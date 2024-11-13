@@ -32,7 +32,7 @@ const Academic = () => {
                 <form onSubmit={handleFilter}>
                     <input
                         className="filterStudentInput"
-                        placeholder="Student No"
+                        placeholder="Student Number"
                         type="text"
                         value={studentNo}
                         onChange={(e) => setStudentNo(e.target.value)}
@@ -63,7 +63,7 @@ const Academic = () => {
                             <td>DEGREE:</td>
                             <td colSpan="2">{transcriptData.degree}</td>
                             <td>STATUS:</td>
-                            <td colSpan="2">{transcriptData.status}</td>
+                            <td colSpan="2">{transcriptData.status.toUpperCase()}</td>
                             <td>GPA:</td>
                             <td>{transcriptData.gpa}</td>
                         </tr>
