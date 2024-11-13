@@ -10,7 +10,10 @@ const enrollment = require('./routes/enrollmentRoute');
 const student = require('./routes/studentRoute');
 
 // Use CORS middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3001', // Frontend URL
+  credentials: true,               // Enable if using cookies or sessions
+}));
 
 // Middleware for parsing JSON and URL-encoded data
 app.use(express.json());
