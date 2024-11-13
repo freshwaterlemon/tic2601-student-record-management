@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Mount router
 app.use('/grade', grades);
-app.use('/courses', courses);
+app.use('/course', courses);
 app.use('/academic', academic);
 // app.use('/enrollment', enrollment); // for amos backend
 app.use('/student', student);

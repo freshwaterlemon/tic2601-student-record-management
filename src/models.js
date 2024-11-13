@@ -39,13 +39,10 @@ const Student = sequelize.define(
 		gpa: {
 			type: DataTypes.FLOAT,
 			allowNull: false,
-			validate: {
-				min: 0.0,
-				max: 5.0,
-			},
+			validate: { min: 0.0, max: 5.0 },
 		},
 		studentStatus: {
-			type: DataTypes.ENUM('Active', 'Graduated'),
+			type: DataTypes.ENUM('Undergraduate', 'Graduated'),
 			allowNull: false,
 		},
 		studentEmail: {
@@ -253,8 +250,8 @@ CourseRecord.belongsTo(Module, {
 });
 
 // Sync and Populate Database
-// Sync and Populate Database
 (async () => {
+	// Sync with force: true to clear the database each time for testing
 	await sequelize.sync({ force: true });
 	console.log('Database synced!');
 
@@ -373,7 +370,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Singaporean',
 			degree: 'BSc',
 			gpa: 3.8,
-			studentStatus: 'undergraduate',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'alice@student.com',
 		},
 		{
@@ -386,7 +383,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Singaporean',
 			degree: 'BSc',
 			gpa: 3.5,
-			studentStatus: 'undergraduate',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'bob@student.com',
 		},
 		{
@@ -399,7 +396,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Malaysian',
 			degree: 'BA',
 			gpa: 3.6,
-			studentStatus: 'undergraduate',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'charlie@student.com',
 		},
 		{
@@ -412,7 +409,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Indonesian',
 			degree: 'BSc',
 			gpa: 3.2,
-			studentStatus: 'undergraduate',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'david@student.com',
 		},
 		{
@@ -425,7 +422,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Indian',
 			degree: 'BA',
 			gpa: 3.4,
-			studentStatus: 'undergraduate',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'eve@student.com',
 		},
 		{
@@ -438,7 +435,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Filipino',
 			degree: 'BEng',
 			gpa: 3.9,
-			studentStatus: 'undergraduate',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'frank@student.com',
 		},
 		{
@@ -451,7 +448,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Thai',
 			degree: 'BA',
 			gpa: 3.9,
-			status: 'undergraduate',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'grace@student.com',
 		},
 		{
@@ -464,7 +461,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Vietnamese',
 			degree: 'BBA',
 			gpa: 3.7,
-			status: 'undergraduate',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'hank@student.com',
 		},
 	]);
