@@ -8,16 +8,22 @@
 }
 
 .updateCourseForm {
-	margin: 3rem;
+	margin: 1rem;
+}
+
+.updateCourseheading {
+	background-color: white;
+	padding: 2rem 0em 0.5em 0em;
 }
 
 .courseForm {
 	display: flex;
 	flex-direction: column;
-	gap: 15px;
+	gap: 3em;
 	padding: 1em 3em;
-	width: 80%;
+	width: fit-content;
 	transition: 0.4s ease-in-out;
+	align-items: stretch;
 	height: 70vh;
 }
 
@@ -43,19 +49,19 @@
 }
 
 .updateCourseBtn {
-	margin-top: 1rem;
 	width: 100%;
 }
 
 .viewCourse {
+	flex-grow: 1;
 	margin: 1rem;
 	font-size: 0.8rem;
 	margin-right: auto;
 	overflow-y: auto;
 	background-color: white;
-	height: 70vh;
-	width: 65vw;
-	padding: 0.5em;
+	height: 75vh;
+	width: auto;
+	padding: 2.5em;
 }
 
 .viewCourseTable {
@@ -75,65 +81,115 @@
 }
 
 .searchbarcontainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 	margin: 2rem 0rem;
-	max-width: fit-content;
-	margin-left: auto;
-	margin-right: auto;
+}
+.viewCourseInputSearch{
+	height: 3.5rem;
 }
 
-@media only screen and (max-width: 1500px) {
-	.gradeForm {
+.searchbarcontainer p{
+	flex-grow: 1;
+	padding-left: 9em;
+}
+
+.viewCourseTable {
+	width: 100%;
+	border-collapse: collapse;
+	font-family: Arial, sans-serif;
+	font-size: 1em;
+	margin: 1em 0;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.viewCourseTable thead tr {
+	background-color: #ffab67;
+	color: #ffffff;
+}
+
+.viewCourseTable th,
+.viewCourseTable td {
+	padding: 1.2em 1em;
+	text-align: left;
+}
+
+.viewCourseTable tbody tr {
+	background-color: #f3f3f3;
+	transition: background-color 0.2s ease;
+}
+
+.viewCourseTable tbody tr td[colspan='3'] {
+	text-align: center;
+	padding: 6em;
+}
+
+.viewCourseTable tbody tr:nth-child(even) {
+	background-color: #e6e6e6;
+}
+
+.viewCourseTable tbody tr:hover {
+	background-color: rgba(255, 235, 205, 0.357);
+}
+
+@media only screen and (max-width: 992px) {
+	.updateCourseheading {
+		background-color: white;
+		padding: 1rem;
+	}
+	.courseForm {
 		display: flex;
-		flex-direction: column;
-		gap: 5px;
-		padding: 1em 3em;
-		width: 60%;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-around;
+		gap: 25px;
+		width: auto;
 		transition: 0.4s ease-in-out;
-		height: 70vh;
+		height: auto;
 	}
 
 	.viewCourse {
-		margin: 0em;
+		margin: auto;
 		font-size: 0.8rem;
 		margin-right: auto;
 		overflow-y: auto;
 		background-color: white;
 		height: 70vh;
-		width: 50vw;
+		width: auto;
 		padding: 1.5em;
 	}
-
 }
 
+@media only screen and (max-width: 1200px) {
+	.updateCourseheading {
+		background-color: white;
+		padding: 1rem;
+	}
+	.courseForm {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-around;
+		gap: 25px;
+		width: auto;
+		transition: 0.4s ease-in-out;
+		height: auto;
+	}
 
-.viewCourseTable {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    margin: 20px 0;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
-.viewCourseTable thead tr {
-    background-color: #ffab67; 
-    color: #ffffff;
-}
-
-.viewCourseTable th, .viewCourseTable td {
-    padding: 12px 15px;
-	text-align: left;
-}
-
-.viewCourseTable tbody tr {
-    background-color: #f3f3f3;
-    transition: background-color 0.2s ease;
-}
-
-.viewCourseTable tbody tr:nth-child(even) {
-    background-color: #e6e6e6;
-}
-
-.viewCourseTable tbody tr:hover {
-    background-color: #b0c4de99;
+	.viewCourse {
+		margin: auto;
+		font-size: 0.8rem;
+		margin-right: auto;
+		overflow-y: auto;
+		background-color: white;
+		height: 70vh;
+		width: auto;
+		padding: 1.5em;
+	}
+	.updateCourseInput {
+		flex-grow: 1;
+	}
 }

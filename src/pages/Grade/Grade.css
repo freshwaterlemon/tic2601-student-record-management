@@ -8,16 +8,22 @@
 }
 
 .updateGradeForm {
-	margin: 3rem;
+	margin: 1rem;
+}
+
+.updateGradeHeading {
+	background-color: white;
+	padding: 2rem 0em 0.5em 0em;
 }
 
 .gradeForm {
 	display: flex;
 	flex-direction: column;
-	gap: 25px;
+	gap: 2em;
 	padding: 1em 3em;
-	width: 80%;
+	width: fit-content;
 	transition: 0.4s ease-in-out;
+	align-items: stretch;
 	height: 70vh;
 }
 
@@ -51,20 +57,21 @@
 	transition: 0.4s ease-in-out;
 }
 
+.viewCourseStudentBtn,
 .updateGradeBtn {
-	margin-top: 1rem;
 	width: 100%;
 }
 
 .viewCourseStudent {
+	flex-grow: 1;
 	margin: 1rem;
 	font-size: 0.8rem;
 	margin-right: auto;
 	overflow-y: auto;
 	background-color: white;
-	height: 70vh;
-	width: 65vw;
-	padding: 1.5em;
+	height: 75vh;
+	width: auto;
+	padding: 2.5em;
 }
 
 .viewCourseStudentTable {
@@ -75,7 +82,7 @@
 	border-spacing: 30px;
 }
 
-.viewCourseHeading {
+.viewCourseStudentHeading {
 	color: black;
 	text-align: center;
 	font-weight: bold;
@@ -84,13 +91,16 @@
 }
 
 .chooseCourseStudent {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: flex-start;
+	gap: 1em;
 	margin: 2rem 0rem;
 }
 
 .viewCourseStudentBtn {
-	margin-top: 1rem;
-	margin-left: 1.5rem;
-	width: 10%;
+	width: 20%;
 }
 
 .viewCourseStudentLabel {
@@ -104,59 +114,128 @@
 	margin: 2rem;
 }
 
-@media only screen and (max-width: 1500px) {
+.viewCourseStudentTable {
+	width: 100%;
+	border-collapse: collapse;
+	font-family: Arial, sans-serif;
+	font-size: 1em;
+	margin: 1em 0;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.viewCourseStudentTable thead h3 {
+	text-align: center;
+	padding: 0.5em;
+	margin: 0;
+}
+
+.viewCourseStudentTable thead tr {
+	background-color: #ffab67;
+	color: #ffffff;
+}
+
+.viewCourseStudentTable th,
+.viewCourseStudentTable td {
+	padding: 12px 15px;
+	/* border: 1px solid #dddddd; */
+	text-align: left;
+}
+
+.viewCourseStudentTable tbody tr td[colspan='7'] {
+	text-align: center;
+	padding: 6em;
+}
+
+.viewCourseStudentTable tbody tr {
+	background-color: #f3f3f3;
+	transition: background-color 0.2s ease;
+}
+
+.viewCourseStudentTable tbody tr:nth-child(even) {
+	background-color: #e6e6e6;
+}
+
+.viewCourseStudentTable tbody tr:hover {
+	background-color: rgba(255, 235, 205, 0.357);
+}
+
+@media only screen and (max-width: 992px) {
+	.updateGradeHeading {
+		background-color: white;
+		padding: 1rem;
+	}
+
 	.gradeForm {
 		display: flex;
-		flex-direction: column;
-		gap: 5px;
-		padding: 1em 3em;
-		width: 60%;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-around;
+		gap: 25px;
+		width: auto;
 		transition: 0.4s ease-in-out;
-		height: 70vh;
+		height: auto;
+	}
+
+	.chooseCourseStudent {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 2em;
+		padding: 0 5em;
 	}
 
 	.viewCourseStudent {
-		margin: 0em;
+		margin: auto;
 		font-size: 0.8rem;
 		margin-right: auto;
 		overflow-y: auto;
 		background-color: white;
 		height: 70vh;
-		width: 50vw;
+		width: auto;
 		padding: 1.5em;
 	}
-
 }
 
-.viewCourseStudentTable {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
-    font-size: 1.2em;
-    margin: 1em 0;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
+@media only screen and (max-width: 1200px) {
+	.updateGradeHeading {
+		background-color: white;
+		padding: 1rem;
+	}
 
-.viewCourseStudentTable thead tr {
-    background-color: #ffab67; 
-    color: #ffffff; 
-}
+	.gradeForm {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-around;
+		gap: 25px;
+		/* padding: 1em 3em; */
+		width: auto;
+		transition: 0.4s ease-in-out;
+		height: auto;
+	}
 
-.viewCourseStudentTable th, .viewCourseStudentTable td {
-    padding: 12px 15px;
-    /* border: 1px solid #dddddd; */
-	text-align: left;
-}
+	.chooseCourseStudent {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 2em;
+	}
 
-.viewCourseStudentTable tbody tr {
-    background-color: #f3f3f3;
-    transition: background-color 0.2s ease;
-}
-
-.viewCourseStudentTable tbody tr:nth-child(even) {
-    background-color: #e6e6e6;
-}
-
-.viewCourseStudentTable tbody tr:hover {
-    background-color: #b0c4de99;
+	.viewCourseStudent {
+		margin: auto;
+		font-size: 0.8rem;
+		margin-right: auto;
+		overflow-y: auto;
+		background-color: white;
+		height: 70vh;
+		width: auto;
+		padding: 1.5em;
+	}
+	.chooseCourseStudent {
+		padding: 0 5em;
+	}
 }
