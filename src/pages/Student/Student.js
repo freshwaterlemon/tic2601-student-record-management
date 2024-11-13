@@ -52,7 +52,7 @@ const Student = () => {
         e.preventDefault();
         console.log({newStudent});
 
-        const url = studentIdExists(newStudent.studentID, students) ? `http://localhost:3000/student/add/${newStudent.studentID}` : 'http://localhost:3000/student/add'; // Update if ID exists, else add new
+        const url = studentIdExists(newStudent.studentID, students) ? `http://localhost:3000/student/update/${newStudent.studentID}` : 'http://localhost:3000/student/add'; // Update if ID exists, else add new
         const method = studentIdExists(newStudent.studentID, students) ? 'put' : 'post';
         console.log(studentIdExists(newStudent.studentID, students));
         console.log({method},{url});
@@ -89,6 +89,9 @@ const Student = () => {
             ));
           }
     };
+
+    //Delete student
+
         
     return (
         <>
