@@ -91,7 +91,30 @@ const Student = () => {
     };
 
     //Delete student
-
+    const handleDelete = async (e) => {
+        if (studentIdExists(newStudent.studentID, students)){
+            try{
+                await axios.delete(`http://localhost:3000/student/delete/${newStudent.studentID}`);
+                alert(`Student with ID ${newStudent.studentID} deleted successfully`);
+                setNewStudent({ 
+                    studentID: "",
+                    studentName: "",
+                    studentDOB: "",
+                    personalPhoneNum: "",
+                    housePhoneNum: "", 
+                    sex: "", 
+                    currentAddress: "", 
+                    nationality: "", 
+                    degree: "", 
+                    gpa: "", 
+                    studentStatus: "", 
+                    studentEmail: "",});
+                } catch (error) {
+                console.error("Failed to delete student:", error);
+                alert("Error: Unable to delete student.");
+            }
+        }
+    }
         
     return (
         <>
@@ -147,9 +170,8 @@ const Student = () => {
                 <input type="email" name="studentEmail" value={newStudent.studentEmail} onChange={handleChange} />
                 </div>
 
-                 {/* This part is wrong, need to troubleshoot
-                need a function to query the database to check if studentID exists */}
                 <button type="submit" onSubmit={handleSubmit}>{studentIdExists(newStudent.studentID, students) ? 'Update' : 'Add'}</button>
+                <button type="submit" onClick={handleDelete} disabled={!studentIdExists(newStudent.studentID, students)}>Delete</button>
             </form>
 
             {/* Displays student information 

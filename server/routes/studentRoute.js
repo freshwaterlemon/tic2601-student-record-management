@@ -53,4 +53,23 @@ router.put("/update/:studentID", async (req, res) => {
       }
 });
 
+//detele student
+router.delete("/delete/:studentID", async (req, res) =>{
+  const { studentID } = req.params;
+
+  try {
+    // Find the student by ID
+    const student = await Student.findOne({ where: { studentID } });
+    if (student) {
+      await student.destroy(); // Delete the student record
+      res.status(200).json({ message: 'Student deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Student not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete student' });
+  }
+})
+
 module.exports = router
