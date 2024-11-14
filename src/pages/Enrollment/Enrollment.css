@@ -122,7 +122,7 @@
 	text-align: left;
 }
 
-.viewCourseEnrollmentTable tbody tr td[colspan='7'] {
+.viewCourseEnrollmentTable tbody tr td[colspan='5'] {
 	text-align: center;
 	padding: 6em;
 }

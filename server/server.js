@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/grade', grades);
 app.use('/course', courses);
 app.use('/academic', academic);
-// app.use('/enrollment', enrollment); // for amos backend
+app.use('/enrollment', enrollment); // for amos backend
 app.use('/student', student);
 
 // Home route
