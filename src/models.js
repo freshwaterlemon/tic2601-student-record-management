@@ -4,7 +4,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 // Initialize Sequelize with SQLite
 const sequelize = new Sequelize({
 	dialect: 'sqlite',
-	storage: './db/studentrecordmanagement.db',
+	storage: './server/db/studentrecordmanagement.db',
 	logging: false, // Set to true if you need query logs for debugging
 });
 

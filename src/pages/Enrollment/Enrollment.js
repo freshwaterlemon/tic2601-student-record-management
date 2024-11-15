@@ -46,7 +46,7 @@ const Enrollment = () => {
 	const handleEnrollStudent = async (e) => {
 		e.preventDefault();
 		try {
-			await fetch('http://localhost:3000/enrollment/enroll', {
+			const response = await fetch('http://localhost:3000/enrollment/enroll', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -54,36 +54,52 @@ const Enrollment = () => {
 				body: JSON.stringify(enrollment),
 			});
 
-			setMessage('Enrolled successfully!');
-			setTimeout(() => setMessage(''), 3000); // clear message after 3 seconds
+			const data = await response.json();
 
-			// reset form after successful enrollment
-			setEnrollment({
-				studentID: '',
-				courseCode: '',
-				year: '',
-				semester: '',
-			});
+			if (response.status === 409) {
+				// Show the error message for duplicate records
+				setMessage(data.error);
+			} else if (response.ok) {
+				setMessage('Enrolled successfully!');
+				// Clear the message after a delay
+				setTimeout(() => setMessage(''), 3000);
 
-			// refetch enrollments to show updated status
-			fetchEnrollments();
+				// Reset form after successful enrollment
+				setEnrollment({
+					studentID: '',
+					courseCode: '',
+					year: '',
+					semester: '',
+				});
+
+				// Refetch enrollments to show updated status
+				fetchEnrollments();
+			}
 		} catch (error) {
 			console.error('Error enrolling student:', error);
+			setMessage('Failed to enroll student');
 		}
 	};
 
-	// submit unenrollment to the server
-	const handleUnEnrollStudent = async (e) => {
-		e.preventDefault();
-		try {
-			await fetch('http://localhost:3000/enrollment/unenroll', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(enrollment),
-			});
+// submit unenrollment to the server
+const handleUnEnrollStudent = async (e) => {
+	e.preventDefault();
+	try {
+		const response = await fetch('http://localhost:3000/enrollment/unenroll', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(enrollment),
+		});
 
+		const data = await response.json();
+
+		if (response.status === 409) {
+			// Show the specific error message for already withdrawn records
+			setMessage(data.error || 'Student is already withdrawn from this course for the specified term.');
+			setTimeout(() => setMessage(''), 3000); // clear message after 3 seconds
+		} else if (response.ok) {
 			setMessage('Unenrolled successfully!');
 			setTimeout(() => setMessage(''), 3000); // clear message after 3 seconds
 
@@ -97,10 +113,13 @@ const Enrollment = () => {
 
 			// refetch enrollments to show updated status
 			fetchEnrollments();
-		} catch (error) {
-			console.error('Error unenrolling student:', error);
 		}
-	};
+	} catch (error) {
+		console.error('Error unenrolling student:', error);
+		setMessage('Failed to unenroll student');
+	}
+};
+
 
 	return (
 		<div className="enrolContainer">

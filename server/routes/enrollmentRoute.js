@@ -23,16 +23,12 @@ router.post('/enroll', async (req, res) => {
 				existingEnrollment.enrollmentStatus = 'enrolled';
 				await existingEnrollment.save();
 
-				return res
-					.status(200)
-					.json({ updatedEnrollment: existingEnrollment });
+				return res.status(200).json({ updatedEnrollment: existingEnrollment });
 			} else {
-				// ff the student is already enrolled, return a conflict response
-				return res
-					.status(409)
-					.json({
-						error: 'Student is already enrolled in this course for the specified term.',
-					});
+				// If the student is already enrolled, return a conflict response
+				return res.status(409).json({
+					error: 'Student is already enrolled in this course for the specified term.',
+				});
 			}
 		}
 
@@ -69,31 +65,28 @@ router.post('/unenroll', async (req, res) => {
 			return res.status(404).json({ error: 'Course record not found' });
 		}
 
-		// check if the current enrollment status is "enrolled"
-		if (existingEnrollment.enrollmentStatus === 'enrolled') {
-			// update the enrollmentStatus to "withdrawn"
-			existingEnrollment.enrollmentStatus = 'withdrawn';
-
-			// save to db
-			await existingEnrollment.save();
-
-			return res
-				.status(200)
-				.json({ updatedEnrollment: existingEnrollment });
-		} else {
-			return res
-				.status(409)
-				.json({
-					error: 'Student is already withdrawn from this course for the specified term.',
-				});
+		// check if the current enrollment status is "withdrawn"
+		if (existingEnrollment.enrollmentStatus === 'withdrawn') {
+			// If the student is already withdrawn, return a conflict response
+			return res.status(409).json({
+				error: 'Student is already withdrawn from this course for the specified term.',
+			});
 		}
+
+		// update the enrollmentStatus to "withdrawn"
+		existingEnrollment.enrollmentStatus = 'withdrawn';
+
+		// save to db
+		await existingEnrollment.save();
+
+		return res.status(200).json({ updatedEnrollment: existingEnrollment });
 	} catch (error) {
 		console.error('Failed to unenroll student:', error);
 		res.status(500).json({ error: 'Failed to unenroll student' });
 	}
 });
 
-// route to fetch student records from course record after enrollment or unerollment
+// route to fetch student records from course record after enrollment or unenrollment
 router.get('/display', async (req, res) => {
 	const { studentID, courseCode, year, semester } = req.query;
 
