@@ -94,8 +94,10 @@ const NextOfKin = sequelize.define(
 	'NextOfKin',
 	{
 		NOKID: { type: DataTypes.STRING, primaryKey: true, allowNull: false },
+		studentRelationID: { type: DataTypes.STRING, allowNull: false },
 		NOKName: { type: DataTypes.STRING, allowNull: false },
 		NOKPhoneNum: { type: DataTypes.STRING, allowNull: false },
+		NOKRelationship: { type: DataTypes.STRING, allowNull: false },
 	},
 	{ freezeTableName: true }
 );
@@ -947,6 +949,66 @@ CourseRecord.belongsTo(Module, {
 			enrollmentStatus: 'enrolled',
 		},
 	]);
+
+	await NextOfKin.bulkCreate([
+		{
+			NOKID: 'NOK001',
+			studentRelationID: 'S001', // Refers to Alice
+			NOKName: 'Mary Smith',
+			NOKPhoneNum: '9988776655',
+			NOKRelationship: 'Mother',
+		},
+		{
+			NOKID: 'NOK002',
+			studentRelationID: 'S002', // Refers to Bob
+			NOKName: 'John Doe',
+			NOKPhoneNum: '9876543210',
+			NOKRelationship: 'Father',
+		},
+		{
+			NOKID: 'NOK003',
+			studentRelationID: 'S003', // Refers to Charlie
+			NOKName: 'Emma Brown',
+			NOKPhoneNum: '9345678901',
+			NOKRelationship: 'Sister',
+		},
+		{
+			NOKID: 'NOK004',
+			studentRelationID: 'S004', // Refers to David
+			NOKName: 'Richard Lee',
+			NOKPhoneNum: '8765432109',
+			NOKRelationship: 'Father',
+		},
+		{
+			NOKID: 'NOK005',
+			studentRelationID: 'S005', // Refers to Eve
+			NOKName: 'Sophia Adams',
+			NOKPhoneNum: '9123067890',
+			NOKRelationship: 'Mother',
+		},
+		{
+			NOKID: 'NOK006',
+			studentRelationID: 'S006', // Refers to Frank
+			NOKName: 'Michael Tan',
+			NOKPhoneNum: '8112233445',
+			NOKRelationship: 'Uncle',
+		},
+		{
+			NOKID: 'NOK007',
+			studentRelationID: 'S007', // Refers to Grace
+			NOKName: 'Laura White',
+			NOKPhoneNum: '9234567890',
+			NOKRelationship: 'Aunt',
+		},
+		{
+			NOKID: 'NOK008',
+			studentRelationID: 'S008', // Refers to Hank
+			NOKName: 'George Brown',
+			NOKPhoneNum: '9345678901',
+			NOKRelationship: 'Father',
+		},
+	]);
+	
 
 	console.log('Database fully seeded with sample data!');
 })();

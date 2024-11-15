@@ -4,9 +4,11 @@ import './Student.css';
 
 const Student = () => {
 	// const [isUpdated, setIsUpdated] = useState([]);
+	const [isPopoverVisible, setIsPopoverVisible] = useState(false); // Popover state
 	const [filteredStudent, setfilteredStudent] = useState([]);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [students, setStudents] = useState([]);
+	const [nokData, setNokData] = useState(null);
 	const [newStudent, setNewStudent] = useState({
 		studentID: '',
 		studentName: '',
@@ -21,6 +23,54 @@ const Student = () => {
 		studentStatus: '',
 		studentEmail: '',
 	});
+
+	// function to reset form
+	const resetForm = () =>
+		setNewStudent({
+			studentID: '',
+			studentName: '',
+			studentDOB: '',
+			personalPhoneNum: '',
+			housePhoneNum: '',
+			sex: '',
+			currentAddress: '',
+			nationality: '',
+			degree: '',
+			gpa: '',
+			studentStatus: '',
+			studentEmail: '',
+		});
+
+	// toggle popover visibility
+	const togglePopover = async () => {
+		// Toggle the popover immediately
+		setIsPopoverVisible((prevVisible) => {
+			// If it was not visible, start fetching data
+			if (!prevVisible && newStudent.studentID) {
+				fetchNokData(); // Fetch NOK data asynchronously
+			}
+			return !prevVisible; // Update the visibility state
+		});
+	};
+
+	// Function to fetch NOK data
+	const fetchNokData = async () => {
+		try {
+			if (!newStudent.studentID) {
+				console.warn("Student ID is not set.");
+				return;
+			}
+			console.log("Fetching NOK Data for Student ID:", newStudent.studentID);
+			const response = await axios.get(`http://localhost:3000/student/nok/${newStudent.studentID}`);
+			setNokData(response.data);
+		} catch (error) {
+			console.error("Error fetching NOK data:", error);
+		}
+	};
+
+
+	// close the popover explicitly
+	const closePopover = () => setIsPopoverVisible(false);
 
 	useEffect(() => {
 		// Fetch all students
@@ -61,84 +111,77 @@ const Student = () => {
 		e.preventDefault();
 		console.log({ newStudent });
 
-		const url = studentIdExists(newStudent.studentID, students)
+		const isUpdate = studentIdExists(newStudent.studentID, students);
+		const url = isUpdate
 			? `http://localhost:3000/student/update/${newStudent.studentID}`
-			: 'http://localhost:3000/student/add'; // Update if ID exists, else add new
-		const method = studentIdExists(newStudent.studentID, students)
-			? 'put'
-			: 'post';
-		console.log(studentIdExists(newStudent.studentID, students));
-		console.log({ method }, { url });
+			: 'http://localhost:3000/student/add';
+		const method = isUpdate ? 'put' : 'post';
+
 		try {
 			await axios({
 				method,
 				url,
 				data: newStudent,
 			});
-			console.log('added');
-			if (!newStudent.studentID)
-				setNewStudent({
-					studentID: '',
-					studentName: '',
-					studentDOB: '',
-					personalPhoneNum: '',
-					housePhoneNum: '',
-					sex: '',
-					currentAddress: '',
-					nationality: '',
-					degree: '',
-					gpa: '',
-					studentStatus: '',
-					studentEmail: '',
-				}); // Reset form after adding
+			console.log('added or updated');
+
+			resetForm();
+
+			// refresh the students list
+			const response = await axios.get('http://localhost:3000/student');
+			setStudents(response.data);
 		} catch (error) {
 			console.log('Error: ' + error.message);
 		}
-		if (method === 'post') {
-			// If a new student was added, append it to the students array
-			setStudents([...students, newStudent]);
-		} else {
-			// If a student was updated, map over the students array to replace the old data
-			setStudents(
-				students.map((student) =>
-					student.studentID === newStudent.studentID
-						? newStudent
-						: student
-				)
-			);
-		}
 	};
 
-	//Delete student
+
+	// remove student
 	const handleDelete = async (e) => {
-		if (studentIdExists(newStudent.studentID, students)) {
-			try {
-				await axios.delete(
-					`http://localhost:3000/student/delete/${newStudent.studentID}`
-				);
-				alert(
-					`Student with ID ${newStudent.studentID} deleted successfully`
-				);
-				setNewStudent({
-					studentID: '',
-					studentName: '',
-					studentDOB: '',
-					personalPhoneNum: '',
-					housePhoneNum: '',
-					sex: '',
-					currentAddress: '',
-					nationality: '',
-					degree: '',
-					gpa: '',
-					studentStatus: '',
-					studentEmail: '',
-				});
-			} catch (error) {
-				console.error('Failed to delete student:', error);
-				alert('Error: Unable to delete student.');
-			}
+
+		const url = `http://localhost:3000/student/delete/${newStudent.studentID}`;
+
+
+		try {
+			await axios.put(url);
+
+			alert(
+				`Student with ID ${newStudent.studentID} deleted successfully`
+			);
+
+			resetForm();
+
+			// refresh the students list
+			const response = await axios.get('http://localhost:3000/student');
+			setStudents(response.data);
+
+		} catch (error) {
+			console.error('Failed to delete student:', error);
+			alert('Error: Unable to delete student.');
 		}
+
 	};
+
+
+	// //Delete student
+	// const handleDelete = async (e) => {
+	// 	if (studentIdExists(newStudent.studentID, students)) {
+	// 		try {
+	// 			await axios.delete(
+	// 				`http://localhost:3000/student/delete/${newStudent.studentID}`
+	// 			);
+	// 			alert(
+	// 				`Student with ID ${newStudent.studentID} deleted successfully`
+	// 			);
+
+	// 			resetForm();
+
+	// 		} catch (error) {
+	// 			console.error('Failed to delete student:', error);
+	// 			alert('Error: Unable to delete student.');
+	// 		}
+	// 	}
+	// };
 
 	return (
 		<>
@@ -323,10 +366,24 @@ const Student = () => {
 							onChange={(e) => setSearchQuery(e.target.value)}
 							className="viewStudentInputSearch"
 						/>
-						<button className="viewStudentInfoBtn" type="button">
+						<button className="viewStudentInfoBtn" onClick={togglePopover}>
 							Emergency Contact Info
 						</button>
 					</div>
+
+					{/* Popover for Emergency Contact Info */}
+					{isPopoverVisible && (
+						<div id="NOK-popover" className="popover">
+							<h3>Emergency Contact Information</h3>
+							<p>Student ID: {newStudent.studentID || "N/A"}</p>
+							<p>NOK Name: {nokData?.NOKName || "Loading..."}</p>
+							<p>NOK Number: {nokData?.NOKPhoneNum || "Loading..."}</p>
+							<button onClick={closePopover} className="closeButton">
+								Close
+							</button>
+						</div>
+					)}
+
 					<table className="viewStudentInfoTable">
 						{students.length > 0 && (
 							<thead>
@@ -373,7 +430,7 @@ const Student = () => {
 								))
 							) : (
 								<tr>
-									<td>There are no students</td>
+									<td colSpan="12">There are no students</td>
 								</tr>
 							)}
 						</tbody>
