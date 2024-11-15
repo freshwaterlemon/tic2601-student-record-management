@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import React, { useState } from 'react';
 import './Enrollment.css';
 
 const Enrollment = () => {
@@ -198,9 +199,106 @@ const Enrollment = () => {
 				<div className="updatedMessage">
 					{message && <p>{message}</p>}
 				</div>
+		<div className="enrolContainer">
+			<div className="enrolForm">
+				<p className="enrolHeading">Enroll Student</p>
+				<form className="enrollmentForm" onSubmit={handleEnrollStudent}>
+					<input
+						className="enrolInput"
+						placeholder="Student ID"
+						type="text"
+						name="studentID"
+						value={enrollment.studentID}
+						onChange={handleInputChange}
+					/>
+					<input
+						className="enrolInput"
+						placeholder="Course Code"
+						type="text"
+						name="courseCode"
+						value={enrollment.courseCode}
+						onChange={handleInputChange}
+					/>
+					<input
+						className="enrolInput"
+						placeholder="Year"
+						type="number"
+						name="year"
+						value={enrollment.year}
+						onChange={handleInputChange}
+					/>
+					<input
+						className="enrolInput"
+						placeholder="Semester"
+						type="number"
+						name="semester"
+						value={enrollment.semester}
+						onChange={handleInputChange}
+					/>
+					<button
+						className="enrolBtn"
+						type="submit"
+						disabled={!isFormValid()}
+					>
+						Enroll Student
+					</button>
+					<button
+						className="enrolBtn"
+						type="button"
+						onClick={handleUnEnrollStudent}
+						disabled={!isFormValid()}
+					>
+						Unenroll Student
+					</button>
+				</form>
 			</div>
+
+			<div className="viewCourseEnrollment">
+				<p className="viewCourseEnrollmentHeading">
+					View Enrollment Status
+				</p>
+				<table className="viewCourseEnrollmentTable">
+					<thead>
+						<tr>
+							<th>STUDENT NO</th>
+							<th>STUDENT NAME</th>
+							<th>COURSE CODE</th>
+							<th>COURSE NAME</th>
+							<th>YEAR</th>
+							<th>SEMESTER</th>
+							<th>STATUS</th>
+						</tr>
+					</thead>
+					<tbody>
+						{students.length > 0 ? (
+							students.map((student, index) => (
+								<tr key={index}>
+									<td>{student.studentID}</td>
+									<td>{student.studentName}</td>
+									<td>{student.courseCode}</td>
+									<td>{student.courseName}</td>
+									<td>{student.year}</td>
+									<td>{student.semester}</td>
+									<td>{student.enrollmentStatus}</td>
+								</tr>
+							))
+						) : (
+							<tr>
+								<td colSpan="7">
+									No enrollment records available.
+								</td>
+							</tr>
+						)}
+					</tbody>
+				</table>
+				<div className="updatedMessage">
+					{message && <p>{message}</p>}
+				</div>
+			</div>
+		</div>
 		</div>
 	);
 };
 
 export default Enrollment;
+
