@@ -107,11 +107,21 @@
 	margin-left: 1rem;
 }
 
-.updatedMessage {
+/* .updatedMessage {
 	color: green;
 	font-weight: bold;
 	font-size: 1rem;
 	margin: 2rem;
+} */
+
+.passStatus {
+    color: green; /* Text color for PASS */
+    font-weight: bold; /* Optional for emphasis */
+}
+
+.failStatus {
+    color: red; /* Text color for FAIL */
+    font-weight: bold; /* Optional for emphasis */
 }
 
 .viewCourseStudentTable {

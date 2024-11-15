@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './Grade.css';
+import MessageDisplay from '../../components/MessageDisplay';
+import Pagination from '../../components/Pagination';
 
 const Grade = () => {
 	const [studentNo, setStudentNo] = useState('');
@@ -11,9 +13,22 @@ const Grade = () => {
 	const [semester, setSemester] = useState('');
 	const [students, setStudents] = useState([]);
 	const [message, setMessage] = useState('');
+	const [searchQuery, setSearchQuery] = useState('');
+	const [currentPage, setCurrentPage] = useState(1);
+	const studentsPerPage = 10;
+
+	const [sortConfig, setSortConfig] = useState({
+		key: null,
+		direction: 'ascending',
+	});
 
 	const handleFilter = async (e) => {
 		if (e) e.preventDefault();
+		if (!courseCode || !year || !semester) {
+			setMessage('Please fill in all required fields for filtering.');
+			setTimeout(() => setMessage(''), 3000);
+			return;
+		}
 		try {
 			const response = await fetch(
 				`http://localhost:3000/grade?courseCode=${courseCode}&year=${year}&semester=${semester}`
@@ -35,6 +50,20 @@ const Grade = () => {
 
 	const handleSubmitGrade = async (e) => {
 		e.preventDefault();
+		if (
+			!studentNo ||
+			!courseCode ||
+			!grade ||
+			!passFail ||
+			!year ||
+			!semester
+		) {
+			setMessage(
+				'Please fill in all required fields for grade submission.'
+			);
+			setTimeout(() => setMessage(''), 3000);
+			return;
+		}
 		try {
 			const response = await fetch('http://localhost:3000/grade/update', {
 				method: 'POST',
@@ -51,11 +80,10 @@ const Grade = () => {
 			});
 			if (!response.ok) throw new Error('Failed to submit grade');
 
-			// set and clear the success message using timeout
 			setMessage('Grade updated successfully!');
-			setTimeout(() => setMessage(''), 3000); // clear after 3 sec
+			setTimeout(() => setMessage(''), 3000);
 
-			// reset form fields
+			// Clear inputs
 			setStudentNo('');
 			setCourseCode('');
 			setCourseName('');
@@ -64,11 +92,38 @@ const Grade = () => {
 			setYear('');
 			setSemester('');
 
-			// refresh student data after successful update
-			handleFilter();
+			handleFilter(); // refresh data after submission
 		} catch (error) {
 			console.error('Error submitting grade:', error);
+			setMessage('Error submitting grade. Please try again.');
 		}
+	};
+
+	const totalPages = Math.ceil(students.length / studentsPerPage);
+	const displayedStudents = students
+		.filter((student) =>
+			student.studentName
+				.toLowerCase()
+				.includes(searchQuery.toLowerCase())
+		)
+		.sort((a, b) => {
+			if (sortConfig.key) {
+				const directionMultiplier =
+					sortConfig.direction === 'ascending' ? 1 : -1;
+				if (a[sortConfig.key] < b[sortConfig.key])
+					return -1 * directionMultiplier;
+				if (a[sortConfig.key] > b[sortConfig.key])
+					return 1 * directionMultiplier;
+			}
+			return 0;
+		})
+		.slice(
+			(currentPage - 1) * studentsPerPage,
+			currentPage * studentsPerPage
+		);
+
+	const handlePageChange = (page) => {
+		setCurrentPage(page);
 	};
 
 	return (
@@ -76,7 +131,6 @@ const Grade = () => {
 			<div className="updateGradeForm">
 				<p className="updateGradeHeading">Update Grade</p>
 				<form className="gradeForm" onSubmit={handleSubmitGrade}>
-					{/* <label className="updateGradeLabel">Enter Student No: </label> */}
 					<input
 						className="updateGradeInput"
 						placeholder="Student No"
@@ -84,7 +138,6 @@ const Grade = () => {
 						value={studentNo}
 						onChange={(e) => setStudentNo(e.target.value)}
 					/>
-					{/* <label className="updateGradeLabel">Enter Course Code: </label> */}
 					<input
 						className="updateGradeInput"
 						placeholder="Course Code"
@@ -92,7 +145,6 @@ const Grade = () => {
 						value={courseCode}
 						onChange={(e) => setCourseCode(e.target.value)}
 					/>
-					{/* <label className="updateGradeLabel">Enter Year: </label> */}
 					<input
 						className="updateGradeInput"
 						placeholder="Year"
@@ -100,7 +152,6 @@ const Grade = () => {
 						value={year}
 						onChange={(e) => setYear(e.target.value)}
 					/>
-					{/* <label className="updateGradeLabel">Enter Semester: </label> */}
 					<input
 						className="updateGradeInput"
 						placeholder="Semester"
@@ -108,18 +159,13 @@ const Grade = () => {
 						value={semester}
 						onChange={(e) => setSemester(e.target.value)}
 					/>
-					{/* <label className="updateGradeLabel">Enter Grade: </label> */}
 					<input
 						className="updateGradeInput"
 						placeholder="Grade"
 						type="number"
-						// min="1"
-						// max="5"
-						// step="0.1"
 						value={grade}
 						onChange={(e) => setGrade(e.target.value)}
 					/>
-					{/* <label className="updateGradeLabel">Enter Pass/Fail: </label> */}
 					<input
 						className="updateGradeInput"
 						placeholder="Pass/Fail"
@@ -137,7 +183,6 @@ const Grade = () => {
 			<div className="viewCourseStudent">
 				<p className="viewCourseStudentHeading">View Course</p>
 				<form className="chooseCourseStudent" onSubmit={handleFilter}>
-					{/* <label className="viewCourseStudentLabel">Course Code: </label> */}
 					<input
 						className="viewCourseStudentInput"
 						placeholder="Course Code"
@@ -146,7 +191,6 @@ const Grade = () => {
 						onChange={(e) => setCourseCode(e.target.value)}
 						required
 					/>
-					{/* <label className="viewCourseLabel">Year: </label> */}
 					<input
 						className="viewCourseStudentInput"
 						placeholder="Year"
@@ -155,15 +199,19 @@ const Grade = () => {
 						onChange={(e) => setYear(e.target.value)}
 						required
 					/>
-					{/* <label className="viewCourseStudentLabel">Semester: </label> */}
 					<input
 						className="viewCourseStudentInput"
 						placeholder="Semester"
 						type="text"
-						maxLength="8"
 						value={semester}
 						onChange={(e) => setSemester(e.target.value)}
 						required
+					/>
+					<input
+						className="searchInput"
+						placeholder="Search by name"
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
 					/>
 					<button className="viewCourseStudentBtn" type="submit">
 						Filter
@@ -173,31 +221,83 @@ const Grade = () => {
 				<table className="viewCourseStudentTable">
 					<thead>
 						<tr>
-							<th colSpan="7">
-								<h3>
-									{courseCode + ' ' + courseName ||
-										'No Course Selected'}
-								</h3>
+							<th
+								onClick={() =>
+									setSortConfig({
+										key: 'studentNo',
+										direction:
+											sortConfig.key === 'studentNo' &&
+											sortConfig.direction === 'ascending'
+												? 'descending'
+												: 'ascending',
+									})
+								}
+							>
+								STUDENT NO{' '}
+								{sortConfig.key === 'studentNo' &&
+									(sortConfig.direction === 'ascending'
+										? '▲'
+										: '▼')}
 							</th>
-						</tr>
-						<tr>
-							<th>STUDENT NO</th>
-							<th>STUDENT NAME</th>
-							<th>GRADE</th>
+							<th
+								onClick={() =>
+									setSortConfig({
+										key: 'studentName',
+										direction:
+											sortConfig.key === 'studentName' &&
+											sortConfig.direction === 'ascending'
+												? 'descending'
+												: 'ascending',
+									})
+								}
+							>
+								STUDENT NAME{' '}
+								{sortConfig.key === 'studentName' &&
+									(sortConfig.direction === 'ascending'
+										? '▲'
+										: '▼')}
+							</th>
+							<th
+								onClick={() =>
+									setSortConfig({
+										key: 'grade',
+										direction:
+											sortConfig.key === 'grade' &&
+											sortConfig.direction === 'ascending'
+												? 'descending'
+												: 'ascending',
+									})
+								}
+							>
+								GRADE{' '}
+								{sortConfig.key === 'grade' &&
+									(sortConfig.direction === 'ascending'
+										? '▲'
+										: '▼')}
+							</th>
 							<th>PASS/FAIL</th>
 							<th>YEAR</th>
 							<th>SEMESTER</th>
 							<th>STATUS</th>
 						</tr>
 					</thead>
+
 					<tbody>
-						{students.length > 0 ? (
-							students.map((student, index) => (
+						{displayedStudents.length > 0 ? (
+							displayedStudents.map((student, index) => (
 								<tr key={index}>
 									<td>{student.studentNo}</td>
 									<td>{student.studentName}</td>
 									<td>{student.grade}</td>
-									<td>{student.passFail}</td>
+									<td
+										className={
+											student.passFail === 'Pass'
+												? 'passStatus'
+												: 'failStatus'
+										}
+									>
+										{student.passFail}
+									</td>
 									<td>{student.year}</td>
 									<td>{student.semester}</td>
 									<td>{student.enrollmentStatus}</td>
@@ -210,8 +310,15 @@ const Grade = () => {
 						)}
 					</tbody>
 				</table>
+				<div className="paginationControls">
+					<Pagination
+						totalPages={totalPages}
+						currentPage={currentPage}
+						onPageChange={handlePageChange}
+					/>
+				</div>
 				<div className="updatedMessage">
-					{message && <p>{message}</p>}
+					<MessageDisplay message={message} />
 				</div>
 			</div>
 		</div>
