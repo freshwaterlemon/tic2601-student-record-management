@@ -1,6 +1,6 @@
-// server/server.js
 const express = require('express');
-const cors = require('cors'); // Import cors
+const cors = require('cors');
+
 const app = express();
 const port = 3000;
 const grades = require('./routes/gradesRoute');
@@ -9,29 +9,40 @@ const academic = require('./routes/academicRoute');
 const enrollment = require('./routes/enrollmentRoute');
 const student = require('./routes/studentRoute');
 
-// Use CORS middleware
+// use CORS middleware
 app.use(cors({
-  origin: 'http://localhost:3001', // Frontend URL
-  credentials: true,               // Enable if using cookies or sessions
+  origin: 'http://localhost:3001', // frontend URL (change it if needed depending on your port)
+  credentials: true,
 }));
 
-// Middleware for parsing JSON and URL-encoded data
+// middleware for parsing JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Mount router
+// mount routers
 app.use('/grade', grades);
 app.use('/course', courses);
 app.use('/academic', academic);
 app.use('/enrollment', enrollment);
 app.use('/student', student);
 
-// Home route
+// health check route, see if server is running
+app.get('/health', (req, res) => {
+  res.json({ status: 'Server is healthy' });
+});
+
+// home route
 app.get('/', (req, res) => {
   res.send("Home");
 });
 
-// Start the server
+// global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
+});
+
+// start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

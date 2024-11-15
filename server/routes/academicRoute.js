@@ -47,32 +47,38 @@ router.get('/', async (req, res) => {
 		}
 
 		// calculate the cumulative GPA, filtering out invalid grades
-		const grades = student.CourseRecords.filter(
-			(record) =>
-				record.enrollmentStatus !== 'withdrawn' &&
-				record.grade !== null
-		).map((record) => record.grade);
+		const grades = [];
+		const courses = student.CourseRecords.map((record) => {
+			// filter out withdrawn courses and those without grades
+			if (record.enrollmentStatus !== 'withdrawn' && record.grade !== null) {
+				// push the numeric grade to the grades array
+				grades.push(record.grade);
+			}
 
+			return {
+				courseCode: record.courseCode,
+				moduleName: record.Course.courseName,
+				year: record.year,
+				semester: record.semester,
+				grade: record.grade ?? 'complete course for grade',
+				passFail: record.passfail ?? 'complete course for grade',
+			};
+		});
+
+		// calculate GPA
 		const totalGrade = grades.reduce((sum, grade) => sum + grade, 0);
 		const averageGPA = grades.length ? totalGrade / grades.length : 0;
 		const gpa = Math.min(averageGPA, 5).toFixed(2);
 
-		// prepare and sort the course list
-		const courses = student.CourseRecords.map((record) => ({
-			courseCode: record.courseCode,
-			moduleName: record.Course.courseName,
-			year: record.year,
-			semester: record.semester,
-			grade: record.grade ?? 'complete course for grade',
-			passFail: record.passfail ?? 'complete course for grade',
-		})).sort((a, b) => {
+		// sort courses by year and semester
+		courses.sort((a, b) => {
 			if (a.year === b.year) {
 				return a.semester.localeCompare(b.semester);
 			}
 			return a.year - b.year;
 		});
 
-		// format the data for the front end
+		// format student data
 		const transcriptData = {
 			name: student.studentName,
 			studentNo: student.studentID,
@@ -80,7 +86,7 @@ router.get('/', async (req, res) => {
 				? new Date(student.studentDOB).toLocaleDateString()
 				: 'N/A',
 			degree: student.degree,
-			status: student.studentStatus, // corrected field name
+			status: student.studentStatus,
 			gpa: gpa,
 			courses: courses,
 		};

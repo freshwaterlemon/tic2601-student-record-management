@@ -16,6 +16,7 @@ const Academic = () => {
         setError(null);
         setTranscriptData(null);
         setSuccessMessage('');
+        setCurrentPage(1); // reset current page to 1 when fetching new data
 
         try {
             const response = await fetch(`http://localhost:3000/academic?studentNo=${studentNo}`);

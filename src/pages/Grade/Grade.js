@@ -95,7 +95,7 @@ const Grade = () => {
 			handleFilter(); // refresh data after submission
 		} catch (error) {
 			console.error('Error submitting grade:', error);
-			setMessage('Error submitting grade. Please try again.');
+			setMessage('Error submitting grade. Please check input(case sensative) and try again.');
 		}
 	};
 

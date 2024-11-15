@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
         res.json(courses);
     } catch (error) {
         console.error("Failed to fetch courses:", error);
-        res.status(500).json({ error: 'Failed to fetch courses' });
+        res.status(500).json({ error: 'Failed to fetch courses from the database' });
     }
 });
 
@@ -22,20 +22,27 @@ router.post('/add', async (req, res) => {
     }
 
     try {
+        // Check if the course already exists
+        const existingCourse = await Course.findOne({ where: { courseCode } });
+
+        if (existingCourse) {
+            return res.status(409).json({ error: 'Course with this courseCode already exists' });
+        }
+
+        // Create a new course if it doesn't exist
         const newCourse = await Course.create({ courseCode, courseName, description });
         res.status(201).json(newCourse);
     } catch (error) {
-        if (error.name === 'SequelizeUniqueConstraintError') {
-            return res.status(409).json({ error: 'Course with this courseCode already exists' });
-        }
         console.error("Failed to add course:", error);
         res.status(500).json({ error: 'Failed to add course' });
     }
 });
 
-// Route to update an existing course
-router.put('/update', async (req, res) => {
-    const { courseCode, courseName, description } = req.body;
+
+// Route to update an existing course (using courseCode in URL)
+router.put('/update/:courseCode', async (req, res) => {
+    const { courseCode } = req.params; // Get the courseCode from the URL
+    const { courseName, description } = req.body; // Get the updated data from the request body
 
     if (!courseCode) {
         return res.status(400).json({ error: 'courseCode is required to update a course' });
@@ -62,5 +69,6 @@ router.put('/update', async (req, res) => {
         res.status(500).json({ error: 'Failed to update course' });
     }
 });
+
 
 module.exports = router;

@@ -7,6 +7,7 @@ const Course = () => {
     const [courses, setCourses] = useState([]);
     const [filteredCourses, setFilteredCourses] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [courseData, setCourseData] = useState({
         courseCode: '',
         courseName: '',
@@ -57,19 +58,33 @@ const Course = () => {
     const handleAddCourse = async (e) => {
         e.preventDefault();
         try {
-            await fetch('http://localhost:3000/course/add', {
+            const response = await fetch('http://localhost:3000/course/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(courseData),
             });
-            await refetchCourses();
-            setCourseData({ courseCode: '', courseName: '', description: '' });
-            setSuccessMessage('Course added successfully!');
-            setTimeout(() => setSuccessMessage(''), 3000);
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Success case
+                await refetchCourses();
+                setCourseData({ courseCode: '', courseName: '', description: '' });
+                setSuccessMessage('Course added successfully!');
+                setTimeout(() => setSuccessMessage(''), 3000);
+            } else {
+                // Error case (e.g., course already exists)
+                setSuccessMessage(''); // Clear any previous success message
+                setErrorMessage(data.error || 'Failed to add course');
+                setTimeout(() => setErrorMessage(''), 3000); // Clear the error after 3 seconds
+            }
         } catch (error) {
             console.error('Error adding course:', error);
+            setSuccessMessage(''); // Clear any previous success message
+            setErrorMessage('Failed to add course due to a server error');
+            setTimeout(() => setErrorMessage(''), 3000); // Clear the error after 3 seconds
         }
     };
 
@@ -77,22 +92,37 @@ const Course = () => {
     const handleUpdateCourse = async (e) => {
         e.preventDefault();
         try {
-            await fetch('http://localhost:3000/course/update', {
+            const response = await fetch(`http://localhost:3000/course/update/${courseData.courseCode}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(courseData),
             });
-            await refetchCourses();
-            setCourseData({ courseCode: '', courseName: '', description: '' });
-            setSuccessMessage('Course updated successfully!');
-            setTimeout(() => setSuccessMessage(''), 3000);
-            setMode('add'); // reset mode to add
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Success case
+                await refetchCourses();  // Refetch courses to get the latest data
+                setCourseData({ courseCode: '', courseName: '', description: '' });
+                setSuccessMessage('Course updated successfully!');
+                setTimeout(() => setSuccessMessage(''), 3000);
+                setMode('add'); // Reset mode to add after updating
+            } else {
+                // Error case
+                setSuccessMessage(''); // Clear any previous success message
+                setErrorMessage(data.error || 'Failed to update course');
+                setTimeout(() => setErrorMessage(''), 3000); // Clear the error after 3 seconds
+            }
         } catch (error) {
             console.error('Error updating course:', error);
+            setSuccessMessage(''); // Clear any previous success message
+            setErrorMessage('Failed to update course due to a server error');
+            setTimeout(() => setErrorMessage(''), 3000); // Clear the error after 3 seconds
         }
     };
+
 
     // refetch courses
     const refetchCourses = async () => {
@@ -215,6 +245,9 @@ const Course = () => {
                     )}
                     {/* display message */}
                     <MessageDisplay message={successMessage} />
+                    {/* Display error message */}
+                    {errorMessage && <div className="updatedError">{errorMessage}</div>}
+
                 </div>
             </div>
         </>

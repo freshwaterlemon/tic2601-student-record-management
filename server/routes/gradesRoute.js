@@ -6,7 +6,7 @@ const { CourseRecord, Student, Course } = require('../../src/models');
 router.get('/', async (req, res) => {
 	const { courseCode, year, semester } = req.query;
 
-	console.log('Received query parameters:', { courseCode, year, semester });
+	// console.log('Received query parameters:', { courseCode, year, semester });
 
 	const filters = {};
 	if (courseCode) filters.courseCode = courseCode;
@@ -28,6 +28,10 @@ router.get('/', async (req, res) => {
 				},
 			],
 		});
+
+		if (!records.length) {
+			return res.status(404).json({ error: 'No course records found matching the criteria' });
+		}
 
 		// map the records to include only necessary data
 		const formattedRecords = records.map((record) => ({
@@ -52,6 +56,14 @@ router.get('/', async (req, res) => {
 router.post('/update', async (req, res) => {
 	const { studentNo, courseCode, year, semester, grade, passFail } = req.body;
 
+	// Validate the input
+	if (!grade || (typeof grade !== 'string' && typeof grade !== 'number')) {
+		return res.status(400).json({ error: 'Invalid grade format. It must be a string or number.' });
+	}
+	if (!['Pass', 'Fail'].includes(passFail)) {
+		return res.status(400).json({ error: 'Invalid pass/fail status. It must be either "Pass" or "Fail".' });
+	}
+
 	try {
 		// find the specific course record by studentID, courseCode, year, and semester
 		const record = await CourseRecord.findOne({
@@ -74,14 +86,14 @@ router.post('/update', async (req, res) => {
 		// save the changes to the database
 		await record.save();
 
-		console.log('Updated record:', {
-			studentNo,
-			courseCode,
-			year,
-			semester,
-			grade,
-			passFail,
-		});
+		// console.log('Updated record:', {
+		// 	studentNo,
+		// 	courseCode,
+		// 	year,
+		// 	semester,
+		// 	grade,
+		// 	passFail,
+		// });
 
 		res.json({ message: 'Grade updated successfully', record });
 	} catch (error) {
