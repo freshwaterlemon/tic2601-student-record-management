@@ -48,6 +48,7 @@ router.post('/enroll', async (req, res) => {
 });
 
 // route to unenroll a student
+
 router.post('/unenroll', async (req, res) => {
 	const { studentID, courseCode, year, semester } = req.body;
 
@@ -85,6 +86,7 @@ router.post('/unenroll', async (req, res) => {
 		res.status(500).json({ error: 'Failed to unenroll student' });
 	}
 });
+
 
 // route to fetch student records from course record after enrollment or unenrollment
 router.get('/display', async (req, res) => {
