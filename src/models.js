@@ -1,3 +1,4 @@
+// models.js
 const { Sequelize, DataTypes } = require('sequelize');
 
 // Initialize Sequelize with SQLite
@@ -73,10 +74,10 @@ const CourseRecord = sequelize.define(
 		studentID: { type: DataTypes.STRING, allowNull: false },
 		courseCode: { type: DataTypes.STRING, allowNull: false },
 		grade: { type: DataTypes.FLOAT, allowNull: true },
-		passfail: { type: DataTypes.STRING, allowNull: true },
+		passfail: { type: DataTypes.STRING, allowNull: false },
 		year: { type: DataTypes.INTEGER, allowNull: false },
 		semester: { type: DataTypes.STRING, allowNull: false },
-		enrollmentStatus: { type: DataTypes.STRING, allowNull: true },
+		enrollmentStatus: { type: DataTypes.STRING, allowNull: false },
 	},
 	{
 		indexes: [
@@ -93,8 +94,10 @@ const NextOfKin = sequelize.define(
 	'NextOfKin',
 	{
 		NOKID: { type: DataTypes.STRING, primaryKey: true, allowNull: false },
+		studentRelationID: { type: DataTypes.STRING, allowNull: false },
 		NOKName: { type: DataTypes.STRING, allowNull: false },
 		NOKPhoneNum: { type: DataTypes.STRING, allowNull: false },
+		NOKRelationship: { type: DataTypes.STRING, allowNull: false },
 	},
 	{ freezeTableName: true }
 );
@@ -162,7 +165,7 @@ const Module = sequelize.define(
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
-		},
+		}, // Surrogate primary key
 		courseCode: { type: DataTypes.STRING, allowNull: false },
 		year: { type: DataTypes.INTEGER, allowNull: false },
 		semester: { type: DataTypes.STRING, allowNull: false },
@@ -174,13 +177,13 @@ const Module = sequelize.define(
 		indexes: [
 			{
 				unique: true,
-				fields: ['courseCode', 'year', 'semester'], // unique constraint as super key
+				fields: ['courseCode', 'year', 'semester'], // Unique constraint as super key
 			},
 		],
 	}
 );
 
-// associations
+// Define Associations
 
 School.hasMany(Student, { foreignKey: 'SchoolSchoolCode' });
 Student.belongsTo(School, { foreignKey: 'SchoolSchoolCode' });
@@ -212,8 +215,14 @@ CourseRecord.belongsTo(Course, { foreignKey: 'courseCode' });
 Course.hasMany(Module, { foreignKey: 'courseCode' });
 Module.belongsTo(Course, { foreignKey: 'courseCode' });
 
-Student.belongsToMany(NextOfKin, { through: 'StudentNextOfKin' });
-NextOfKin.belongsToMany(Student, { through: 'StudentNextOfKin' });
+Student.belongsToMany(NextOfKin, {
+	through: 'StudentNextOfKin',
+	onDelete: 'CASCADE',
+});
+NextOfKin.belongsToMany(Student, {
+	through: 'StudentNextOfKin',
+	onDelete: 'CASCADE',
+});
 
 Student.belongsToMany(Module, { through: 'StudentModule' });
 Module.belongsToMany(Student, { through: 'StudentModule' });
@@ -224,7 +233,7 @@ Course.belongsToMany(AdminStaff, { through: 'AdminStaffCourse' });
 Instructor.belongsToMany(Module, { through: 'InstructorModule' });
 Module.belongsToMany(Instructor, { through: 'InstructorModule' });
 
-// association for academic
+// Association for academic
 CourseRecord.belongsTo(Course, { foreignKey: 'courseCode' });
 CourseRecord.belongsTo(Module, {
 	foreignKey: 'courseCode',
@@ -242,8 +251,9 @@ CourseRecord.belongsTo(Module, {
 	constraints: false,
 });
 
-// sync and Populate Database
+// Sync and Populate Database
 (async () => {
+	// Sync with force: true to clear the database each time for testing
 	await sequelize.sync({ force: true });
 	console.log('Database synced!');
 
@@ -362,7 +372,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Singaporean',
 			degree: 'BSc',
 			gpa: 3.8,
-			status: 'Active',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'alice@student.com',
 		},
 		{
@@ -375,7 +385,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Singaporean',
 			degree: 'BSc',
 			gpa: 3.5,
-			status: 'Active',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'bob@student.com',
 		},
 		{
@@ -388,7 +398,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Malaysian',
 			degree: 'BA',
 			gpa: 3.6,
-			status: 'Active',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'charlie@student.com',
 		},
 		{
@@ -401,7 +411,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Indonesian',
 			degree: 'BSc',
 			gpa: 3.2,
-			status: 'Active',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'david@student.com',
 		},
 		{
@@ -414,7 +424,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Indian',
 			degree: 'BA',
 			gpa: 3.4,
-			status: 'Active',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'eve@student.com',
 		},
 		{
@@ -427,7 +437,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Filipino',
 			degree: 'BEng',
 			gpa: 3.9,
-			status: 'Active',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'frank@student.com',
 		},
 		{
@@ -440,7 +450,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Thai',
 			degree: 'BA',
 			gpa: 3.9,
-			status: 'Active',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'grace@student.com',
 		},
 		{
@@ -453,7 +463,7 @@ CourseRecord.belongsTo(Module, {
 			nationality: 'Vietnamese',
 			degree: 'BBA',
 			gpa: 3.7,
-			status: 'Active',
+			studentStatus: 'Undergraduate',
 			studentEmail: 'hank@student.com',
 		},
 	]);
@@ -939,6 +949,66 @@ CourseRecord.belongsTo(Module, {
 			enrollmentStatus: 'enrolled',
 		},
 	]);
+
+	await NextOfKin.bulkCreate([
+		{
+			NOKID: 'NOK001',
+			studentRelationID: 'S001', // Refers to Alice
+			NOKName: 'Mary Smith',
+			NOKPhoneNum: '9988776655',
+			NOKRelationship: 'Mother',
+		},
+		{
+			NOKID: 'NOK002',
+			studentRelationID: 'S002', // Refers to Bob
+			NOKName: 'John Doe',
+			NOKPhoneNum: '9876543210',
+			NOKRelationship: 'Father',
+		},
+		{
+			NOKID: 'NOK003',
+			studentRelationID: 'S003', // Refers to Charlie
+			NOKName: 'Emma Brown',
+			NOKPhoneNum: '9345678901',
+			NOKRelationship: 'Sister',
+		},
+		{
+			NOKID: 'NOK004',
+			studentRelationID: 'S004', // Refers to David
+			NOKName: 'Richard Lee',
+			NOKPhoneNum: '8765432109',
+			NOKRelationship: 'Father',
+		},
+		{
+			NOKID: 'NOK005',
+			studentRelationID: 'S005', // Refers to Eve
+			NOKName: 'Sophia Adams',
+			NOKPhoneNum: '9123067890',
+			NOKRelationship: 'Mother',
+		},
+		{
+			NOKID: 'NOK006',
+			studentRelationID: 'S006', // Refers to Frank
+			NOKName: 'Michael Tan',
+			NOKPhoneNum: '8112233445',
+			NOKRelationship: 'Uncle',
+		},
+		{
+			NOKID: 'NOK007',
+			studentRelationID: 'S007', // Refers to Grace
+			NOKName: 'Laura White',
+			NOKPhoneNum: '9234567890',
+			NOKRelationship: 'Aunt',
+		},
+		{
+			NOKID: 'NOK008',
+			studentRelationID: 'S008', // Refers to Hank
+			NOKName: 'George Brown',
+			NOKPhoneNum: '9345678901',
+			NOKRelationship: 'Father',
+		},
+	]);
+	
 
 	console.log('Database fully seeded with sample data!');
 })();
