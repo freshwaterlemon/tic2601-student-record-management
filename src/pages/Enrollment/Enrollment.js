@@ -104,7 +104,7 @@ const Enrollment = () => {
             if (response.status === 409) {
                 // show the specific error message for already withdrawn records
                 setMessage(data.error || 'Student is already withdrawn from this course for the specified term.');
-                setTimeout(() => setMessage(''), 3000); 
+                setTimeout(() => setMessage(''), 3000);
             } else if (response.ok) {
                 setMessage('Unenrolled successfully!');
                 setTimeout(() => setMessage(''), 3000);

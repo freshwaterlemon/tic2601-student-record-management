@@ -5,7 +5,7 @@ const Home = () => {
     return (
         <div className="homeContainer">
             <h2 className="welcomeHeading">Welcome to TIC2601 Student Record Management Dashboard</h2>
-            
+
             <div className="featureList">
                 <div className="featureItem">
                     <Link to="/Student">

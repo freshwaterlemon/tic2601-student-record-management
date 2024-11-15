@@ -108,13 +108,13 @@
 }
 
 .passStatus {
-    color: green;
-    font-weight: bold; 
+	color: green;
+	font-weight: bold;
 }
 
 .failStatus {
-    color: #d9534f;
-    font-weight: bold; 
+	color: #d9534f;
+	font-weight: bold;
 }
 
 .viewCourseStudentTable {

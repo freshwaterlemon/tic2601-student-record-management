@@ -227,7 +227,7 @@ const Grade = () => {
 										key: 'studentNo',
 										direction:
 											sortConfig.key === 'studentNo' &&
-											sortConfig.direction === 'ascending'
+												sortConfig.direction === 'ascending'
 												? 'descending'
 												: 'ascending',
 									})
@@ -245,7 +245,7 @@ const Grade = () => {
 										key: 'studentName',
 										direction:
 											sortConfig.key === 'studentName' &&
-											sortConfig.direction === 'ascending'
+												sortConfig.direction === 'ascending'
 												? 'descending'
 												: 'ascending',
 									})
@@ -263,7 +263,7 @@ const Grade = () => {
 										key: 'grade',
 										direction:
 											sortConfig.key === 'grade' &&
-											sortConfig.direction === 'ascending'
+												sortConfig.direction === 'ascending'
 												? 'descending'
 												: 'ascending',
 									})

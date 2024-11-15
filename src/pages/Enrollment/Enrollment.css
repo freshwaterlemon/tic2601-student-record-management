@@ -59,7 +59,7 @@
 .enrolBtn {
 	width: 100%;
 }
-.statusText{
+.statusText {
 	color: d9534f;
 	font-weight: bold;
 }
@@ -205,4 +205,3 @@
 		padding: 1.5em;
 	}
 }
-

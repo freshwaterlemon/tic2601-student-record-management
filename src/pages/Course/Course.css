@@ -87,16 +87,16 @@
 	align-items: center;
 	margin: 2rem 0rem;
 }
-.viewCourseInputSearch{
+.viewCourseInputSearch {
 	height: 2.5rem;
 }
 
-.searchbarcontainer p{
+.searchbarcontainer p {
 	flex-grow: 1;
 	padding-left: 9em;
 }
 
-.editbutton{
+.editbutton {
 	box-shadow: none;
 	color: black;
 	background-color: ivory;
@@ -107,7 +107,7 @@
 	padding: 7px 10px;
 }
 
-.editbutton:hover{
+.editbutton:hover {
 	box-shadow: none;
 	border: 3px solid #ffab67;
 }

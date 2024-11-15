@@ -71,11 +71,11 @@
 	justify-content: center;
 	margin: 2rem 0rem;
 }
-.viewStudentInputSearch{
+.viewStudentInputSearch {
 	height: 2.5rem;
 }
 
-.searchbarcontainer p{
+.searchbarcontainer p {
 	flex-grow: 1;
 	padding-left: 9em;
 }
@@ -99,7 +99,6 @@
 .updateStudentBtn {
 	width: 100%;
 }
-
 
 .viewStudentInfo {
 	flex-grow: 1;
@@ -219,7 +218,6 @@
 	text-align: left;
 	z-index: 1000;
 	font-weight: bold;
-
 }
 
 .closeButton {

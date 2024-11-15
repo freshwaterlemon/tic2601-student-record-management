@@ -161,7 +161,7 @@ const Course = () => {
                         >
                             {mode === 'add' ? 'Add Course' : 'Update Course'}
                         </button>
-						
+
                     </form>
                 </div>
 
@@ -213,8 +213,8 @@ const Course = () => {
                             onPageChange={paginate}
                         />
                     )}
-					{/* display message */}
-					<MessageDisplay message={successMessage} />
+                    {/* display message */}
+                    <MessageDisplay message={successMessage} />
                 </div>
             </div>
         </>
