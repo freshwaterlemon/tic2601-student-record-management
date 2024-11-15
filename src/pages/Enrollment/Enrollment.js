@@ -2,198 +2,224 @@ import React, { useState } from 'react';
 import './Enrollment.css';
 
 const Enrollment = () => {
-    const [message, setMessage] = useState({ type: '', text: '' });
-    const [loading, setLoading] = useState(false);
-    const [students, setStudents] = useState([]);
-    const [enrollment, setEnrollment] = useState({
-        studentID: '',
-        courseCode: '',
-        year: '',
-        semester: '',
-    });
+	const [message, setMessage] = useState('');
+	const [students, setStudents] = useState([]);
+	const [enrollment, setEnrollment] = useState({
+		studentID: '',
+		courseCode: '',
+		year: '',
+		semester: '',
+	});
 
-    const isFormValid = () => {
-        const { studentID, courseCode, year, semester } = enrollment;
-        return studentID && courseCode && year && semester;
-    };
+	// check if form is valid
+	const isFormValid = () => {
+		const { studentID, courseCode, year, semester } = enrollment;
+		return studentID && courseCode && year && semester;
+	};
 
-    const fetchEnrollments = async () => {
-        const { studentID, courseCode, year, semester } = enrollment;
+	// fetch enrollment records from the server
+	const fetchEnrollments = async () => {
+		const { studentID, courseCode, year, semester } = enrollment;
 
-        const url = new URL('http://localhost:3000/enrollment/display');
-        if (studentID) url.searchParams.append('studentID', studentID);
-        if (courseCode) url.searchParams.append('courseCode', courseCode);
-        if (year) url.searchParams.append('year', year);
-        if (semester) url.searchParams.append('semester', semester);
+		const url = new URL('http://localhost:3000/enrollment/display');
+		if (studentID) url.searchParams.append('studentID', studentID);
+		if (courseCode) url.searchParams.append('courseCode', courseCode);
+		if (year) url.searchParams.append('year', year);
+		if (semester) url.searchParams.append('semester', semester);
 
-        try {
-            setLoading(true);
-            const response = await fetch(url);
-            const data = await response.json();
-            setStudents(data.students || []);
-        } catch (error) {
-            console.error('Error fetching enrollments:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+		try {
+			const response = await fetch(url);
+			const data = await response.json();
+			setStudents(data.students || []);
+		} catch (error) {
+			console.error('Error fetching enrollments:', error);
+		}
+	};
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setEnrollment((prev) => ({ ...prev, [name]: value }));
-    };
+	// handle input changes for the new enrollment form
+	const handleInputChange = (e) => {
+		const { name, value } = e.target;
+		setEnrollment((prev) => ({ ...prev, [name]: value }));
+	};
 
-    const handleEnrollStudent = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch('http://localhost:3000/enrollment/enroll', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(enrollment),
-            });
+	// submit new enrollment to the server
+	const handleEnrollStudent = async (e) => {
+		e.preventDefault();
+		try {
+			const response = await fetch('http://localhost:3000/enrollment/enroll', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(enrollment),
+			});
 
-            const result = await response.json();
+			const data = await response.json();
 
-            if (response.ok) {
-                setMessage({ type: 'success', text: 'Enrolled successfully!' });
-                fetchEnrollments();
-            } else {
-                setMessage({ type: 'error', text: result.message || 'Enrollment failed!' });
-            }
-        } catch (error) {
-            console.error('Error enrolling student:', error);
-            setMessage({ type: 'error', text: 'Enrollment failed due to server error!' });
-        } finally {
-            setTimeout(() => setMessage({ type: '', text: '' }), 3000);
-        }
-    };
+			if (response.status === 409) {
+				// Show the error message for duplicate records
+				setMessage(data.error);
+			} else if (response.ok) {
+				setMessage('Enrolled successfully!');
+				// Clear the message after a delay
+				setTimeout(() => setMessage(''), 3000);
 
-    const handleUnEnrollStudent = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch('http://localhost:3000/enrollment/unenroll', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(enrollment),
-            });
+				// Reset form after successful enrollment
+				setEnrollment({
+					studentID: '',
+					courseCode: '',
+					year: '',
+					semester: '',
+				});
 
-            const result = await response.json();
+				// Refetch enrollments to show updated status
+				fetchEnrollments();
+			}
+		} catch (error) {
+			console.error('Error enrolling student:', error);
+			setMessage('Failed to enroll student');
+		}
+	};
 
-            if (response.ok) {
-                setMessage({ type: 'success', text: 'Unenrolled successfully!' });
-                fetchEnrollments();
-            } else {
-                setMessage({ type: 'error', text: result.message || 'Unenrollment failed!' });
-            }
-        } catch (error) {
-            console.error('Error unenrolling student:', error);
-            setMessage({ type: 'error', text: 'Unenrollment failed due to server error!' });
-        } finally {
-            setTimeout(() => setMessage({ type: '', text: '' }), 3000);
-        }
-    };
+// submit unenrollment to the server
+const handleUnEnrollStudent = async (e) => {
+	e.preventDefault();
+	try {
+		const response = await fetch('http://localhost:3000/enrollment/unenroll', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(enrollment),
+		});
 
-    return (
-        <div className="enrolContainer">
-            <div className="enrolForm">
-                <p className="enrolHeading">Enroll or Unenroll Student</p>
-                <form className="enrollmentForm">
-                    <input
-                        className="enrolInput"
-                        placeholder="Student ID"
-                        type="text"
-                        name="studentID"
-                        value={enrollment.studentID}
-                        onChange={handleInputChange}
-                    />
-                    <input
-                        className="enrolInput"
-                        placeholder="Course Code"
-                        type="text"
-                        name="courseCode"
-                        value={enrollment.courseCode}
-                        onChange={handleInputChange}
-                    />
-                    <input
-                        className="enrolInput"
-                        placeholder="Year"
-                        type="number"
-                        name="year"
-                        value={enrollment.year}
-                        onChange={handleInputChange}
-                    />
-                    <input
-                        className="enrolInput"
-                        placeholder="Semester"
-                        type="number"
-                        name="semester"
-                        value={enrollment.semester}
-                        onChange={handleInputChange}
-                    />
-                    <button
-                        className="enrolBtn"
-                        type="button"
-                        onClick={handleEnrollStudent}
-                        disabled={!isFormValid() || loading}
-                    >
-                        Enroll Student
-                    </button>
-                    <button
-                        className="enrolBtn"
-                        type="button"
-                        onClick={handleUnEnrollStudent}
-                        disabled={!isFormValid() || loading}
-                    >
-                        Unenroll Student
-                    </button>
-                </form>
-                {message.text && (
-                    <p className={`message ${message.type === 'error' ? 'error' : 'success'}`}>
-                        {message.text}
-                    </p>
-                )}
-            </div>
-            <div className="viewCourseEnrollment">
-                <p className="viewCourseEnrollmentHeading">View Enrollment Status</p>
-                {loading ? (
-                    <p>Loading...</p>
-                ) : (
-                    <table className="viewCourseEnrollmentTable">
-                        <thead>
-                            <tr>
-                                <th>STUDENT NO</th>
-                                <th>STUDENT NAME</th>
-                                <th>COURSE CODE</th>
-                                <th>COURSE NAME</th>
-                                <th>YEAR</th>
-                                <th>SEMESTER</th>
-                                <th>STATUS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {students.length > 0 ? (
-                                students.map((student, index) => (
-                                    <tr key={index}>
-                                        <td>{student.studentID}</td>
-                                        <td>{student.studentName}</td>
-                                        <td>{student.courseCode}</td>
-                                        <td>{student.courseName}</td>
-                                        <td>{student.year}</td>
-                                        <td>{student.semester}</td>
-                                        <td>{student.enrollmentStatus}</td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="7">No enrollment records available.</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                )}
-            </div>
-        </div>
-    );
+		const data = await response.json();
+
+		if (response.status === 409) {
+			// Show the specific error message for already withdrawn records
+			setMessage(data.error || 'Student is already withdrawn from this course for the specified term.');
+			setTimeout(() => setMessage(''), 3000); // clear message after 3 seconds
+		} else if (response.ok) {
+			setMessage('Unenrolled successfully!');
+			setTimeout(() => setMessage(''), 3000); // clear message after 3 seconds
+
+			// reset form after successful unenrollment
+			setEnrollment({
+				studentID: '',
+				courseCode: '',
+				year: '',
+				semester: '',
+			});
+
+			// refetch enrollments to show updated status
+			fetchEnrollments();
+		}
+	} catch (error) {
+		console.error('Error unenrolling student:', error);
+		setMessage('Failed to unenroll student');
+	}
+};
+
+
+	return (
+		<div className="enrolContainer">
+			<div className="enrolForm">
+				<p className="enrolHeading">Enroll Student</p>
+				<form className="enrollmentForm" onSubmit={handleEnrollStudent}>
+					<input
+						className="enrolInput"
+						placeholder="Student ID"
+						type="text"
+						name="studentID"
+						value={enrollment.studentID}
+						onChange={handleInputChange}
+					/>
+					<input
+						className="enrolInput"
+						placeholder="Course Code"
+						type="text"
+						name="courseCode"
+						value={enrollment.courseCode}
+						onChange={handleInputChange}
+					/>
+					<input
+						className="enrolInput"
+						placeholder="Year"
+						type="number"
+						name="year"
+						value={enrollment.year}
+						onChange={handleInputChange}
+					/>
+					<input
+						className="enrolInput"
+						placeholder="Semester"
+						type="number"
+						name="semester"
+						value={enrollment.semester}
+						onChange={handleInputChange}
+					/>
+					<button
+						className="enrolBtn"
+						type="submit"
+						disabled={!isFormValid()}
+					>
+						Enroll Student
+					</button>
+					<button
+						className="enrolBtn"
+						type="button"
+						onClick={handleUnEnrollStudent}
+						disabled={!isFormValid()}
+					>
+						Unenroll Student
+					</button>
+				</form>
+			</div>
+
+			<div className="viewCourseEnrollment">
+				<p className="viewCourseEnrollmentHeading">
+					View Enrollment Status
+				</p>
+				<table className="viewCourseEnrollmentTable">
+					<thead>
+						<tr>
+							<th>STUDENT NO</th>
+							<th>STUDENT NAME</th>
+							<th>COURSE CODE</th>
+							<th>COURSE NAME</th>
+							<th>YEAR</th>
+							<th>SEMESTER</th>
+							<th>STATUS</th>
+						</tr>
+					</thead>
+					<tbody>
+						{students.length > 0 ? (
+							students.map((student, index) => (
+								<tr key={index}>
+									<td>{student.studentID}</td>
+									<td>{student.studentName}</td>
+									<td>{student.courseCode}</td>
+									<td>{student.courseName}</td>
+									<td>{student.year}</td>
+									<td>{student.semester}</td>
+									<td>{student.enrollmentStatus}</td>
+								</tr>
+							))
+						) : (
+							<tr>
+								<td colSpan="7">
+									No enrollment records available.
+								</td>
+							</tr>
+						)}
+					</tbody>
+				</table>
+				<div className="updatedMessage">
+					{message && <p>{message}</p>}
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default Enrollment;
