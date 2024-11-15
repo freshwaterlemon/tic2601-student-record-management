@@ -59,10 +59,7 @@
 .enrolBtn {
 	width: 100%;
 }
-.statusText{
-	color: red;
-	font-weight: bold;
-}
+
 .viewCourseEnrollment {
 	flex-grow: 1;
 	margin: 1rem;
@@ -205,4 +202,3 @@
 		padding: 1.5em;
 	}
 }
-

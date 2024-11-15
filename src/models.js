@@ -74,7 +74,7 @@ const CourseRecord = sequelize.define(
 		studentID: { type: DataTypes.STRING, allowNull: false },
 		courseCode: { type: DataTypes.STRING, allowNull: false },
 		grade: { type: DataTypes.FLOAT, allowNull: true },
-		passfail: { type: DataTypes.STRING, allowNull: false },
+		passfail: { type: DataTypes.STRING, allowNull: true },
 		year: { type: DataTypes.INTEGER, allowNull: false },
 		semester: { type: DataTypes.STRING, allowNull: false },
 		enrollmentStatus: { type: DataTypes.STRING, allowNull: false },

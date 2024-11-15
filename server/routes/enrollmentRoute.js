@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-// for amos back end code to be here
-=======
 const express = require('express');
 const router = express.Router();
 const { Student, CourseRecord, Course } = require('../../src/models');
@@ -24,10 +21,6 @@ router.post('/enroll', async (req, res) => {
 			if (existingEnrollment.enrollmentStatus === 'withdrawn') {
 				// update status to "enrolled" if it's currently "withdrawn"
 				existingEnrollment.enrollmentStatus = 'enrolled';
-<<<<<<< Updated upstream
-=======
-                
->>>>>>> Stashed changes
 				await existingEnrollment.save();
 
 				return res
@@ -144,4 +137,3 @@ router.get('/display', async (req, res) => {
 });
 
 module.exports = router;
->>>>>>> 75245e1 (enrollment)
