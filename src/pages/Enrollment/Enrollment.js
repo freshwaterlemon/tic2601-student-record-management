@@ -114,7 +114,10 @@ const Enrollment = () => {
 						name="studentID"
 						value={enrollment.studentID}
 						onChange={handleInputChange}
+<<<<<<< Updated upstream
 						required
+=======
+>>>>>>> Stashed changes
 					/>
 					<input
 						className="enrolInput"

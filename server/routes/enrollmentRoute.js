@@ -21,6 +21,10 @@ router.post('/enroll', async (req, res) => {
 			if (existingEnrollment.enrollmentStatus === 'withdrawn') {
 				// update status to "enrolled" if it's currently "withdrawn"
 				existingEnrollment.enrollmentStatus = 'enrolled';
+<<<<<<< Updated upstream
+=======
+                
+>>>>>>> Stashed changes
 				await existingEnrollment.save();
 
 				return res
