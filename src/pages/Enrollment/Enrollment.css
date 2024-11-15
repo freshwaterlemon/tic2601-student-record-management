@@ -1,0 +1,204 @@
+.enrolContainer {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	align-content: center;
+	flex-wrap: wrap;
+	margin: 0 1rem;
+}
+
+.enrolForm {
+	margin: 1rem;
+}
+
+.enrolHeading {
+	background-color: white;
+	padding: 2rem 0em 0.5em 0em;
+}
+
+.enrollmentForm {
+	display: flex;
+	flex-direction: column;
+	gap: 2em;
+	padding: 1em 3em;
+	width: fit-content;
+	transition: 0.4s ease-in-out;
+	align-items: stretch;
+	height: 70vh;
+}
+
+.enrolHeading {
+	color: black;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.5em;
+	margin: 0;
+}
+
+.enrolInput:hover {
+	box-shadow: 6px 6px 0px #c2c2c2, -3px -3px 10px #ffffff;
+}
+
+.enrolBtn .enrolInput:focus {
+	background: #ffffff;
+	box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.enrolBtn {
+	align-self: center;
+	padding: 0.7em;
+	padding-left: 1em;
+	padding-right: 1em;
+	border-radius: 10px;
+	border: none;
+	color: whitesmoke;
+	outline: none;
+	transition: 0.4s ease-in-out;
+}
+
+.enrolBtn {
+	width: 100%;
+}
+
+.viewCourseEnrollment {
+	flex-grow: 1;
+	margin: 1rem;
+	font-size: 0.8rem;
+	margin-right: auto;
+	overflow-y: auto;
+	background-color: white;
+	height: 75vh;
+	width: auto;
+	padding: 2.5em;
+}
+
+.viewCourseEnrollmentTable {
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+	text-align: center;
+	border-spacing: 30px;
+}
+
+.viewCourseEnrollmentHeading {
+	color: black;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.5em;
+	margin: 1rem;
+}
+
+.updatedMessage {
+	color: green;
+	font-weight: bold;
+	font-size: 1rem;
+	margin: 2rem;
+}
+
+.viewCourseEnrollmentTable {
+	width: 100%;
+	border-collapse: collapse;
+	font-family: Arial, sans-serif;
+	font-size: 1em;
+	margin: 1em 0;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.viewCourseEnrollmentTable thead h3 {
+	text-align: center;
+	padding: 0.5em;
+	margin: 0;
+}
+
+.viewCourseEnrollmentTable thead tr {
+	background-color: #ffab67;
+	color: #ffffff;
+}
+
+.viewCourseEnrollmentTable th,
+.viewCourseEnrollmentTable td {
+	padding: 12px 15px;
+	/* border: 1px solid #dddddd; */
+	text-align: left;
+}
+
+.viewCourseEnrollmentTable tbody tr td[colspan='7'] {
+	text-align: center;
+	padding: 6em;
+}
+
+.viewCourseEnrollmentTable tbody tr {
+	background-color: #f3f3f3;
+	transition: background-color 0.2s ease;
+}
+
+.viewCourseEnrollmentTable tbody tr:nth-child(even) {
+	background-color: #e6e6e6;
+}
+
+.viewCourseEnrollmentTable tbody tr:hover {
+	background-color: rgba(255, 235, 205, 0.357);
+}
+
+@media only screen and (max-width: 992px) {
+	.enrolHeading {
+		background-color: white;
+		padding: 1rem;
+	}
+
+	.enrollmentForm {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-around;
+		gap: 25px;
+		width: auto;
+		transition: 0.4s ease-in-out;
+		height: auto;
+	}
+	.enrollmentForm input {
+		margin: 0 5em;
+	}
+
+	.viewCourseEnrollment {
+		margin: auto;
+		font-size: 0.8rem;
+		margin-right: auto;
+		overflow-y: auto;
+		background-color: white;
+		height: 70vh;
+		width: auto;
+		padding: 1.5em;
+	}
+}
+
+@media only screen and (max-width: 1200px) {
+	.enrolHeading {
+		background-color: white;
+		padding: 1rem;
+	}
+
+	.enrollmentForm {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-around;
+		gap: 25px;
+		width: auto;
+		transition: 0.4s ease-in-out;
+		height: auto;
+	}
+
+	.viewCourseEnrollment {
+		margin: auto;
+		font-size: 0.8rem;
+		margin-right: auto;
+		overflow-y: auto;
+		background-color: white;
+		height: 70vh;
+		width: auto;
+		padding: 1.5em;
+	}
+}
