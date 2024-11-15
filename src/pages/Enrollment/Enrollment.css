@@ -60,7 +60,7 @@
 	width: 100%;
 }
 .statusText{
-	color: red;
+	color: d9534f;
 	font-weight: bold;
 }
 .viewCourseEnrollment {

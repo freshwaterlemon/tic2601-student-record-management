@@ -3,442 +3,343 @@ import axios from 'axios';
 import './Student.css';
 
 const Student = () => {
-	// const [isUpdated, setIsUpdated] = useState([]);
-	const [isPopoverVisible, setIsPopoverVisible] = useState(false); // Popover state
-	const [filteredStudent, setfilteredStudent] = useState([]);
-	const [searchQuery, setSearchQuery] = useState('');
-	const [students, setStudents] = useState([]);
-	const [nokData, setNokData] = useState(null);
-	const [newStudent, setNewStudent] = useState({
-		studentID: '',
-		studentName: '',
-		studentDOB: '',
-		personalPhoneNum: '',
-		housePhoneNum: '',
-		sex: '',
-		currentAddress: '',
-		nationality: '',
-		degree: '',
-		gpa: '',
-		studentStatus: '',
-		studentEmail: '',
-	});
+    // States
+    const [students, setStudents] = useState([]);
+    const [filteredStudents, setFilteredStudents] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isPopoverVisible, setIsPopoverVisible] = useState(false);
+    const [nokData, setNokData] = useState(null);
+    const [newStudent, setNewStudent] = useState({
+        studentID: '',
+        studentName: '',
+        studentDOB: '',
+        personalPhoneNum: '',
+        housePhoneNum: '',
+        sex: '',
+        currentAddress: '',
+        nationality: '',
+        degree: '',
+        gpa: '',
+        studentStatus: '',
+        studentEmail: '',
+    });
 
-	// function to reset form
-	const resetForm = () =>
-		setNewStudent({
-			studentID: '',
-			studentName: '',
-			studentDOB: '',
-			personalPhoneNum: '',
-			housePhoneNum: '',
-			sex: '',
-			currentAddress: '',
-			nationality: '',
-			degree: '',
-			gpa: '',
-			studentStatus: '',
-			studentEmail: '',
-		});
+    // Fetch all students on component mount
+    useEffect(() => {
+        fetchStudents();
+    }, []);
 
-	// toggle popover visibility
-	const togglePopover = async () => {
-		// Toggle the popover immediately
-		setIsPopoverVisible((prevVisible) => {
-			// If it was not visible, start fetching data
-			if (!prevVisible && newStudent.studentID) {
-				fetchNokData(); // Fetch NOK data asynchronously
-			}
-			return !prevVisible; // Update the visibility state
-		});
-	};
+    // Fetch students data
+    const fetchStudents = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/student');
+            setStudents(response.data);
+            setFilteredStudents(response.data);
+        } catch (error) {
+            console.error('Error fetching students:', error);
+        }
+    };
 
-	// Function to fetch NOK data
-	const fetchNokData = async () => {
-		try {
-			if (!newStudent.studentID) {
-				console.warn("Student ID is not set.");
-				return;
-			}
-			console.log("Fetching NOK Data for Student ID:", newStudent.studentID);
-			const response = await axios.get(`http://localhost:3000/student/nok/${newStudent.studentID}`);
-			setNokData(response.data);
-		} catch (error) {
-			console.error("Error fetching NOK data:", error);
-		}
-	};
+    // Filter students based on the search query
+    useEffect(() => {
+        const results = students.filter((student) =>
+            student.studentID.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredStudents(results);
+    }, [searchQuery, students]);
 
+    // Handle form input changes
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewStudent((prevState) => ({ ...prevState, [name]: value }));
+    };
 
-	// close the popover explicitly
-	const closePopover = () => setIsPopoverVisible(false);
+    // Reset form fields
+    const resetForm = () => {
+        setNewStudent({
+            studentID: '',
+            studentName: '',
+            studentDOB: '',
+            personalPhoneNum: '',
+            housePhoneNum: '',
+            sex: '',
+            currentAddress: '',
+            nationality: '',
+            degree: '',
+            gpa: '',
+            studentStatus: '',
+            studentEmail: '',
+        });
+    };
 
-	useEffect(() => {
-		// Fetch all students
+    // Toggle the visibility of the popover and fetch NOK data
+    const togglePopover = async () => {
+        setIsPopoverVisible((prevVisible) => {
+            if (!prevVisible && newStudent.studentID) {
+                fetchNokData(); // Fetch NOK data if popover is being shown
+            }
+            return !prevVisible;
+        });
+    };
 
-		axios
-			.get('http://localhost:3000/student')
-			.then((response) => setStudents(response.data))
-			.catch((error) => console.error('Error fetching students:', error));
-	}, []);
+    // Fetch NOK data for the student
+    const fetchNokData = async () => {
+        try {
+            if (!newStudent.studentID) {
+                console.warn('Student ID is not set.');
+                return;
+            }
+            const response = await axios.get(`http://localhost:3000/student/nok/${newStudent.studentID}`);
+            setNokData(response.data);
+        } catch (error) {
+            console.error('Error fetching NOK data:', error);
+        }
+    };
 
-	// update filtered courses based on search query (by student ID)
-	useEffect(() => {
-		const results = students.filter((students) =>
-			students.studentID.toLowerCase().includes(searchQuery.toLowerCase())
-		);
-		setfilteredStudent(results);
-	}, [searchQuery, students]);
+    // Close the popover
+    const closePopover = () => setIsPopoverVisible(false);
 
-	// Handle form input changes
-	// takes data from input fields and put them into student as an object
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		// to check what is prev state
-		setNewStudent((prevState) => ({
-			...prevState,
-			[name]: value,
-		}));
-	};
+    // Check if student ID exists in the list
+    const studentIdExists = (studentID) => students.some((student) => student.studentID === studentID);
 
-	// check if student ID exists
-	function studentIdExists(studentID, students) {
-		return students.some((student) => student.studentID === studentID);
-	}
+    // Add or Update student data
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-	// reference: https://axios-http.com/docs/api_intro
-	// Add or Update student
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		console.log({ newStudent });
+        const isUpdate = studentIdExists(newStudent.studentID);
+        const url = isUpdate
+            ? `http://localhost:3000/student/update/${newStudent.studentID}`
+            : 'http://localhost:3000/student/add';
+        const method = isUpdate ? 'put' : 'post';
 
-		const isUpdate = studentIdExists(newStudent.studentID, students);
-		const url = isUpdate
-			? `http://localhost:3000/student/update/${newStudent.studentID}`
-			: 'http://localhost:3000/student/add';
-		const method = isUpdate ? 'put' : 'post';
+        try {
+            await axios({ method, url, data: newStudent });
+            resetForm();
+            fetchStudents(); // Refresh students list after add/update
+        } catch (error) {
+            console.error('Error: ' + error.message);
+        }
+    };
 
-		try {
-			await axios({
-				method,
-				url,
-				data: newStudent,
-			});
-			console.log('added or updated');
+    // Remove student from the list
+    const handleDelete = async () => {
+        const url = `http://localhost:3000/student/delete/${newStudent.studentID}`;
 
-			resetForm();
+        try {
+            await axios.put(url);
+            alert(`Student with ID ${newStudent.studentID} deleted successfully`);
+            resetForm();
+            fetchStudents(); // Refresh students list after deletion
+        } catch (error) {
+            console.error('Failed to delete student:', error);
+            alert('Error: Unable to delete student.');
+        }
+    };
 
-			// refresh the students list
-			const response = await axios.get('http://localhost:3000/student');
-			setStudents(response.data);
-		} catch (error) {
-			console.log('Error: ' + error.message);
-		}
-	};
+    return (
+        <div className="studentContainer">
+            {/* Form to add/update and remove students */}
+            <div className="updateStudentForm">
+                <p className="updateStudentHeading">Add/Update/Delete student record</p>
+                <form onSubmit={handleSubmit} className="studentForm">
+                    <input
+                        type="text"
+                        name="studentID"
+                        placeholder="Student ID"
+                        value={newStudent.studentID}
+                        onChange={handleInputChange}
+                        className="updateStudentInput"
+                    />
+                    <input
+                        type="text"
+                        name="studentName"
+                        placeholder="Student Name"
+                        value={newStudent.studentName}
+                        onChange={handleInputChange}
+                        className="updateStudentInput"
+                    />
+                    <input
+                        type="email"
+                        name="studentEmail"
+                        placeholder="Email"
+                        value={newStudent.studentEmail}
+                        onChange={handleInputChange}
+                        className="updateStudentInput"
+                    />
+                    <input
+                        type="date"
+                        name="studentDOB"
+                        placeholder="Date of Birth"
+                        value={newStudent.studentDOB}
+                        onChange={handleInputChange}
+                        className="updateStudentInputDate"
+                    />
+                    <input
+                        type="text"
+                        name="personalPhoneNum"
+                        placeholder="Personal Phone Number"
+                        value={newStudent.personalPhoneNum}
+                        onChange={handleInputChange}
+                        className="updateStudentInput"
+                    />
+                    <input
+                        type="text"
+                        name="housePhoneNum"
+                        placeholder="House Phone Number"
+                        value={newStudent.housePhoneNum}
+                        onChange={handleInputChange}
+                        className="updateStudentInput"
+                    />
+                    <input
+                        type="text"
+                        name="sex"
+                        placeholder="Sex"
+                        value={newStudent.sex}
+                        onChange={handleInputChange}
+                        className="updateStudentInput"
+                    />
+                    <input
+                        type="text"
+                        name="currentAddress"
+                        placeholder="Current Address"
+                        value={newStudent.currentAddress}
+                        onChange={handleInputChange}
+                        className="updateStudentInput"
+                    />
+                    <input
+                        type="text"
+                        name="nationality"
+                        placeholder="Nationality"
+                        value={newStudent.nationality}
+                        onChange={handleInputChange}
+                        className="updateStudentInput"
+                    />
+                    <input
+                        type="text"
+                        name="degree"
+                        placeholder="Degree"
+                        value={newStudent.degree}
+                        onChange={handleInputChange}
+                        className="updateStudentInput"
+                    />
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="gpa"
+                        placeholder="GPA"
+                        value={newStudent.gpa}
+                        onChange={handleInputChange}
+                        className="updateStudentInput"
+                    />
+                    <input
+                        type="text"
+                        name="studentStatus"
+                        placeholder="Student Status"
+                        value={newStudent.studentStatus}
+                        onChange={handleInputChange}
+                        className="updateStudentInput"
+                    />
+                    <div className="studentBtnContainer">
+                        <button
+                            type="submit"
+                            className="updateStudentBtn"
+                            disabled={studentIdExists(newStudent.studentID)}
+                        >
+                            Add Student
+                        </button>
+                        <button
+                            type="submit"
+                            className="updateStudentBtn"
+                            disabled={!studentIdExists(newStudent.studentID)}
+                        >
+                            Update Student
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleDelete}
+                            className="updateStudentBtn"
+                            disabled={!studentIdExists(newStudent.studentID)}
+                        >
+                            Remove Student
+                        </button>
+                    </div>
+                </form>
+            </div>
 
+            {/* Display student information and Emergency Contact Info */}
+            <div className="viewStudentInfo">
+                <p className="viewStudentInfoHeading">Student Information</p>
+                <div className="chooseStudentInfo">
+                    <input
+                        type="search"
+                        placeholder="Filter By Student ID"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="viewStudentInputSearch"
+                    />
+                    <button className="viewStudentInfoBtn" onClick={togglePopover}>
+                        Emergency Contact Info
+                    </button>
+                </div>
 
-	// remove student
-	const handleDelete = async (e) => {
+                {/* Popover for Emergency Contact Info */}
+                {isPopoverVisible && (
+                    <div id="NOK-popover" className="popover">
+                        <h3>Emergency Contact Information</h3>
+                        <p>Student ID: {newStudent.studentID || "N/A"}</p>
+                        <p>NOK Name: {nokData?.NOKName || "Loading..."}</p>
+                        <p>NOK Number: {nokData?.NOKPhoneNum || "Loading..."}</p>
+                        <button onClick={closePopover} className="closeButton">
+                            Close
+                        </button>
+                    </div>
+                )}
 
-		const url = `http://localhost:3000/student/delete/${newStudent.studentID}`;
-
-
-		try {
-			await axios.put(url);
-
-			alert(
-				`Student with ID ${newStudent.studentID} deleted successfully`
-			);
-
-			resetForm();
-
-			// refresh the students list
-			const response = await axios.get('http://localhost:3000/student');
-			setStudents(response.data);
-
-		} catch (error) {
-			console.error('Failed to delete student:', error);
-			alert('Error: Unable to delete student.');
-		}
-
-	};
-
-
-	// //Delete student
-	// const handleDelete = async (e) => {
-	// 	if (studentIdExists(newStudent.studentID, students)) {
-	// 		try {
-	// 			await axios.delete(
-	// 				`http://localhost:3000/student/delete/${newStudent.studentID}`
-	// 			);
-	// 			alert(
-	// 				`Student with ID ${newStudent.studentID} deleted successfully`
-	// 			);
-
-	// 			resetForm();
-
-	// 		} catch (error) {
-	// 			console.error('Failed to delete student:', error);
-	// 			alert('Error: Unable to delete student.');
-	// 		}
-	// 	}
-	// };
-
-	return (
-		<>
-			<div className="studentContainer">
-				{/* Form to add/update and remove students */}
-				<div className="updateStudentForm">
-					<p className="updateStudentHeading">
-						Add/Update/Delete student record
-					</p>
-					<form onSubmit={handleSubmit} className="studentForm">
-						{/* <label>Student ID:</label> */}
-						<input
-							type="text"
-							name="studentID"
-							placeholder="studentID"
-							value={newStudent.studentID}
-							onChange={handleChange}
-							className="updateStudentInput"
-						/>
-
-						{/* <label>Student Name:</label> */}
-						<input
-							type="text"
-							name="studentName"
-							placeholder="studentName"
-							value={newStudent.studentName}
-							onChange={handleChange}
-							className="updateStudentInput"
-						/>
-						{/* <label>Student Email:</label> */}
-						<input
-							type="email"
-							name="studentEmail"
-							placeholder="email"
-							value={newStudent.studentEmail}
-							onChange={handleChange}
-							className="updateStudentInput"
-						/>
-						{/* <label>Date of Birth:</label> */}
-						<input
-							type="date"
-							name="studentDOB"
-							placeholder="date of birth"
-							value={newStudent.studentDOB}
-							onChange={handleChange}
-							className="updateStudentInputDate"
-						/>
-
-						{/* <label>Personal Phone Number:</label> */}
-						<input
-							type="text"
-							name="personalPhoneNum"
-							placeholder="personal phone number"
-							value={newStudent.personalPhoneNum}
-							onChange={handleChange}
-							className="updateStudentInput"
-						/>
-
-						{/* <label>House Phone Number:</label> */}
-						<input
-							type="text"
-							name="housePhoneNum"
-							placeholder="house phone number"
-							value={newStudent.housePhoneNum}
-							onChange={handleChange}
-							className="updateStudentInput"
-						/>
-
-						{/* <label>Sex:</label> */}
-						<input
-							type="text"
-							name="sex"
-							placeholder="sex"
-							value={newStudent.sex}
-							onChange={handleChange}
-							className="updateStudentInput"
-						/>
-
-						{/* <label>Current Address:</label> */}
-						<input
-							type="text"
-							name="currentAddress"
-							placeholder="current address"
-							value={newStudent.currentAddress}
-							onChange={handleChange}
-							className="updateStudentInput"
-						/>
-
-						{/* <label>Nationality:</label> */}
-						<input
-							type="text"
-							name="nationality"
-							placeholder="nationality"
-							value={newStudent.nationality}
-							onChange={handleChange}
-							className="updateStudentInput"
-						/>
-
-						{/* <label>Degree:</label> */}
-						<input
-							type="text"
-							name="degree"
-							placeholder="degree"
-							value={newStudent.degree}
-							onChange={handleChange}
-							className="updateStudentInput"
-						/>
-
-						{/* <label>GPA:</label> */}
-						<input
-							type="number"
-							step="0.01"
-							name="gpa"
-							value={newStudent.gpa}
-							placeholder="gpa"
-							onChange={handleChange}
-							className="updateStudentInput"
-						/>
-
-						{/* <label>Student Status:</label> */}
-						<input
-							type="text"
-							name="studentStatus"
-							placeholder="student status"
-							value={newStudent.studentStatus}
-							onChange={handleChange}
-							className="updateStudentInput"
-						/>
-
-						<div className="studentBtnContainer">
-							<button
-								type="submit"
-								onSubmit={handleSubmit}
-								className="updateStudentBtn"
-								disabled={studentIdExists(
-									newStudent.studentID,
-									students
-								)}
-							>
-								Add Student
-							</button>
-							<button
-								type="submit"
-								onSubmit={handleSubmit}
-								className="updateStudentBtn"
-								disabled={
-									!studentIdExists(
-										newStudent.studentID,
-										students
-									)
-								}
-							>
-								Update Student
-							</button>
-							<button
-								type="submit"
-								onClick={handleDelete}
-								className="updateStudentBtn"
-								disabled={
-									!studentIdExists(
-										newStudent.studentID,
-										students
-									)
-								}
-							>
-								Remove Student
-							</button>
-						</div>
-					</form>
-				</div>
-
-				{/* Displays student information Emergency contact not added yet*/}
-				<div className="viewStudentInfo">
-					<p className="viewStudentInfoHeading">
-						Student information
-					</p>
-					<div className="chooseStudentInfo">
-						<input
-							type="search"
-							placeholder="Filter By student ID"
-							value={searchQuery}
-							onChange={(e) => setSearchQuery(e.target.value)}
-							className="viewStudentInputSearch"
-						/>
-						<button className="viewStudentInfoBtn" onClick={togglePopover}>
-							Emergency Contact Info
-						</button>
-					</div>
-
-					{/* Popover for Emergency Contact Info */}
-					{isPopoverVisible && (
-						<div id="NOK-popover" className="popover">
-							<h3>Emergency Contact Information</h3>
-							<p>Student ID: {newStudent.studentID || "N/A"}</p>
-							<p>NOK Name: {nokData?.NOKName || "Loading..."}</p>
-							<p>NOK Number: {nokData?.NOKPhoneNum || "Loading..."}</p>
-							<button onClick={closePopover} className="closeButton">
-								Close
-							</button>
-						</div>
-					)}
-
-					<table className="viewStudentInfoTable">
-						{students.length > 0 && (
-							<thead>
-								<tr>
-									<td>Student ID</td>
-									<td>Name</td>
-									<td>Date of Birth</td>
-									<td>Personal Phone Number</td>
-									<td>House Phone Number</td>
-									<td>Sex</td>
-									<td>Address</td>
-									<td>Nationality</td>
-									<td>Degree</td>
-									<td>GPA</td>
-									<td>Student Status</td>
-									<td>Email</td>
-								</tr>
-							</thead>
-						)}
-
-						<tbody>
-							{filteredStudent.length > 0 ? (
-								filteredStudent.map((student, index) => (
-									<tr key={index}>
-										<td>{student.studentID}</td>
-										<td>{student.studentName}</td>
-										{/* format date */}
-										<td>
-											{new Date(
-												student.studentDOB
-											).toLocaleDateString()}
-										</td>
-										<td>{student.personalPhoneNum}</td>
-										{/* display '-' if house number is null as tuple is null allowable */}
-										<td>{student.housePhoneNum || '-'}</td>
-										<td>{student.sex}</td>
-										<td>{student.currentAddress}</td>
-										<td>{student.nationality}</td>
-										<td>{student.degree}</td>
-										<td>{student.gpa}</td>
-										<td>{student.studentStatus}</td>
-										<td>{student.studentEmail}</td>
-									</tr>
-								))
-							) : (
-								<tr>
-									<td colSpan="12">There are no students</td>
-								</tr>
-							)}
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</>
-	);
+                <table className="viewStudentInfoTable">
+                    <thead>
+                        <tr>
+                            <td>Student ID</td>
+                            <td>Name</td>
+                            <td>Date of Birth</td>
+                            <td>Personal Phone Number</td>
+                            <td>House Phone Number</td>
+                            <td>Sex</td>
+                            <td>Address</td>
+                            <td>Nationality</td>
+                            <td>Degree</td>
+                            <td>GPA</td>
+                            <td>Student Status</td>
+                            <td>Email</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredStudents.length > 0 ? (
+                            filteredStudents.map((student, index) => (
+                                <tr key={index}>
+                                    <td>{student.studentID}</td>
+                                    <td>{student.studentName}</td>
+                                    <td>{new Date(student.studentDOB).toLocaleDateString()}</td>
+                                    <td>{student.personalPhoneNum}</td>
+                                    <td>{student.housePhoneNum || '-'}</td>
+                                    <td>{student.sex}</td>
+                                    <td>{student.currentAddress}</td>
+                                    <td>{student.nationality}</td>
+                                    <td>{student.degree}</td>
+                                    <td>{student.gpa}</td>
+                                    <td>{student.studentStatus}</td>
+                                    <td>{student.studentEmail}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="12">No students found</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
 };
 
 export default Student;

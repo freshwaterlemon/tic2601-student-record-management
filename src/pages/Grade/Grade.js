@@ -175,7 +175,7 @@ const Grade = () => {
 						onChange={(e) => setPassFail(e.target.value)}
 					/>
 					<button className="updateGradeBtn" type="submit">
-						Submit
+						Update Grade
 					</button>
 				</form>
 			</div>
@@ -214,7 +214,7 @@ const Grade = () => {
 						onChange={(e) => setSearchQuery(e.target.value)}
 					/>
 					<button className="viewCourseStudentBtn" type="submit">
-						Filter
+						Filter Course
 					</button>
 				</form>
 
