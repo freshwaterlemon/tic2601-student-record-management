@@ -5,7 +5,7 @@ const Course = () => {
 	const [courses, setCourses] = useState([]);
 	const [filteredCourses, setFilteredCourses] = useState([]);
 	const [searchQuery, setSearchQuery] = useState('');
-	const [newCourse, setNewCourse] = useState({
+	const [courseData, setCourseData] = useState({
 		courseCode: '',
 		courseName: '',
 		description: '',
@@ -34,10 +34,10 @@ const Course = () => {
 		setFilteredCourses(results);
 	}, [searchQuery, courses]);
 
-	// handle input changes for the new course form
+	// handle input changes for the course form
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
-		setNewCourse((prev) => ({ ...prev, [name]: value })); // spread the data
+		setCourseData((prev) => ({ ...prev, [name]: value }));
 	};
 
 	// submit new course to the server
@@ -49,22 +49,42 @@ const Course = () => {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(newCourse),
+				body: JSON.stringify(courseData),
 			});
-
-			// refetch courses after adding a new course
-			const updatedCoursesResponse = await fetch(
-				'http://localhost:3000/course'
-			);
-			const updatedCoursesData = await updatedCoursesResponse.json();
-
-			// update state with refetched courses
-			setCourses(updatedCoursesData);
-			setFilteredCourses(updatedCoursesData); // update filtered list as well
-
-			setNewCourse({ courseCode: '', courseName: '', description: '' }); // reset form
+			await refetchCourses();
+			setCourseData({ courseCode: '', courseName: '', description: '' });
 		} catch (error) {
 			console.error('Error adding course:', error);
+		}
+	};
+
+	// update existing course on the server
+	const handleUpdateCourse = async (e) => {
+		e.preventDefault();
+		try {
+			await fetch('http://localhost:3000/course/update', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(courseData),
+			});
+			await refetchCourses();
+			setCourseData({ courseCode: '', courseName: '', description: '' });
+		} catch (error) {
+			console.error('Error updating course:', error);
+		}
+	};
+
+	// refetch courses
+	const refetchCourses = async () => {
+		try {
+			const response = await fetch('http://localhost:3000/course');
+			const data = await response.json();
+			setCourses(data);
+			setFilteredCourses(data);
+		} catch (error) {
+			console.error('Error refetching courses:', error);
 		}
 	};
 
@@ -72,52 +92,53 @@ const Course = () => {
 		<>
 			<div className="courseContainer">
 				<div className="updateCourseForm">
-					<p className="updateCourseheading">Add Course</p>
-					<form className="courseForm" onSubmit={handleAddCourse}>
-						{/* <label className="updateCourseLabel">Course Code:</label> */}
+					<p className="updateCourseheading">Add/Update Course</p>
+					<form className="courseForm">
 						<input
 							className="updateCourseInput"
 							placeholder="Course Code"
 							type="text"
 							name="courseCode"
-							value={newCourse.courseCode}
+							value={courseData.courseCode}
 							onChange={handleInputChange}
 							required
 						/>
-
-						{/* <label className="updateCourseLabel">Course Name:</label> */}
 						<input
 							className="updateCourseInput"
 							placeholder="Course Name"
 							type="text"
 							name="courseName"
-							value={newCourse.courseName}
+							value={courseData.courseName}
 							onChange={handleInputChange}
-							required
 						/>
-
-						{/* <label className="updateCourseLabel">Description: </label> */}
 						<textarea
 							rows="5"
 							className="updateCourseInput"
 							placeholder="Description"
 							name="description"
-							value={newCourse.description}
+							value={courseData.description}
 							onChange={handleInputChange}
-							required
 						/>
-
-						<button className="updateCourseBtn" type="submit">
-							Add Course
-						</button>
+							<button
+								className="updateCourseBtn"
+								type="button"
+								onClick={handleAddCourse}
+							>
+								Add Course
+							</button>
+							<button
+								className="updateCourseBtn"
+								type="button"
+								onClick={handleUpdateCourse}
+							>
+								Update Course
+							</button>
 					</form>
 				</div>
 
 				<div className="viewCourse">
-					
-
 					<div className="searchbarcontainer">
-					<p className="viewCourseHeading">View All Courses</p>
+						<p className="viewCourseHeading">View All Courses</p>
 						<input
 							type="search"
 							placeholder="Filter By Course Code"
@@ -126,7 +147,6 @@ const Course = () => {
 							className="viewCourseInputSearch"
 						/>
 					</div>
-
 					<table className="viewCourseTable">
 						<thead>
 							<tr>

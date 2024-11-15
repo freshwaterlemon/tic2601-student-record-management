@@ -59,7 +59,10 @@
 .enrolBtn {
 	width: 100%;
 }
-
+.statusText{
+	color: red;
+	font-weight: bold;
+}
 .viewCourseEnrollment {
 	flex-grow: 1;
 	margin: 1rem;
@@ -122,7 +125,7 @@
 	text-align: left;
 }
 
-.viewCourseEnrollmentTable tbody tr td[colspan='7'] {
+.viewCourseEnrollmentTable tbody tr td[colspan='5'] {
 	text-align: center;
 	padding: 6em;
 }
@@ -202,3 +205,4 @@
 		padding: 1.5em;
 	}
 }
+
