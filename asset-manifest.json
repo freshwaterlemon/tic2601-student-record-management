@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/tic2601-student-record-management/static/css/main.b7968042.css",
+    "main.js": "/tic2601-student-record-management/static/js/main.b05563b5.js",
+    "static/js/453.4a4744e4.chunk.js": "/tic2601-student-record-management/static/js/453.4a4744e4.chunk.js",
+    "index.html": "/tic2601-student-record-management/index.html",
+    "main.b7968042.css.map": "/tic2601-student-record-management/static/css/main.b7968042.css.map",
+    "main.b05563b5.js.map": "/tic2601-student-record-management/static/js/main.b05563b5.js.map",
+    "453.4a4744e4.chunk.js.map": "/tic2601-student-record-management/static/js/453.4a4744e4.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b7968042.css",
+    "static/js/main.b05563b5.js"
+  ]
+}
