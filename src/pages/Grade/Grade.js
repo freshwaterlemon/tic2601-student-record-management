@@ -207,15 +207,15 @@ const Grade = () => {
 						onChange={(e) => setSemester(e.target.value)}
 						required
 					/>
+					<button className="viewCourseStudentBtn" type="submit">
+						Filter Course
+					</button>
 					<input
 						className="searchInput"
 						placeholder="Search by ID"
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
 					/>
-					<button className="viewCourseStudentBtn" type="submit">
-						Filter Course
-					</button>
 				</form>
 
 				<table className="viewCourseStudentTable">
