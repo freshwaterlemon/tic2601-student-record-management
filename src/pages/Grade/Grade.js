@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Grade.css';
-import MessageDisplay from '../../components/MessageDisplay';
-import Pagination from '../../components/Pagination';
+import MessageDisplay from '../../components/MessageDisplay/MessageDisplay';
+import Pagination from '../../components/Pagination/Pagination';
 
 const Grade = () => {
 	const [studentNo, setStudentNo] = useState('');

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Course.css';
-import MessageDisplay from '../../components/MessageDisplay';
-import Pagination from '../../components/Pagination';
+import MessageDisplay from '../../components/MessageDisplay/MessageDisplay';
+import Pagination from '../../components/Pagination/Pagination';
 
 const Course = () => {
     const [courses, setCourses] = useState([]);
