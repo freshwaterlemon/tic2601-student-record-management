@@ -32,7 +32,7 @@ const Student = () => {
     // Fetch students data
     const fetchStudents = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/student');
+            const response = await axios.get('http://localhost:3001/student');
             setStudents(response.data);
             setFilteredStudents(response.data);
         } catch (error) {
@@ -89,7 +89,7 @@ const Student = () => {
                 console.warn('Student ID is not set.');
                 return;
             }
-            const response = await axios.get(`http://localhost:3000/student/nok/${newStudent.studentID}`);
+            const response = await axios.get(`http://localhost:3001/student/nok/${newStudent.studentID}`);
             setNokData(response.data);
         } catch (error) {
             console.error('Error fetching NOK data:', error);
@@ -108,8 +108,8 @@ const Student = () => {
 
         const isUpdate = studentIdExists(newStudent.studentID);
         const url = isUpdate
-            ? `http://localhost:3000/student/update/${newStudent.studentID}`
-            : 'http://localhost:3000/student/add';
+            ? `http://localhost:3001/student/update/${newStudent.studentID}`
+            : 'http://localhost:3001/student/add';
         const method = isUpdate ? 'put' : 'post';
 
         try {
@@ -123,7 +123,7 @@ const Student = () => {
 
     // Remove student from the list
     const handleDelete = async () => {
-        const url = `http://localhost:3000/student/delete/${newStudent.studentID}`;
+        const url = `http://localhost:3001/student/delete/${newStudent.studentID}`;
 
         try {
             await axios.put(url);

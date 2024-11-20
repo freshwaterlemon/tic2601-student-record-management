@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Student, NextOfKin} = require('../../src/models');
+const { Student, NextOfKin} = require('../../server/models');
 
 //https://sequelize.org/docs/v6/core-concepts/model-querying-basics/
 router.get("/", async (req, res) => {

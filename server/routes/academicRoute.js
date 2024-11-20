@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Student, CourseRecord, Course } = require('../../src/models');
+const { Student, CourseRecord, Course } = require('../../server/models');
 
 // route to fetch transcript data by student number
 router.get('/', async (req, res) => {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { CourseRecord, Student, Course } = require('../../src/models');
+const { CourseRecord, Student, Course } = require('../../server/models');
 
 // route to fetch course records with filtering by courseCode, year, and semester
 router.get('/', async (req, res) => {

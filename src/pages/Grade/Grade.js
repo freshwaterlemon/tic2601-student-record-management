@@ -31,7 +31,7 @@ const Grade = () => {
 		}
 		try {
 			const response = await fetch(
-				`http://localhost:3000/grade?courseCode=${courseCode}&year=${year}&semester=${semester}`
+				`http://localhost:3001/grade?courseCode=${courseCode}&year=${year}&semester=${semester}`
 			);
 			if (!response.ok) throw new Error('Failed to fetch data');
 			const data = await response.json();
@@ -65,7 +65,7 @@ const Grade = () => {
 			return;
 		}
 		try {
-			const response = await fetch('http://localhost:3000/grade/update', {
+			const response = await fetch('http://localhost:3001/grade/update', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
@@ -102,7 +102,7 @@ const Grade = () => {
 	const totalPages = Math.ceil(students.length / studentsPerPage);
 	const displayedStudents = students
 		.filter((student) =>
-			student.studentName
+			student.studentNo
 				.toLowerCase()
 				.includes(searchQuery.toLowerCase())
 		)
@@ -209,7 +209,7 @@ const Grade = () => {
 					/>
 					<input
 						className="searchInput"
-						placeholder="Search by name"
+						placeholder="Search by ID"
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
 					/>

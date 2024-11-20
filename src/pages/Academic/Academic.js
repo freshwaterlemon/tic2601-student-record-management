@@ -19,7 +19,7 @@ const Academic = () => {
         setCurrentPage(1); // reset current page to 1 when fetching new data
 
         try {
-            const response = await fetch(`http://localhost:3000/academic?studentNo=${studentNo}`);
+            const response = await fetch(`http://localhost:3001/academic?studentNo=${studentNo}`);
             if (!response.ok) {
                 throw new Error("Failed to fetch data. Please ensure the student number is correct.");
             }

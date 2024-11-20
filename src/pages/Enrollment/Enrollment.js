@@ -21,7 +21,7 @@ const Enrollment = () => {
     const fetchEnrollments = async () => {
         const { studentID, courseCode, year, semester } = enrollment;
 
-        const url = new URL('http://localhost:3000/enrollment/display');
+        const url = new URL('http://localhost:3001/enrollment/display');
         if (studentID) url.searchParams.append('studentID', studentID);
         if (courseCode) url.searchParams.append('courseCode', courseCode);
         if (year) url.searchParams.append('year', year);
@@ -57,7 +57,7 @@ const Enrollment = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:3000/enrollment/enroll', {
+            const response = await fetch('http://localhost:3001/enrollment/enroll', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ const Enrollment = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:3000/enrollment/unenroll', {
+            const response = await fetch('http://localhost:3001/enrollment/unenroll', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

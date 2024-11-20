@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const port = 3001;
 const grades = require('./routes/gradesRoute');
 const courses = require('./routes/coursesRoute');
 const academic = require('./routes/academicRoute');
@@ -10,14 +10,16 @@ const enrollment = require('./routes/enrollmentRoute');
 const student = require('./routes/studentRoute');
 
 // use CORS middleware
-app.use(cors({
-  origin: 'http://localhost:3001', // frontend URL (change it if needed depending on your port)
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: 'http://localhost:3000', // frontend URL (change it if needed depending on your port)
+//   credentials: true,
+// }));
 
 // middleware for parsing JSON and URL-encoded data
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+app.use(cors())
+app.use(express.json())
 
 // mount routers
 app.use('/grade', grades);

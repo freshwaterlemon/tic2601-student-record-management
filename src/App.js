@@ -6,7 +6,7 @@ import Grade from './pages/Grade/Grade';
 import Student from './pages/Student/Student';
 import Enrollment from './pages/Enrollment/Enrollment';
 import Home from './pages/Home/Home';
-import Error from './pages/Error';
+import Error from './pages/Error/Error';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {

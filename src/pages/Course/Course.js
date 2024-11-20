@@ -24,7 +24,7 @@ const Course = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await fetch('http://localhost:3000/course');
+                const response = await fetch('http://localhost:3001/course');
                 const data = await response.json();
                 setCourses(data);
                 setFilteredCourses(data);
@@ -58,7 +58,7 @@ const Course = () => {
     const handleAddCourse = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3000/course/add', {
+            const response = await fetch('http://localhost:3001/course/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ const Course = () => {
     const handleUpdateCourse = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:3000/course/update/${courseData.courseCode}`, {
+            const response = await fetch(`http://localhost:3001/course/update/${courseData.courseCode}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ const Course = () => {
     // refetch courses
     const refetchCourses = async () => {
         try {
-            const response = await fetch('http://localhost:3000/course');
+            const response = await fetch('http://localhost:3001/course');
             const data = await response.json();
             setCourses(data);
             setFilteredCourses(data);

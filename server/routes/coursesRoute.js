@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Course } = require('../../src/models');
+const { Course } = require('../../server/models');
 
 // Route to fetch all courses
 router.get('/', async (req, res) => {
