@@ -12,7 +12,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 function App() {
 	return (
 		<>
-			<BrowserRouter>
+			<BrowserRouter basename="/tic2601-student-record-management">
 				<Routes>
 					<Route path="/" element={<Layout />}>
 						<Route index element={<Home />} />
